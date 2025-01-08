@@ -11,17 +11,18 @@ Proteins app: Utilized UniProt API : https://www.ebi.ac.uk/proteins/api/doc/#/
         
         - Given the sequence/ identifier of a protein, the API provides information about that protein.
     Attributes:
-        Name: protein -> reccomendedName -> fullName -> value
-        AA_sequence:
-        location: comments -> where type = Tissue_specificity -> text -> value
-        Function: comments -> where type = function -> text -> value
-        Disease: comments -> where type = Disease -> text -> value
+
+        Name:  
+
+        Function: 
+
+        Disease: 
 
 Patients app:
     Attributes:
-        -name
+        - name
         - age
-        - protein deficiencies: ,many to many field( protein, related_name = patients)
+        - affected_proteins: many to many field( protein, related_name = proteins)
         
 
     -holds patient information, along with a reference to patients protein deficencies/mutations. (CRUD)
@@ -38,4 +39,3 @@ Diseases app:
         proteins (manytomany)
         patients (manytomany)
         symptoms: 
-        prevalence:
