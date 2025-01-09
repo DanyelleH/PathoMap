@@ -1,8 +1,7 @@
 # Personal Project API Prototype
 Protein Function API
     What it does: 
-        - Allows users with authorization to access patient data, and giving them the ability to obtain disease information to educate patients on the condition.
-        -Improve patient-Doctor relationships/ communication, Improve patient health literacy by providing summary of their conditions.
+        - Allows user to quickly access protein function data and diseases associated with the proteins using an accession ID. By leveraging the UniProt database, this API delivers accurate insights into protein roles, and diseases connected to them saving time and accelerating research efforts.
 
 Proteins app: Utilized UniProt API : https://www.ebi.ac.uk/proteins/api/doc/#/
     endpoint: www.ebi.ac.uk/proteins/api/proteins/<accessionID>
@@ -18,16 +17,6 @@ Proteins app: Utilized UniProt API : https://www.ebi.ac.uk/proteins/api/doc/#/
 
         Disease: 
 
-Patients app:
-    Attributes:
-        - name
-        - age
-        - affected_proteins: many to many field( protein, related_name = proteins)
-        
-
-    -holds patient information, along with a reference to patients protein deficencies/mutations. (CRUD)
-        - A view that allows a patients information to be viewed, along with description of their protein deficiencies.
-        - Authentication allowing only authorized users to access patient data.
 
 
 Diseases app:

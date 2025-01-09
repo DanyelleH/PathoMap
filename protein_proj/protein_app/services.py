@@ -3,6 +3,8 @@ from .models import Protein
 from disease_app.models import Disease
 
 def fetch_protein_data(accession_id):
+        # with each call, the protein and disease information structured at the same time
+        # since there is an association.
         url = f"https://rest.uniprot.org/uniprotkb/{accession_id}.json"
         response = requests.get(url)
         
@@ -11,41 +13,51 @@ def fetch_protein_data(accession_id):
             # Extract relevant data
             name = data.get("proteinDescription", {}).get("recommendedName", {}).get("fullName").get("value", "")
             print(name)
-            # function = [item.value for item in data.get("comments", []) if item.get("commentType") == "FUNCTION"]
-            # print(function)
+            comments = data.get("comments", [])
 
+            function_comments = [comment['texts'][0]["value"] for comment in comments if comment.get("commentType")== "FUNCTION" and 'texts' in comment]
+            
+            disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
 
             # Create the protein entry
-            # protein, created = Protein.objects.get_or_create(
-            #     accession_id=accession_id,
-            #     defaults={
-            #         'name': name,
-            #         'function': function,
-            #     }
-            # )
-
-            # associated_diseases = [item for item in protein_data.get("comments", []) if item.get("commentType") == "DISEASE"]
+            protein, created = Protein.objects.get_or_create(
+                accession_id=accession_id,
+                defaults={
+                    'name': name,
+                    'function': function_comments,
+                }
+            )
 
 
-        #     # Create disease objects for each associated disease
-        #     for item in associated_diseases:
-        #         disease_data = item.get("disease", {})
-        #         disease, created = Disease.objects.get_or_create(
-        #             name=disease_data.get("diseaseId"),
-        #             defaults={"description": disease_data.get("description")},
-        #         )
+        # Create disease objects for each associated disease
+            associated_diseases = []
+            for disease in disease_comments:
+                disease_data = disease.get('disease', {}) 
+                formatted_disease ={
+                    "disease_name": disease_data.get("diseaseId"),
+                    'disease_description': disease_data.get('description')
+                }
+                associated_diseases.append(formatted_disease)
 
-        #         # Add the disease to the protein's associated diseases
-        #         protein.associated_disease.add(disease)
+                disease, created = Disease.objects.get_or_create(
+                    disease_name=disease_data.get("diseaseId"),
+                    defaults={"description": disease_data.get("description","")},
+                )
 
-        #     return protein  # Return the newly created protein
+        # Add the disease to the protein's associated diseases
+                protein.associated_disease.add(disease)
+        # improve to provide verification of successful creation.
+            print(Disease.objects.all())
+            print(Protein.objects.all())
 
-        # else:
-        #     raise Exception(f"Failed to fetch data for accession ID {accession_id}")
+        else:
+            raise Exception(f"Failed to fetch data for accession ID {accession_id}")
 
 
 
 
 
-        from protein_app.services import fetch_protein_data
-        protein = fetch_protein_data("P05067")
+        # from protein_app.services import fetch_protein_data
+        # protein = fetch_protein_data("P05067")
+
+        # gather and format each diseases name and description/ stored in

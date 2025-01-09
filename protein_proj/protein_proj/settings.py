@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'protein_app',
-    'patient_app',
     'disease_app',
 ]
 
