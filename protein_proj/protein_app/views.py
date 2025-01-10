@@ -21,7 +21,8 @@ class AllProteins(APIView):
 
 class OneProtein(APIView):
     def get(self,request, name):
-        protein = Protein.objects.filter(name = name)
+        protein_name = name.replace("_", " ")
+        protein = Protein.objects.filter(name = protein_name)
 
         serialized_protein = serialize("json", protein)
         json_protein = json.loads(serialized_protein)[0]
