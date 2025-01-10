@@ -46,18 +46,10 @@ def fetch_protein_data(accession_id):
 
         # Add the disease to the protein's associated diseases
                 protein.associated_disease.add(disease)
-        # improve to provide verification of successful creation.
-            print(Disease.objects.all())
-            print(Protein.objects.all())
-
+        # improve to provide verification of successful creation
         else:
             raise Exception(f"Failed to fetch data for accession ID {accession_id}")
 
 
-
-
-
         # from protein_app.services import fetch_protein_data
         # protein = fetch_protein_data("P05067")
-
-        # gather and format each diseases name and description/ stored in
