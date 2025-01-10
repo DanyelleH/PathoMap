@@ -4,6 +4,7 @@ from .models import Protein
 from disease_app.models import Disease
 from django.core.serializers import serialize
 import json
+from .services import fetch_protein_data, fetch_protein_data_by_name
 # Create your views here.
 
 class AllProteins(APIView):
@@ -22,9 +23,14 @@ class AllProteins(APIView):
 class OneProtein(APIView):
     def get(self,request, name):
         protein_name = name.replace("_", " ")
-        protein = Protein.objects.filter(name = protein_name)
+        protein = Protein.objects.filter(name = protein_name).first()
+        if not protein:
+            try:
+                protein=fetch_protein_data_by_name(protein_name)
+            except Exception as e:
+                return Response({"error": f"Protein not found in database or API. {str(e)}"}, status=404)
 
-        serialized_protein = serialize("json", protein)
+        serialized_protein = serialize("json", [protein])
         json_protein = json.loads(serialized_protein)[0]
 
         disease_pk = json_protein["fields"].get("associated_disease",[])

@@ -51,5 +51,22 @@ def fetch_protein_data(accession_id):
             raise Exception(f"Failed to fetch data for accession ID {accession_id}")
 
 
+def fetch_protein_data_by_name(name):
+    # Step 1: Search UniProt for the protein by name to get the accession ID
+    search_url = f"https://rest.uniprot.org/uniprotkb/search?query={name}&fields=accession"
+    search_response = requests.get(search_url)
+
+    if search_response.status_code == 200:
+        search_data = search_response.json()
+        # Extract the first accession ID
+        accession_id = search_data.get("results", [])[0].get("primaryAccession", None)
+        if not accession_id:
+            raise Exception(f"No accession ID found for protein name: {name}")
+    else:
+        raise Exception(f"Failed to fetch accession ID for protein name: {name}")
+
+    # Step 2: Fetch detailed protein information using the accession ID
+    return fetch_protein_data(accession_id)
+
         # from protein_app.services import fetch_protein_data
         # protein = fetch_protein_data("P05067")
