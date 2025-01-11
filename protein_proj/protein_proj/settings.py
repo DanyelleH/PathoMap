@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'protein_app',
     'disease_app',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -82,8 +83,8 @@ DATABASES = {
         'NAME': 'protein_db',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': 5444
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -129,11 +130,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ]
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.TokenAuthentication',
+#     ]
+# }
