@@ -12,7 +12,7 @@ def fetch_protein_data(accession_id):
             data = response.json()
             # Extract relevant data
             name = data.get("proteinDescription", {}).get("recommendedName", {}).get("fullName").get("value", "")
-            print(name)
+            
             comments = data.get("comments", [])
 
             function_comments = [comment['texts'][0]["value"] for comment in comments if comment.get("commentType")== "FUNCTION" and 'texts' in comment]
@@ -46,6 +46,8 @@ def fetch_protein_data(accession_id):
 
         # Add the disease to the protein's associated diseases
                 protein.associated_disease.add(disease)
+                protein.save()
+                return protein
         # improve to provide verification of successful creation
         else:
             raise Exception(f"Failed to fetch data for accession ID {accession_id}")
