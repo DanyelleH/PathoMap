@@ -12,16 +12,20 @@ Proteins app:
         associated_disease 
 
     If a protein is not yet in the local database, it will be added by querying UniProt API.
+    Endpoints:
     -    speicific protein accessible through name, words seperated by underscores in url.
-        
+        ex. 
+            Alpha-1 antitrypsin -> localhost:8000/api/v1/protein/Alpha1-antitrypsin
+            Aspartate aminotransferase, mitochondrial -> localhost:8000/api/v1/protein/Aspartate_aminotransferase,_mitochondrial
+            
 
 
 Diseases app:
     Attributes:
         name
         description:
-        common symptoms:
-        stages_of_progression:
-        treatments:
+        common symptoms:      <!-- <not implemented> -->
+        stages_of_progression:      <!-- <not implemented> -->
+        treatments:       <!-- <not implemented> -->
 
 

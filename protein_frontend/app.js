@@ -81,7 +81,7 @@ window.onload = () => {
         "Content-Type": "application/json" ,
         "Authorization": `Token ${token}`
       }
-    }
+    };
     return basicFetch("http://127.0.0.1:8000/api/v1/protein", context)
   }
   
