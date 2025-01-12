@@ -1,4 +1,5 @@
 # Personal Project API Prototype
+current version: not configured for run_compose.sh
 Protein Function API
     What it does: 
         - Allows user to quickly access protein function data and diseases associated with the proteins using an accession ID. By leveraging the UniProt database, this API delivers accurate insights into protein roles, and diseases connected to them saving time and accelerating research efforts.
