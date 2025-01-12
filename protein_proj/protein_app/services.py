@@ -17,35 +17,38 @@ def fetch_protein_data(accession_id):
 
             function_comments = [comment['texts'][0]["value"] for comment in comments if comment.get("commentType")== "FUNCTION" and 'texts' in comment]
             
-            disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
 
             # Create the protein entry
             protein, created = Protein.objects.get_or_create(
                 accession_id=accession_id,
                 defaults={
                     'name': name,
-                    'function': function_comments,
+                    'function': ";".join(function_comments),
                 }
             )
 
+            disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
 
         # Create disease objects for each associated disease
             associated_diseases = []
             for disease in disease_comments:
                 disease_data = disease.get('disease', {}) 
-                formatted_disease ={
-                    "disease_name": disease_data.get("diseaseId"),
-                    'disease_description': disease_data.get('description')
-                }
-                associated_diseases.append(formatted_disease)
+                disease_name = disease_data.get("diseaseId")
+                description = disease_data.get("description","")
 
-                disease, created = Disease.objects.get_or_create(
-                    disease_name=disease_data.get("diseaseId"),
-                    defaults={"description": disease_data.get("description","")},
+                # formatted_disease ={
+                #     "disease_name": disease_data.get("diseaseId"),
+                #     'disease_description': disease_data.get('description')
+                # }
+                # associated_diseases.append(formatted_disease)
+
+                disease_obj,_ = Disease.objects.get_or_create(
+                    disease_name=disease_name,
+                    defaults={"description": description},
                 )
 
         # Add the disease to the protein's associated diseases
-                protein.associated_disease.add(disease)
+                protein.associated_disease.add(disease_obj)
                 protein.save()
                 return protein
         # improve to provide verification of successful creation

@@ -3,6 +3,7 @@ from rest_framework.views import APIView, Response
 from .models import Protein
 from disease_app.models import Disease
 from django.core.serializers import serialize
+from django.shortcuts import get_object_or_404
 import json
 from .services import fetch_protein_data, fetch_protein_data_by_name
 # Create your views here.
@@ -34,9 +35,8 @@ class OneProtein(APIView):
         json_protein = json.loads(serialized_protein)[0]
 
         disease_pk = json_protein["fields"].get("associated_disease",[])
-        
-        disease = serialize('json',Disease.objects.filter(pk__in=disease_pk))
-        disease_info = json.loads(disease)
+        diseases =Disease.objects.filter(pk__in=disease_pk)
+        disease_info = serialize('json',diseases)
 
         formatted_information = {
             "name": json_protein["fields"]["name"],
@@ -44,6 +44,12 @@ class OneProtein(APIView):
             "associated_disease": [{
                 "disease_name": disease["fields"].get("disease_name"),
                 "description": disease["fields"].get("description")
-            } for disease in disease_info]
+            } for disease in json.loads(disease_info)]
         }
         return Response(formatted_information)
+    
+    def delete(self,request,name):
+        protein_name = name.replace("_", " ")
+        protein = get_object_or_404(Protein, name=protein_name)
+        protein.delete()
+        return Response(f"{protein_name} was deleted")
