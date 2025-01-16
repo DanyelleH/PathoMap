@@ -72,6 +72,3 @@ def fetch_protein_data_by_name(name):
 
     # Step 2: Fetch detailed protein information using the accession ID
     return fetch_protein_data(accession_id)
-
-        # from protein_app.services import fetch_protein_data
-        # protein = fetch_protein_data("P05067")
