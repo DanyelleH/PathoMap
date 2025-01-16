@@ -1,5 +1,3 @@
-from django.http import JsonResponse
-
 class CorsMiddleware:
 
     def __init__(self, get_response):

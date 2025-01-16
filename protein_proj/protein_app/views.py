@@ -28,9 +28,6 @@ class OneProtein(APIView):
         if not protein:
                 protein=fetch_protein_data_by_name(protein_name)
 
-            # except Exception as e:
-            #     return Response({"error": f"Protein not found in database or API. {str(e)}"}, status=404)
-
         serialized_protein = serialize("json", [protein])
         json_protein = json.loads(serialized_protein)[0]
 

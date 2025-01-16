@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'protein_app',
     'disease_app',
     'rest_framework.authtoken',
-    'corsheaders',
+    
 ]
 
 MIDDLEWARE = [
