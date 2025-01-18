@@ -4,6 +4,7 @@ from .models import Patient
 from django.core.serializers import serialize
 import json
 from .serializer import PatientSerializer
+from rest_framework import status
 # Create your views here.
 class AllPatients(APIView):
     def post(self, request,):
@@ -20,11 +21,19 @@ class PatientById(APIView):
         # json_patient = json.loads(serialize_patient)
         return Response(serialize_patient.data)
 
+    def patch(self,request,id):
+        patient=Patient.objects.get(id=id)
+        serializer = PatientSerializer(patient, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class Patient_History(APIView):
     def get():
         pass
     
-    def put(self,request,disease_name):
+    def put(self,request):
         #update patients history to contain diseases in remission
         pass
 

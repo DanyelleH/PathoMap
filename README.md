@@ -62,3 +62,8 @@ If a protein is not yet in the local database, it will be added by querying UniP
 	4.	Delete Patient (Delete): (user permissions)
         •	Endpoint: /patients/<id>/delete/
         •	remove duplicates.
+
+```
+Looking at adding serializer to protein add.
+continue CRUD operations ( create, update) 
+```
