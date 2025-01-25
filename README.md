@@ -1,69 +1,78 @@
-# Personal Project API Prototype
-current version: not configured for run_compose.sh
-Protein Function API
-    What it does: 
-        - Allows user to quickly access protein function data and diseases associated with the proteins using an accession ID. By leveraging the UniProt database, this API delivers accurate insights into protein roles, and diseases connected to them saving time and accelerating research efforts.
+# Protein-Disease Quick Reference API
 
-```python
-# from the
-   ./run_compose.sh 
+Overview
+
+The Protein Function API enables users to quickly access protein function data and diseases associated with protein mutations or deficiencies using he proteins name. By leveraging the UniProt database, this API provides accurate insights into protein roles and their connections to diseases, saving time and accelerating research efforts.
+
+#### Usage : To start the API:
+
+```
+./run_compose.sh
 ```
 
-## Proteins app: 
-    Attributes:
-        accession_id
-        name  
-        function 
-        associated_disease 
+## Proteins App
+	• accession_id: Unique identifier for the protein.
+	• name: The protein’s name.
+	• function: Description of the protein’s role.
+	• associated_disease: List of diseases linked to the protein.
 
-If a protein is not yet in the local database, it will be added by querying UniProt API.
+`Note: If a protein is not found in the local database, it will automatically be fetched from the UniProt API and added to the database.`
 
-#### Endpoints:
-- speicific protein accessible through name, words seperated by underscores in url.
-    
-        Alpha-1 antitrypsin:
-             ex. localhost:8000/api/v1/protein/Alpha1-antitrypsin
+Endpoints:
+	1.	Access specific protein data by name, using underscores to separate words in the URL.
         
-        Aspartate aminotransferase, mitochondrial
-            ex. localhost:8000/api/v1/protein/Aspartate_aminotransferase,_mitochondrial
-            
+        Examples:
+	•	Alpha-1 antitrypsin: 
+                localhost:8000/api/v1/protein/Alpha1-antitrypsin
 
 
-## Diseases app:
-    Attributes:
-        name
-        description:
-        common symptoms:      <!-- <not implemented> -->
-        stages_of_progression:      <!-- <not implemented> -->
-        treatments:       <!-- <not implemented> -->
+	•	Aspartate aminotransferase, mitochondrial:
+                        localhost:8000/api/v1/protein/Aspartate_aminotransferase,_mitochondrial
 
+## Diseases App
 
-## Patient_app
-    Attributes: 
-    name
-    dob
-    deficiency_history
-    current_illness
+	• name: Disease name.
+	• description: Detailed description of the disease.
+	• common symptoms: (Not implemented) *
+	• stages_of_progression: (Not implemented) *
+	• treatments: (Not implemented) *
 
-# Implementing CRUD operations
+## Patient App
+Used to track patients, or research participants. 
 
+	• name: Patient’s full name.
+	• dob: Date of birth.
+	• deficiency_history: History of any deficiencies.
+	• current_illness: Information on the patient’s current health issues.
 
-  Views
+### CRUD Operations
 
-	1.	Get All Patients (Read):
-        •	Endpoint: /patients/
-        •	Return all patients in a serialized format.
-	2.	Create Patient (Create): ( Group permissions)
-        •	Endpoint: /patients/create/
-        •	Accept patient details via a form or JSON.
-	3.	Update Patient (Update): (user permissions)
-        •	Endpoint: /patients/<id>/update/
-        •	Update patient information based on their unique ID.
-	4.	Delete Patient (Delete): (user permissions)
-        •	Endpoint: /patients/<id>/delete/
-        •	remove duplicates.
+1. Get All Patients (Read):
 
-```
-Looking at adding serializer to protein add.
-continue CRUD operations ( create, update) 
-```
+	• Endpoint: /patients/
+
+	•	Description: Retrieve all patients in a serialized format.
+
+2. Create Patient (Create):
+
+	•	Endpoint: /patients/create/
+
+	•	Permissions: Group-based permissions required.
+
+	•	Description: Accept patient details via a form or JSON to create a new patient entry.
+
+3. Update Patient (Update):
+
+	•	Endpoint: /patients/<id>/update/
+
+	•	Permissions: User-based permissions required.
+
+	•	Description: Update a patient’s information using their unique ID.
+
+4. Delete Patient (Delete):
+
+	•	Endpoint: /patients/<id>/delete/
+
+	•	Permissions: User-based permissions required.
+
+	•	Description: Remove a patient entry by their unique ID and handle duplicate entries.
