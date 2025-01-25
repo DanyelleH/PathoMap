@@ -6,20 +6,14 @@ from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404
 import json
 from .services import fetch_protein_data, fetch_protein_data_by_name
+from .serializer import ProteinSerializer, DiseaseSerializer
 # Create your views here.
 
 class AllProteins(APIView):
     def get(self,request):
         protein = Protein.objects.order_by("name")
-        serialized_protein = serialize("json",protein)
-        json_protein = json.loads(serialized_protein)
-        all_proteins_names =[]
-        for protein in json_protein:
-            info = {
-                'name': protein["fields"].get("name")
-            }
-            all_proteins_names.append(info)
-        return Response(all_proteins_names)
+        serializer = ProteinSerializer(protein, many=True)
+        return Response(serializer.data)
 
 class OneProtein(APIView):
     def get(self,request, name):
@@ -27,23 +21,16 @@ class OneProtein(APIView):
         protein = Protein.objects.filter(name = protein_name).first()
         if not protein:
                 protein=fetch_protein_data_by_name(protein_name)
+        serializer = ProteinSerializer(protein)
 
-        serialized_protein = serialize("json", [protein])
-        json_protein = json.loads(serialized_protein)[0]
-
-        disease_pk = json_protein["fields"].get("associated_disease",[])
+        disease_pk = serializer.data["associated_disease"]
         diseases =Disease.objects.filter(pk__in=disease_pk)
-        disease_info = serialize('json',diseases)
-
-        formatted_information = {
-            "name": json_protein["fields"]["name"],
-            "function" : json_protein["fields"]["function"],
-            "associated_disease": [{
-                "disease_name": disease["fields"].get("disease_name"),
-                "description": disease["fields"].get("description")
-            } for disease in json.loads(disease_info)]
+        disease_serialzer= DiseaseSerializer(diseases, many=True)
+        response_date = {
+             "protein": serializer.data,
+             "disease": disease_serialzer.data
         }
-        return Response(formatted_information)
+        return Response(response_date)
     
     def delete(self,request,name):
         protein_name = name.replace("_", " ")

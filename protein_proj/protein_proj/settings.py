@@ -86,8 +86,8 @@ DATABASES = {
         'NAME': 'protein_db',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': 5444,
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
