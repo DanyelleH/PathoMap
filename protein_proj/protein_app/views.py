@@ -14,7 +14,8 @@ class AllProteins(APIView):
     def get(self,request):
         protein = Protein.objects.order_by("name")
         serializer = ProteinSerializer(protein, many=True)
-        return Response(serializer.data)
+        response = [{"name": item["name"], "accession_id": item["accession_id"]} for item in serializer.data]
+        return Response(response)
 
 class OneProtein(APIView):
     def get(self,request, parameter):
