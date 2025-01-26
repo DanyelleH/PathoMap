@@ -19,15 +19,6 @@ class AllProteins(APIView):
 
 class OneProtein(APIView):
     def get(self,request, parameter):
-        # if type(parameter) == str:
-        #     protein_name = parameter.replace("_", " ")
-        #     protein = Protein.objects.filter(name = protein_name).first()
-        #     if not protein:
-        #         protein=fetch_protein_data_by_name(protein_name)
-        # else:
-        #     protein = Protein.objects.filter(accession_id = parameter)
-        #     if not protein:
-        #             protein=fetch_protein_data(parameter)
         if re.match(r"^[A-Z][0-9A-Z]{5}$", parameter):
         # Handle as an accession ID
             protein = Protein.objects.filter(accession_id=parameter).first()
