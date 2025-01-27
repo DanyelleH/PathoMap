@@ -1,12 +1,11 @@
-from django.shortcuts import render
 from rest_framework.views import APIView, Response
 from .models import Protein
 from disease_app.models import Disease
-from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404
-import json
 from .services import fetch_protein_data, fetch_protein_data_by_name
-from .serializer import ProteinSerializer, DiseaseSerializer
+from .serializer import ProteinSerializer
+from disease_app.serializer import DiseaseSerializer
+from disease_app.services import fetch_disease_data
 import re
 # Create your views here.
 
@@ -33,17 +32,33 @@ class OneProtein(APIView):
     
         serializer = ProteinSerializer(protein)
 
-        disease_pk = serializer.data["associated_disease"]
+        disease_pk = serializer.data.get("associated_disease",[])
         diseases =Disease.objects.filter(pk__in=disease_pk)
-        disease_serialzer= DiseaseSerializer(diseases, many=True)
+
+        if diseases:
+            for disease in diseases:
+                if not disease.patient_summary:
+                    disease.patient_summary = fetch_disease_data(disease.disease_name)
+                    if not disease.patient_summary:
+                        disease.patient_summary = "Patient summary not available"
+                    disease.save()
+            disease_serializer= DiseaseSerializer(diseases, many=True)
+
+        for disease in disease_serializer.data:
+            disease.pop('patient_summary', None)
+
         response_date = {
             "protein": serializer.data,
-            "disease": disease_serialzer.data
+            "disease": disease_serializer.data
         }
         return Response(response_date)
     
-    def delete(self,request,name):
-        protein_name = name.replace("_", " ")
+
+
+
+
+    def delete(self,request,parameter):
+        protein_name = parameter.replace("_", " ")
         protein = get_object_or_404(Protein, name=protein_name)
         protein.delete()
         return Response(f"{protein_name} was deleted")

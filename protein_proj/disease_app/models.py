@@ -5,8 +5,7 @@ from django.db import models
 class Disease(models.Model):
     disease_name = models.CharField(unique=True, max_length=255)
     description = models.TextField(null=True, blank=True)
-    patient_summary = models.TextField(blank=True)
-    # treatments = models.JSONField(help_text="Treatments for disease")
+    patient_summary = models.TextField(default="")
     # risk_factors = models.JSONField(help_text="Risk Factors for Disease")
 
     def __str__(self):

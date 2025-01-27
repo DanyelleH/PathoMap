@@ -2,7 +2,7 @@
 
 Overview
 
-The Protein Function API enables users to quickly access protein function data and diseases associated with protein mutations or deficiencies using he proteins name or Uniprot Accession_id. By leveraging the UniProt database, this API provides accurate insights into protein roles and their connections to diseases, saving time and accelerating research efforts.
+The Protein Function API enables users to quickly access protein function data and diseases associated with deficiencies in these proteins. Proteins are obtained most efficiently using` Uniprot Accession_id`, but the proteins name is an alternative. By leveraging the UniProt database, this API provides accurate insights into protein roles and their connections to diseases, saving time and accelerating research efforts. A summary of each condition is obtained via `Medline Plus API`. As proteins are added to the database, the associated information is added dynamically.
 
 #### Usage : To start the API:
 
@@ -26,20 +26,19 @@ Endpoints:
                 localhost:8000/api/v1/protein/Alpha1-antitrypsin
 
 
-	•	Aspartate aminotransferase, mitochondrial:
+	•	Aspartate aminotransferase, mitochondrial: ** implement url encoder to clean this? **
                         localhost:8000/api/v1/protein/Aspartate_aminotransferase,_mitochondrial
 
 	2. Access by Uniprot Primary accessions 
+						localhost:8000/api/v1/protein/Q6P3S1
 
 ## Diseases App
 
 	• name: Disease name.
-	• description: Detailed description of the disease.
-	• ICD10 Codes: (not implemented) *
-	• common symptoms: (Not implemented) *
-	• stages_of_progression: (Not implemented) *
-	• treatments: (Not implemented) *
+	• description: General description of the disease for professional Information
+	• patient_summary: Clinically related information from Medline
 
+	
 ## Patient App
 Used to track patients, or research participants. 
 
