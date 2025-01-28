@@ -9,7 +9,7 @@ class AllUsers(APIView):
         user = user.objects.order_by("pk")
         serializer = UserSerializer(user)
         return Response(serializer.data)
-    # ContentType.objects.filter(app_label='patient_app').update(app_label='users_app')
+    
     def post(self, request,):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
