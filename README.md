@@ -39,25 +39,26 @@ Endpoints:
 	• patient_summary: Clinically related information from Medline
 
 	
-## Patient App
-Used to track patients, or research participants. 
+## User App
+Used to track users, or research participants. 
 
-	• name: Patient’s full name.
+	• first_ name:
+	• last_name: 
 	• dob: Date of birth.
-	• deficiency_history: History of any deficiencies.
-	• current_illness: Information on the patient’s current health issues.
+	• history: History of concerns forthe user.
+	• current_diseases: Information on the users current health concerns.
 
-### CRUD Operations
+### CRUD Operations * to be implemented * 
 
-1. Get All Patients (Read):
+1. Get All users (Read):
 
-	• Endpoint: /patients/
+	• Endpoint: /users/
 
-	•	Description: Retrieve all patients in a serialized format.
+	•	Description: Retrieve all users in a serialized format.
 
 2. Create Patient (Create):
 
-	•	Endpoint: /patients/create/
+	•	Endpoint: /users/create/
 
 	•	Permissions: Group-based permissions required.
 
@@ -65,7 +66,7 @@ Used to track patients, or research participants.
 
 3. Update Patient (Update):
 
-	•	Endpoint: /patients/<id>/update/
+	•	Endpoint: /users/<id>/update/
 
 	•	Permissions: User-based permissions required.
 
@@ -73,8 +74,8 @@ Used to track patients, or research participants.
 
 4. Delete Patient (Delete):
 
-	•	Endpoint: /patients/<id>/delete/
+	•	Endpoint: /users/<id>/delete/
 
 	•	Permissions: User-based permissions required.
 
-	•	Description: Remove a patient entry by their unique ID and handle duplicate entries.
+	•	Description: Remove a user by their unique ID and handle duplicate entries.
