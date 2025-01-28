@@ -44,13 +44,18 @@ class OneProtein(APIView):
                     disease.save()
             disease_serializer= DiseaseSerializer(diseases, many=True)
 
-        for disease in disease_serializer.data:
-            disease.pop('patient_summary', None)
-
-        response_date = {
+            for disease in disease_serializer.data:
+                disease.pop('patient_summary', None)
+        
+            response_date = {
+                "protein": serializer.data,
+                "disease": disease_serializer.data
+            }   
+        else:
+            response_date={
             "protein": serializer.data,
-            "disease": disease_serializer.data
-        }
+            "disease": "No Associated Diseases"
+            }
         return Response(response_date)
     
 

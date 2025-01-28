@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'protein_app',
     'disease_app',
-    'patient_app',
+    'users_app',
     # 'rest_framework.authtoken',
     
 ]
@@ -86,8 +86,8 @@ DATABASES = {
         'NAME': 'protein_db',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+        'HOST': 'localHost',
+        'PORT': 5444,
     }
 }
 
