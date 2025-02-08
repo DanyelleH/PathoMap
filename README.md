@@ -1,8 +1,19 @@
 # Protein-Disease Quick Reference API
 
-Overview
+## Overview
 
-The Protein Function API enables users to quickly access protein function data and diseases associated with deficiencies in these proteins. Proteins are obtained most efficiently using` Uniprot Accession_id`, but the proteins name is an alternative. By leveraging the UniProt database, this API provides accurate insights into protein roles and their connections to diseases, saving time and accelerating research efforts. A summary of each condition is obtained via `Medline Plus API`. As proteins are added to the database, the associated information is added dynamically.
+Purpose: Allow quicker notification of major concerns to patients and easier access to disease process information and descriptions to imporve patient education.
+
+The Protein Function API enables users to quickly access protein function data and 
+diseases associated with deficiencies in these proteins. Proteins are obtained most 
+efficiently using` Uniprot Accession_id`, but the proteins name is an alternative. By 
+leveraging the UniProt database, this API provides accurate insights into protein roles 
+and their connections to diseases, saving time and accelerating research efforts. A summary of 
+each condition is obtained via `Medline Plus API`. As proteins are added to the database, the 
+associated information is added dynamically.
+
+By integrating LIMS to obtain acession_id and store the proteins information, we obtain quick responses to possible concerns, along with relevant summaries for users.
+`Patient Labs -> LIMS -> Obtain protein data`
 
 #### Usage : To start the API:
 
@@ -18,7 +29,9 @@ The Protein Function API enables users to quickly access protein function data a
 
 `Note: If a protein is not found in the local database, it will automatically be fetched from the UniProt API and added to the database.`
 
-Endpoints:
+Endpoints: 
+
+* Need to add encoded url**
 	1.	Access specific protein data by name, using underscores to separate words in the URL.
         
         Examples:
@@ -42,17 +55,25 @@ Endpoints:
 ## User App
 Used to track users, or research participants. 
 
-	• first_ name:
+	• first_name:
 	• last_name: 
 	• dob: Date of birth.
-	• history: History of concerns forthe user.
+	• history: History of concerns for the user.
 	• current_diseases: Information on the users current health concerns.
+
+
+## Future Features
+- User authentication with roles (admin, patient, staff, provider)
+- API integration with real LIMS for sample data retrieval
+- Real-time sample result reporting
 
 ### CRUD Operations * to be implemented * 
 
 1. Get All users (Read):
 
 	• Endpoint: /users/
+	
+	•	Permissions: Group-based permissions required.
 
 	•	Description: Retrieve all users in a serialized format.
 
@@ -79,3 +100,4 @@ Used to track users, or research participants.
 	•	Permissions: User-based permissions required.
 
 	•	Description: Remove a user by their unique ID and handle duplicate entries.
+

@@ -24,6 +24,7 @@ class UserById(APIView):
         return Response(serialize_user.data)
 
     def patch(self,request,id):
+        #update Users record with newer concern, or PII
         user=User.objects.get(id=id)
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
@@ -32,22 +33,15 @@ class UserById(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class UserHistory(APIView):
-    def get():
-        pass
+    def get(self, request, id):
+        user = User.objects.get(id=id)
+        serializer = UserSerializer(user["history"])
+        return Response(serializer.data)
     
-    def put(self,request):
-        #update Users history to contain diseases in remission
-        pass
-
-
-class Current_Diseases(APIView):
-    def get():
-        pass
-
-    def put():
-        #update Users record with newer concern
-        pass
-
-    def post():
-        #add new record to the Users current disease record.
-        pass
+    def patch(self, request, id):
+        # should pathch history when current disease is in remission
+        user = User.objects.get(id=id)
+        serializer = UserSerializer(user, data = request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(f"{serializer.name} history has been updated")

@@ -41,7 +41,7 @@ def fetch_disease_data(disease_name):
                 
                     
             cleaned_text = re.sub(r'(?<=[a-z])(?=[A-Z])', ', ', cleaned_text)
-            cleaned_text = cleaned_text.replace(".", ". ").replace(":", ":\n\n").replace("•", "\n-").replace("?", "? ").replace("!", "! ")
+            cleaned_text = cleaned_text.replace(".", ". ").replace(":", ": \n\n").replace("•", "\n-").replace("?", "? ").replace("!", "! ")
             return cleaned_text
         else:
             return "No documents found for this disease"
