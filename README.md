@@ -1,4 +1,4 @@
-# Protein-Disease Quick Reference API
+# Protein-Disease Quick Reference API (PathoMap)
 
 ## Overview
 
