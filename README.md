@@ -58,46 +58,10 @@ Used to track users, or research participants.
 	• first_name:
 	• last_name: 
 	• dob: Date of birth.
-	• history: History of concerns for the user.
-	• current_diseases: Information on the users current health concerns.
+	• current_diseases: List of relevant disease info per patient.
 
 
 ## Future Features
 - User authentication with roles (admin, patient, staff, provider)
 - API integration with real LIMS for sample data retrieval
 - Real-time sample result reporting
-
-### CRUD Operations * to be implemented * 
-
-1. Get All users (Read):
-
-	• Endpoint: /users/
-	
-	•	Permissions: Group-based permissions required.
-
-	•	Description: Retrieve all users in a serialized format.
-
-2. Create Patient (Create):
-
-	•	Endpoint: /users/create/
-
-	•	Permissions: Group-based permissions required.
-
-	•	Description: Accept patient details via a form or JSON to create a new patient entry.
-
-3. Update Patient (Update):
-
-	•	Endpoint: /users/<id>/update/
-
-	•	Permissions: User-based permissions required.
-
-	•	Description: Update a patient’s information using their unique ID.
-
-4. Delete Patient (Delete):
-
-	•	Endpoint: /users/<id>/delete/
-
-	•	Permissions: User-based permissions required.
-
-	•	Description: Remove a user by their unique ID and handle duplicate entries.
-

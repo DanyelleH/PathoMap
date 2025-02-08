@@ -57,10 +57,6 @@ class OneProtein(APIView):
             "disease": "No Associated Diseases"
             }
         return Response(response_date)
-    
-
-
-
 
     def delete(self,request,parameter):
         protein_name = parameter.replace("_", " ")

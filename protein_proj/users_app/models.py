@@ -6,7 +6,6 @@ class User(models.Model):
     last_name = models.CharField(max_length=255)
     dob = models.DateField()
     current_disease = models.ManyToManyField(Disease,related_name= 'current_patients', blank=True)
-    history = models.ManyToManyField(Disease, related_name='patient_history', blank=True)
 
     def __str__(self):
         return f"Patient {self.first_name}, {self.last_name}"
