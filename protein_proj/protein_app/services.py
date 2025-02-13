@@ -72,3 +72,11 @@ def fetch_protein_data_by_name(name):
 
     # Step 2: Fetch detailed protein information using the accession ID
     return fetch_protein_data(accession_id)
+
+def fetch_protein_data_by_disease_name(disease_name):
+     #obtain protein information and function based on disease name.
+     search_url = f"https://rest.uniprot.org/uniprotkb/search?query={disease_name}"
+     query_response = requests.get(search_url)
+     queryJSON = query_response.json()
+     accession_id = queryJSON.get("results", [])[0].get("primaryAccession", None)
+     return fetch_protein_data(accession_id)

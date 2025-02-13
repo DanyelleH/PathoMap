@@ -4,6 +4,7 @@ from .models import Disease
 from .serializer import DiseaseSerializer
 from django.core.serializers import serialize
 from .services import fetch_disease_data
+from protein_app.services import fetch_protein_data_by_disease_name
 import json
 # Create your views here.
 class AllDiseases(APIView):
@@ -29,6 +30,8 @@ class DiseaseByName(APIView):
         try:
             disease = Disease.objects.get(disease_name=disease_name)
         except:
+            #get the protein data for the disease.
+            protein = fetch_protein_data_by_disease_name(disease_name)
             disease_summary = fetch_disease_data(disease_name)
             disease = Disease( disease_name = disease_name, patient_summary= disease_summary)
             disease.save()

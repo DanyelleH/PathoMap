@@ -11,7 +11,7 @@ def fetch_disease_data(disease_name):
     disease_name= words[0].lower()
     disease_name = disease_name.split(",")
     
-    # method to fetch MEDLINE Information
+    # method to fetch MEDLINE Information and format from XML
     medline_url = "https://wsearch.nlm.nih.gov/ws/query"
     paramaters= {
         'db' : 'healthTopics',
