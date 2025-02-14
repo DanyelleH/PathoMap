@@ -1,6 +1,5 @@
 from django.urls import path, include
-from .views import AllProteins, OneProtein, ProtienDataByDisease
-
+from .views import AllProteins, OneProtein
 
 # register_converter(SpaceToDashConverter,'spacedash')
 

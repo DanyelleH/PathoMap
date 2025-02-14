@@ -8,7 +8,6 @@ import re
 
 def fetch_disease_data(disease_name):
     words = disease_name.split(" ")
-    disease_name= words[0].lower()
     disease_name = disease_name.split(",")
     
     # method to fetch MEDLINE Information and format from XML
@@ -27,13 +26,17 @@ def fetch_disease_data(disease_name):
         nlm_results = json_data.get("nlmSearchResult",{})
         document_list = nlm_results.get("list",{}).get("document",[])
         if document_list:
-            full_summary = document_list[0].get("content", "")
+            if isinstance(document_list[0], dict) and "content" in document_list[0]:
+                full_summary = document_list[0]["content"]
+            else:
+                full_summary = ""
+
             if isinstance(full_summary, str) and full_summary.strip():
                 cleaned_text = full_summary
             elif isinstance(full_summary, list):
                 cleaned_text = "Full Summary not available"
                 for item in full_summary:
-                    if item["@name"] == "FullSummary":
+                    if item.get("@name") == "FullSummary":
                         cleaned_text = BeautifulSoup(item["#text"], 'html.parser').get_text()
                         break 
             else:

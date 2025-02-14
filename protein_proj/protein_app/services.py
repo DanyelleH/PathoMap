@@ -1,6 +1,7 @@
 import requests
 from .models import Protein
 from disease_app.models import Disease
+from disease_app.services import fetch_disease_data
 
 def fetch_protein_data(accession_id):
         # with each call, the protein and disease information structured at the same time
@@ -11,7 +12,15 @@ def fetch_protein_data(accession_id):
         if response.status_code == 200:
             data = response.json()
             # Extract relevant data
-            name = data.get("proteinDescription", {}).get("recommendedName", {}).get("fullName").get("value", "")
+            protein_description = data.get("proteinDescription", {})
+            if "reccomendedName" in protein_description:
+                name = protein_description.get("recommendedName", {}).get("fullName").get("value", "")
+            else:
+                submission_names = protein_description.get("submissionNames", [])
+                if submission_names:
+                    name = submission_names[0].get("fullName", {}).get("value", "")
+                else:
+                    name = ""
             
             comments = data.get("comments", [])
 
@@ -30,21 +39,17 @@ def fetch_protein_data(accession_id):
             disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
 
         # Create disease objects for each associated disease
-            # associated_diseases = []
             for disease in disease_comments:
                 disease_data = disease.get('disease', {}) 
                 disease_name = disease_data.get("diseaseId")
                 description = disease_data.get("description","")
                 
-                # Consider deleting after Uniprot is running agin.(# formatted_disease ={
-                # #     "disease_name": disease_data.get("diseaseId"),
-                # #     'disease_description': disease_data.get('description')
-                # # }
-                # # associated_diseases.append(formatted_disease))
                 if disease_name:
+                    #get_or_create automatically saves disease
                     disease_obj,_ = Disease.objects.get_or_create(
                         disease_name=disease_name,
                         defaults={"description": description},
+                        patient_summary = fetch_disease_data(disease_name)
                     )
 
         # Add the disease to the protein's associated diseases
@@ -74,12 +79,14 @@ def fetch_protein_data_by_name(name):
     return fetch_protein_data(accession_id)
 
 def fetch_protein_data_by_disease_name(disease_name):
-    #obtain protein information and function based on disease name.
+    #obtain protein information and function for all proteins referencing the diseaseName.
+    # a disease can have multiple associated accessions/ Proteins
     search_url = f"https://rest.uniprot.org/uniprotkb/search?query={disease_name}"
     query_response = requests.get(search_url)
     queryJSON = query_response.json()
-    accession_id = queryJSON.get("results", [])[0].get("primaryAccession", None)
-    if not accession_id:
+    accession_ids = [result.get("primaryAccession") for result in queryJSON.get("results", []) if result.get("primaryAccession")]
+    if not accession_ids:
         print(f"No protein found for disease: {disease_name}")
         return None
-    fetch_protein_data(accession_id)
+    for accession_id in accession_ids:
+        fetch_protein_data(accession_id)

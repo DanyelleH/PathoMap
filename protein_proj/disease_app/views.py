@@ -3,7 +3,6 @@ from rest_framework.views import APIView, Response
 from .models import Disease
 from .serializer import DiseaseSerializer
 from django.core.serializers import serialize
-from .services import fetch_disease_data
 from protein_app.services import fetch_protein_data_by_disease_name
 import json
 # Create your views here.
@@ -29,12 +28,12 @@ class ProtienDataByDisease(APIView):
     def get(self, request, disease_name):
         try:
             disease = Disease.objects.get(disease_name=disease_name)
-        except:
-            #get the protein data for the disease.
+        except Disease.DoesNotExist:
+            #get all  protein data for the disease.
             fetch_protein_data_by_disease_name(disease_name)
-            disease = Disease.objects.get(disease_name=disease_name)
-            disease_summary = fetch_disease_data(disease_name)
-            disease = Disease( disease_name = disease_name, patient_summary= disease_summary)
-            disease.save()
+            disease = Disease.objects.filter(disease_name__icontains=disease_name).first()
+            
+            if not disease:
+                return Response({"detail" : "Disease not found"}, status=404)
         serializer = DiseaseSerializer(disease)
         return Response(serializer.data)
