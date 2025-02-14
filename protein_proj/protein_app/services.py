@@ -30,27 +30,27 @@ def fetch_protein_data(accession_id):
             disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
 
         # Create disease objects for each associated disease
-            associated_diseases = []
+            # associated_diseases = []
             for disease in disease_comments:
                 disease_data = disease.get('disease', {}) 
                 disease_name = disease_data.get("diseaseId")
                 description = disease_data.get("description","")
-
-                # formatted_disease ={
-                #     "disease_name": disease_data.get("diseaseId"),
-                #     'disease_description': disease_data.get('description')
-                # }
-                # associated_diseases.append(formatted_disease)
-
-                disease_obj,_ = Disease.objects.get_or_create(
-                    disease_name=disease_name,
-                    defaults={"description": description},
-                )
+                
+                # Consider deleting after Uniprot is running agin.(# formatted_disease ={
+                # #     "disease_name": disease_data.get("diseaseId"),
+                # #     'disease_description': disease_data.get('description')
+                # # }
+                # # associated_diseases.append(formatted_disease))
+                if disease_name:
+                    disease_obj,_ = Disease.objects.get_or_create(
+                        disease_name=disease_name,
+                        defaults={"description": description},
+                    )
 
         # Add the disease to the protein's associated diseases
-                protein.associated_disease.add(disease_obj)
-                protein.save()
-                return protein
+                    protein.associated_disease.add(disease_obj)
+            protein.save()
+            return protein
         # improve to provide verification of successful creation
         else:
             raise Exception(f"Failed to fetch data for accession ID {accession_id}")
@@ -74,9 +74,12 @@ def fetch_protein_data_by_name(name):
     return fetch_protein_data(accession_id)
 
 def fetch_protein_data_by_disease_name(disease_name):
-     #obtain protein information and function based on disease name.
-     search_url = f"https://rest.uniprot.org/uniprotkb/search?query={disease_name}"
-     query_response = requests.get(search_url)
-     queryJSON = query_response.json()
-     accession_id = queryJSON.get("results", [])[0].get("primaryAccession", None)
-     return fetch_protein_data(accession_id)
+    #obtain protein information and function based on disease name.
+    search_url = f"https://rest.uniprot.org/uniprotkb/search?query={disease_name}"
+    query_response = requests.get(search_url)
+    queryJSON = query_response.json()
+    accession_id = queryJSON.get("results", [])[0].get("primaryAccession", None)
+    if not accession_id:
+        print(f"No protein found for disease: {disease_name}")
+        return None
+    fetch_protein_data(accession_id)

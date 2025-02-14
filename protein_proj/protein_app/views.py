@@ -2,7 +2,7 @@ from rest_framework.views import APIView, Response
 from .models import Protein
 from disease_app.models import Disease
 from django.shortcuts import get_object_or_404
-from .services import fetch_protein_data, fetch_protein_data_by_name
+from .services import fetch_protein_data, fetch_protein_data_by_name, fetch_protein_data_by_disease_name
 from .serializer import ProteinSerializer
 from disease_app.serializer import DiseaseSerializer
 from disease_app.services import fetch_disease_data
@@ -59,7 +59,13 @@ class OneProtein(APIView):
         return Response(response_date)
 
     def delete(self,request,parameter):
+        if re.match(r"^[A-Z][0-9A-Z]{5}$", parameter):
+        # Handle as an accession ID
+            protein = Protein.objects.filter(accession_id=parameter).first()
+            protein.delete()
+        #handle as string
         protein_name = parameter.replace("_", " ")
         protein = get_object_or_404(Protein, name=protein_name)
         protein.delete()
         return Response(f"{protein_name} was deleted")
+    

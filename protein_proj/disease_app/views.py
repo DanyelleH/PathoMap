@@ -20,18 +20,19 @@ class OneDisease(APIView):
         try:
             disease = Disease.objects.get(pk=pk)
         except Disease.DoesNotExist:
-            return Response({"Disease not found"}, status=404)
+            return Response({"Disease with that pk was not found"}, status=404)
         
         serializer = DiseaseSerializer(disease)
         return Response(serializer.data)
 
-class DiseaseByName(APIView):
+class ProtienDataByDisease(APIView):
     def get(self, request, disease_name):
         try:
             disease = Disease.objects.get(disease_name=disease_name)
         except:
             #get the protein data for the disease.
-            protein = fetch_protein_data_by_disease_name(disease_name)
+            fetch_protein_data_by_disease_name(disease_name)
+            disease = Disease.objects.get(disease_name=disease_name)
             disease_summary = fetch_disease_data(disease_name)
             disease = Disease( disease_name = disease_name, patient_summary= disease_summary)
             disease.save()
