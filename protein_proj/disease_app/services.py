@@ -24,29 +24,37 @@ def fetch_disease_data(disease_name):
         # return parsed_data
         
         nlm_results = json_data.get("nlmSearchResult",{})
-        document_list = nlm_results.get("list",{}).get("document",[])
-        if document_list:
-            if isinstance(document_list[0], dict) and "content" in document_list[0]:
-                full_summary = document_list[0]["content"]
-            else:
-                full_summary = ""
+        document_data = nlm_results.get("list",{}).get("document",[])
 
-            if isinstance(full_summary, str) and full_summary.strip():
-                cleaned_text = full_summary
-            elif isinstance(full_summary, list):
-                cleaned_text = "Full Summary not available"
+        if isinstance(document_data, dict):
+            document_list = [document_data]
+        elif isinstance(document_data, list):
+            document_list = document_data
+        else:
+            document_list = []
+
+        if document_list:
+            first_document = document_list[0]
+            full_summary = first_document.get("content", "")
+
+            ## Full summary is a list if data is retrieved, if not it is a string.
+            if isinstance(full_summary, list):
                 for item in full_summary:
                     if item.get("@name") == "FullSummary":
-                        cleaned_text = BeautifulSoup(item["#text"], 'html.parser').get_text()
+                        full_summary = BeautifulSoup(item["#text"], 'html.parser').get_text()
                         break 
-            else:
-                 cleaned_text = "Full Summary not available"
-                
+                    else:
+                        full_summary= "Full Summary not available"
+            elif isinstance(full_summary, str) and not full_summary.strip():
+                full_summary = "Full Summary not available"
+
                     
-            cleaned_text = re.sub(r'(?<=[a-z])(?=[A-Z])', ', ', cleaned_text)
+            cleaned_text = re.sub(r'(?<=[a-z])(?=[A-Z])', ', ', full_summary)
             cleaned_text = cleaned_text.replace(".", ". ").replace(":", ": \n\n").replace("•", "\n-").replace("?", "? ").replace("!", "! ")
+            print(cleaned_text)
             return cleaned_text
-        else:
-            return "No documents found for this disease"
-    else:
-        return "Couldn't fetch data"
+        
+        return "No documents found for this disease"
+    
+    return "Couldn't fetch data"
+

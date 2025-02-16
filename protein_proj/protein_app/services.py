@@ -13,14 +13,14 @@ def fetch_protein_data(accession_id):
             data = response.json()
             # Extract relevant data
             protein_description = data.get("proteinDescription", {})
-            if "reccomendedName" in protein_description:
+            if "recommendedName" in protein_description:
                 name = protein_description.get("recommendedName", {}).get("fullName").get("value", "")
             else:
                 submission_names = protein_description.get("submissionNames", [])
                 if submission_names:
                     name = submission_names[0].get("fullName", {}).get("value", "")
-                else:
-                    name = ""
+            if not name:
+                return None
             
             comments = data.get("comments", [])
 
