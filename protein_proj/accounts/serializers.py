@@ -1,8 +1,15 @@
 from rest_framework.serializers import ModelSerializer
-from django.contrib.auth.models import User
-
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class SignupSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ["username", "password"]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['pk','first_name','last_name','dob', "current_readings"]

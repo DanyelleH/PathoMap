@@ -25,6 +25,8 @@ SECRET_KEY = 'django-insecure-nj9@9k3ui2!@-_n(+a0edug$o63#+o@i3ton8ld@0s!i*$y329
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+AUTH_USER_MODEL = 'accounts.User'
+
 ALLOWED_HOSTS = []
 
 
@@ -40,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'protein_app',
     'disease_app',
-    'users_app',
+    # 'users_app',
+    'accounts',
     # 'rest_framework.authtoken',
     
 ]

@@ -41,21 +41,21 @@ class CurrentDisease(APIView):
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=404)
         
-        serializer = DiseaseSerializer(user.current_disease.all(), many=True)
+        serializer = DiseaseSerializer(user.current_readings.all(), many=True)
         return Response(serializer.data)
     
     def patch(self, request, id):
         # should diseases associated with this user.
         user = User.objects.get(id=id)
 
-        disease_name = request.data.get("current_disease")
+        disease_name = request.data.get("current_readings")
         if not disease_name:
             return Response({"error":"Disease name is required"}, status=404)
 
         disease = Disease.objects.get(disease_name=disease_name)
         if not disease:
             return Response(f"Disease not found in database")
-        user.current_disease.add(disease)
+        user.current_readings.add(disease)
         user.save()
         
         return Response(f"{user.first_name}'s history has been updated")
@@ -63,7 +63,7 @@ class CurrentDisease(APIView):
     def delete(self, request, id):
         user = User.objects.get(id=id)
         
-        disease_name = request.data.get("current_disease")
+        disease_name = request.data.get("current_readings")
         disease = Disease.objects.get(disease_name=disease_name)
-        user.current_disease.remove(disease)
+        user.current_readings.remove(disease)
         return Response(f"{disease.disease_name} has been removed from {user.first_name}")

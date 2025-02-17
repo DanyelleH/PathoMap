@@ -1,11 +1,13 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from disease_app.models import Disease
+
 # Create your models here.
-class User(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    dob = models.DateField()
-    current_disease = models.ManyToManyField(Disease,related_name= 'current_patients', blank=True) # assigned readings.
+class User(AbstractUser):
+
+    dob = models.DateField(null=True, blank=True)
+    current_readings = models.ManyToManyField(Disease,related_name= 'current_readings', blank=True) # assigned readings.
 
     def __str__(self):
-        return f"Patient {self.first_name}, {self.last_name}"
+        return f"{self.username} ({self.first_name}, {self.last_name})"
+    
