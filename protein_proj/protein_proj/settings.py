@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'protein_app',
     'disease_app',
-    # 'users_app',
     'accounts',
     # 'rest_framework.authtoken',
     
