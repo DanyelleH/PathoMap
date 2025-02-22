@@ -1,4 +1,4 @@
-# Protein-Disease Quick Reference API (PathoMap)
+# PathoMap - Patient Health Education
 
 ## Overview
 
