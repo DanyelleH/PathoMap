@@ -44,11 +44,12 @@ INSTALLED_APPS = [
     'disease_app',
     'accounts',
     'rest_framework.authtoken',
+    'corsheaders',
     
 ]
 
 MIDDLEWARE = [
-    # 'protein_proj.middleware.CorsMiddleware',
+    'protein_proj.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
