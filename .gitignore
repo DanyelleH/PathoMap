@@ -3,3 +3,4 @@ pppvenv
 personal.txt
 resources
 node_modules
+.env
