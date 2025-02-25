@@ -12,6 +12,11 @@ Patient Labs -> LIMS -> Obtain protein data
 ```
 
 ### Usage : 
+Create a venv running Python@3.13 or older to avoid errors running scispacy
+
+https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_ner_bc5cdr_md-0.5.4.tar.gz ( model used) 
+
+
 To start the API:
 
 ```
