@@ -12,18 +12,19 @@ Patient Labs -> LIMS -> Obtain protein data
 ```
 
 ### Usage : 
-Create a venv running Python@3.13 or older to avoid errors running scispacy
-
-https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_ner_bc5cdr_md-0.5.4.tar.gz ( model used) 
-
-
-To start the API:
-
+Create a venv running Python@3.12 or older to avoid errors running scispacy
 ```
+commands: 
+python3.12 -m venv venv
+
+cd protein_proj
+
 ./run_compose.sh
 ```
+https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_ner_bc5cdr_md-0.5.4.tar.gz ( model used) 
 
-## Protein Data API (Proteins App)
+# Each Apps Responsibility
+### Protein Data API (Proteins App)
 Allows users to retrieve detailed protein functional information.
 
 #### Fields:
@@ -58,7 +59,7 @@ Endpoints:
 
 						localhost:8000/api/v1/protein/Q6P3S1
 
-## Disease Information API (Diseases App)
+### Disease Information API (Diseases App)
 
 Provide general and clinically relevant disease descriptions.
 
@@ -71,16 +72,12 @@ Provide general and clinically relevant disease descriptions.
 • patient_summary: Patient-Friendly summury from MedlinePlus.
 
 	
-## User Tracking API (User App)
-Used to track users, or research participants. 
+## User Tracking (accounts)
+Contains all fields included in Django Built in Users Model, with the following added: 
+ 
+• dob: needed to improve diagnosis models accuracy.
 
-• first_name:
-
-• last_name: 
-
-• dob: Date of birth.
-
-• current_diseases: List of relevant disease info per patient.
+• current_readings: Users saved queries
 
 
 ## Future Features
