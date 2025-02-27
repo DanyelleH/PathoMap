@@ -5,3 +5,4 @@ resources
 node_modules
 .env
 .DS_Store
+DiagnosisImplemetationDraft.py
