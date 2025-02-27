@@ -1,26 +1,4 @@
-// import React, {useState} from 'react';
-
-// export default function LoginForm({username}, {password}){
-//     const handleSubmit= (e) =>{
-        
-//     }
-//     if (!username || !password){
-//         const [username, setUsername] = useState("");
-//         const [password, setPassword] = useState("");
-//     return(
-//         <form onSubmit={handleSubmit}>
-//             <div>
-//                 <input type="text" value={username} placeholder="Username" />
-//             </div>
-//             <div>
-//                 <input type="password" value={password} placeholder="password" />
-//             </div>
-//             <button type="submit" > Sign In </button>
-//         </form>
-//     )}
-
-
-// }
+import React, {useState} from 'react';
 
 function Form({formType, handleInputChange, formData, handleSubmit, errorMessage}) {
 

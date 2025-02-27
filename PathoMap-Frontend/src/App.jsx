@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import Login from './pages/LoginPage'
 import SignUp from './pages/SignUpPage'
 import UserContext from "./contexts/UserContext"
+import NewUser from './pages/NewUserPage'
 function App() {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [userToken, setUserToken] = useState(null)
@@ -35,6 +36,7 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/login" element={<Login handleInputChange={handleInputChange} formData={formData} handleToken={handleToken}/>} />
             <Route path="/signup" element={<SignUp handleInputChange={handleInputChange} formData={formData}/>} />
+            <Route path="/new-user" element={<NewUser handleInputChange={handleInputChange} formData={formData} />} />
           </Routes>
       </BrowserRouter>
 

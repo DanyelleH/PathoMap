@@ -25,7 +25,7 @@ export default function SignUpForm({handleInputChange, formData}){
             }
         }
         if (shouldRedirect) {
-            return <Navigate to="/login" /> 
+            return <Navigate to="/new-user" /> 
         } else{
             return (
                  <Form formType={"Signup"} handleInputChange={handleInputChange} formData={formData} handleSubmit={handleSubmit} errorMessage={errorMessage}/>
