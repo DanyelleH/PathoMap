@@ -16,13 +16,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # frontend:
-  #   build: ./PathoMap-Frontend 
-  #   ports: 
-  #     - "8090:80"
-  #   depends_on:
-  #     api:
-  #       condition: service_healthy
+  frontend:
+    build: ./PathoMap-Frontend 
+    ports: 
+      - "8090:80"
+    depends_on:
+      api:
 volumes:
   postgres_data:
   
