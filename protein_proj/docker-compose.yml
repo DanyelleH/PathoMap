@@ -24,12 +24,10 @@ services:
 
   frontend:
     image: danyelleh/pathomap-react-server:latest
+    platform: linux/amd64
     ports: 
       - "8090:80"
-    depends_on:
-      api:
-        condition: service_healthy
-        restart: true
+   
 volumes:
   postgres_data:
   
