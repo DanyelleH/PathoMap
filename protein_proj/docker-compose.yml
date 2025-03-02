@@ -17,12 +17,13 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   frontend:
+    image: danyelleh/pathomap-react-server:latest
     build: ../PathoMap-Frontend 
     ports: 
       - "8090:80"
     depends_on:
       api:
-        condition: service_healthy
+        restart: always
 volumes:
   postgres_data:
   
