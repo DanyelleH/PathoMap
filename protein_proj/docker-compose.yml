@@ -23,6 +23,7 @@ services:
       - "8090:80"
     depends_on:
       api:
+        condition: service_healthy
         restart: always
 volumes:
   postgres_data:
