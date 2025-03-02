@@ -24,7 +24,7 @@ services:
     depends_on:
       api:
         condition: service_healthy
-        restart: always
+        restart: true
 volumes:
   postgres_data:
   
