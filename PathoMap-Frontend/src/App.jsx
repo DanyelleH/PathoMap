@@ -6,16 +6,19 @@ import HomePage from './pages/HomePage'
 import Login from './pages/LoginPage'
 import SignUp from './pages/SignUpPage'
 import UserContext from "./contexts/UserContext"
-import NewUser from './pages/NewUserPage'
+import NewUser from './pages/UserInformation'
+import Profile from './pages/ProfilePage'
+import SymptomSearch from './pages/SymptomSearchPage'
+
 function App() {
   const [formData, setFormData] = useState({ username: '', password: '' });
-  const [userToken, setUserToken] = useState(null)
-
+  const [userToken, setUserToken] = useState(sessionStorage.getItem("token"))
 
 
   const handleToken = (token) => {
     setFormData({ username: '', password: '' })
     setUserToken(token)
+    sessionStorage.setItem("userToken", token)
   }
   
   const handleInputChange = (e) => {
@@ -32,11 +35,14 @@ function App() {
       <BrowserRouter>
         <FixedBottomNavigation userToken={userToken} setUserToken={setUserToken}/>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/home" element={<HomePage />} />
+            <Route path="/" element={<HomePage />} formData={formData}/>
+            <Route path="/home" element={<HomePage formData={formData}/>} />
             <Route path="/login" element={<Login handleInputChange={handleInputChange} formData={formData} handleToken={handleToken}/>} />
-            <Route path="/signup" element={<SignUp handleInputChange={handleInputChange} formData={formData}/>} />
-            <Route path="/new-user" element={<NewUser handleInputChange={handleInputChange} formData={formData} />} />
+            <Route path="/signup" element={<SignUp handleToken ={handleToken} handleInputChange={handleInputChange} formData={formData}/>} />
+            <Route path="/new-user/:username" element={<NewUser handleInputChange={handleInputChange} formData={formData} handleToken={handleToken}/>} />
+            <Route path="/profile" element={<Profile />} />  
+            <Route path="/symptomSearch" element={<SymptomSearch />} />
+            {/* direct to new user form with the users id as a parameter. */}
           </Routes>
       </BrowserRouter>
 

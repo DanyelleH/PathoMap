@@ -33,8 +33,8 @@ export default function FixedBottomNavigation({userToken, setUserToken}) {
         >
           <BottomNavigationAction label="Home" icon={<HomeIcon />} onClick={() => navigate("/")} />
           <BottomNavigationAction label="Saved Readings" icon={<LibraryBooksIcon />} />
-          <BottomNavigationAction label="Symptom Search" icon={<MedicalServicesIcon />} />
-          <BottomNavigationAction label="My Profile" icon={<ManageAccountsIcon />} />
+          <BottomNavigationAction label="Symptom Search" icon={<MedicalServicesIcon />} onClick={() => navigate("/symptomSearch")} />
+          <BottomNavigationAction label="My Profile" icon={<ManageAccountsIcon />} onClick={() => navigate("/profile")}/>
           
           {!userToken ? ( 
             <BottomNavigationAction label="Login" icon={<LoginIcon />} onClick={() => navigate("/login")} /> 

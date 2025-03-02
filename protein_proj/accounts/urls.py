@@ -7,6 +7,6 @@ urlpatterns = [
     path('get-token/', obtain_auth_token),
     path('signup/', SignupView.as_view()),
     path('all_users', AllUsers.as_view(), name='All_User'),
-    path('<int:id>/', UserById.as_view(), name='User_by_id'),
-    path('<int:id>/current_disease', CurrentDisease.as_view(), name='current_diseases')
+    path('<str:username>/', UserById.as_view(), name='User_by_id'),
+    path('<str:username>/current_disease', CurrentDisease.as_view(), name='current_diseases')
 ]

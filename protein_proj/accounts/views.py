@@ -38,14 +38,14 @@ class AllUsers(APIView):
         return Response(serializer.errors)
 
 class UserById(APIView):
-    def get(self,request,id):
-        user=User.objects.get(id=id)
+    def get(self,request,username):
+        user=User.objects.get(username=username)
         serialize_user = UserSerializer(user)
         return Response(serialize_user.data)
 
-    def patch(self,request,id):
+    def patch(self,request,username):
         #update Users record  PII
-        user=User.objects.get(id=id)
+        user=User.objects.get(username=username)
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -53,18 +53,18 @@ class UserById(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class CurrentDisease(APIView):
-    def get(self, request, id):
+    def get(self, request, username):
         try:
-            user = User.objects.get(id=id)
+            user = User.objects.get(username=username)
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=404)
         
         serializer = DiseaseSerializer(user.current_readings.all(), many=True)
         return Response(serializer.data)
     
-    def patch(self, request, id):
+    def patch(self, request, username):
         # should diseases associated with this user.
-        user = User.objects.get(id=id)
+        user = User.objects.get(username=username)
 
         disease_name = request.data.get("current_readings")
         if not disease_name:
@@ -78,8 +78,8 @@ class CurrentDisease(APIView):
         
         return Response(f"{disease_name} has successfully been added to {user.first_name}'s readings")
 
-    def delete(self, request, id):
-        user = User.objects.get(id=id)
+    def delete(self, request, username):
+        user = User.objects.get(username=username)
         
         disease_name = request.data.get("current_readings")
         disease = Disease.objects.get(disease_name=disease_name)

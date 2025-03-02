@@ -22,6 +22,9 @@ export default function Login({formData, handleInputChange,handleToken }){
         } else {
           handleToken(token)
           setShouldRedirect(true)
+          localStorage.setItem("username", formData.username);
+          localStorage.setItem("token",token);
+          // #store username in storage
         }
       } catch (error) {
         setResponseMsg("An error occured during login.")
@@ -31,7 +34,7 @@ export default function Login({formData, handleInputChange,handleToken }){
       }
   };
   if (shouldRedirect) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/home" />;  
   }
     return (
       <>

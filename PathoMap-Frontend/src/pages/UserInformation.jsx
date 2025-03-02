@@ -1,19 +1,56 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Box, TextField, Button } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateField } from '@mui/x-date-pickers/DateField';
+import { useNavigate, useParams } from 'react-router-dom';
+import { updateUserInfo } from '../api/usersAPI';
+import dayjs from "dayjs"
+import CircularColor from '../components/LoadingComponent';
+import { Navigate } from 'react-router-dom';
 
-const UserInfoForm = ({ handleInputChange, formData, handleSubmit, errorMessage }) => {
+const UserInfo = ({ handleInputChange, handleToken}) => {
 
-    const userData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        dob: formData.dob,
-      };
-      
+    const [errorMessage, setErrorMessage] = React.useState("");
+    const [loading, setLoading] = useState(false);
+    const username = localStorage.getItem("username");
+    const userToken = localStorage.getItem("token");
+    const navigate= useNavigate()
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        
+        const userData = new FormData(e.target)
+        const formattedDate = dayjs(userData.get("dob"), "MM/DD/YYYY").format("YYYY-MM-DD")
+        
+        
+        const context = {};
+        
+        if (userData.get("firstName")) context.first_name = userData.get("firstName");
+        if (userData.get("lastName")) context.last_name = userData.get("lastName").trim();
+        if (userData.get("dob")) context.dob = formattedDate;
+        if (userData.get("email")) context.email = userData.get("email");
+        
+        try {
+            const response = await updateUserInfo(username,context, userToken);
+            console.log("updating information ... ")
+            if (!response) {
+                throw new Error("Failed to update user information")
+                } else {
+                    console.log("User Updated:", response)
+                    navigate("/home")
+                }
+            } catch (error) {
+                console.error("Error updating user:", error)
+                setErrorMessage("Failed to update user. Please try again.");
+            }
+        };
+
     return (
+        <>
+        {loading ? (
+                      <CircularColor />
+                    ) : (
         <div className="form-container">
             {errorMessage && <h2 className="error-message">{errorMessage}</h2>}
             <Box
@@ -33,14 +70,14 @@ const UserInfoForm = ({ handleInputChange, formData, handleSubmit, errorMessage 
                 autoComplete="off"
             >
                 <h2>User Information</h2>
-
+            
                 {/* First Name */}
                 <TextField
                     fullWidth
                     required
                     id="firstName"
                     label="First Name"
-                    value={formData.firstName}
+                    name="firstName"
                     onChange={handleInputChange}
                     sx={{
                         '& .MuiInputBase-input': {
@@ -56,7 +93,7 @@ const UserInfoForm = ({ handleInputChange, formData, handleSubmit, errorMessage 
                     required
                     id="lastName"
                     label="Last Name"
-                    value={formData.lastName}
+                    name="lastName"
                     onChange={handleInputChange}
                     sx={{
                         '& .MuiInputBase-input': {
@@ -73,7 +110,7 @@ const UserInfoForm = ({ handleInputChange, formData, handleSubmit, errorMessage 
                     id="email"
                     label="Email"
                     type="email"
-                    value={formData.email}
+                    name="email"
                     onChange={handleInputChange}
                     sx={{
                         marginTop: '5px',
@@ -89,9 +126,9 @@ const UserInfoForm = ({ handleInputChange, formData, handleSubmit, errorMessage 
                     <DateField
                         fullWidth
                         required
+                        id="dob"
+                        name="dob"
                         label="Date of Birth"
-                        value={formData.dob}
-                        onChange={handleInputChange}
                         sx={{
                             marginTop: '5px',
                             marginBottom: '10px', // Bottom margin for spacing
@@ -116,8 +153,11 @@ const UserInfoForm = ({ handleInputChange, formData, handleSubmit, errorMessage 
                     Submit
                 </Button>
             </Box>
+            
         </div>
+                    )}
+        </>
     );
 };
 
-export default UserInfoForm;
+export default UserInfo;
