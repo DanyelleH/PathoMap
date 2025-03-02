@@ -18,7 +18,6 @@ services:
 
   frontend:
     image: danyelleh/pathomap-react-server:latest
-    build: ../PathoMap-Frontend 
     ports: 
       - "8090:80"
     depends_on:
