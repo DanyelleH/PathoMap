@@ -3,6 +3,11 @@ services:
     build: .
     ports: 
     - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512MB"
     depends_on:
       - db
     healthcheck:
