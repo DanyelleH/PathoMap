@@ -24,41 +24,46 @@ def fetch_protein_data(accession_id):
             
             comments = data.get("comments", [])
 
-            function_comments = [comment['texts'][0]["value"] for comment in comments if comment.get("commentType")== "FUNCTION" and 'texts' in comment]
+            disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
+            # if there isnt any disease associations, do not save result. 
+            if disease_comments:
+
+                function_comments = [comment['texts'][0]["value"] for comment in comments if comment.get("commentType")== "FUNCTION" and 'texts' in comment]
             
 
-            # Create the protein entry
-            protein, created = Protein.objects.get_or_create(
-                accession_id=accession_id,
-                defaults={
-                    'name': name,
-                    'function': ";".join(function_comments),
-                }
-            )
+                # Create the protein entry
+                protein, created = Protein.objects.get_or_create(
+                    accession_id=accession_id,
+                    defaults={
+                        'name': name,
+                        'function': ";".join(function_comments),
+                    }
+                )
 
-            disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
 
-        # Create disease objects for each associated disease
-            for disease in disease_comments:
-                disease_data = disease.get('disease', {}) 
-                disease_name = disease_data.get("diseaseId")
-                description = disease_data.get("description","")
-                
-                if disease_name:
-                    #get_or_create automatically saves disease
-                    disease_obj,_ = Disease.objects.get_or_create(
-                        disease_name=disease_name,
-                        defaults={"description": description},
+            # Create disease objects for each associated disease
+                for disease in disease_comments:
+                    disease_data = disease.get('disease', {}) 
+                    disease_name = disease_data.get("diseaseId")
+                    if disease_name:
                         patient_summary = fetch_disease_data(disease_name)
-                    )
+                        # dont save diseases with no patient summary available
+                        if patient_summary:
+                            description = disease_data.get("description","")
+                                #get_or_create automatically saves disease
+                            disease_obj,_ = Disease.objects.get_or_create(
+                                disease_name=disease_name,
+                                defaults={"description": description},
+                                patient_summary = patient_summary
+                            )
 
-        # Add the disease to the protein's associated diseases
-                    protein.associated_disease.add(disease_obj)
-            protein.save()
-            return protein
-        # improve to provide verification of successful creation
-        else:
-            raise Exception(f"Failed to fetch data for accession ID {accession_id}")
+                # Add the disease to the protein's associated diseases
+                            protein.associated_disease.add(disease_obj)
+                            protein.save()
+                            return protein
+                # improve to provide verification of successful creation
+                # else:
+                #     raise Exception(f"Failed to fetch data for accession ID {accession_id}")
 
 
 def fetch_protein_data_by_name(name):

@@ -31,9 +31,14 @@ class ProtienDataByDisease(APIView):
         except Disease.DoesNotExist:
             #get all  protein data for the disease.
             fetch_protein_data_by_disease_name(disease_name)
-            disease = Disease.objects.filter(disease_name__icontains=disease_name).first()
+            diseases = Disease.objects.filter(disease_name__icontains=disease_name)
             
-            if not disease:
+            
+            if not diseases:
                 return Response({"detail" : "Disease not found"}, status=404)
-        serializer = DiseaseSerializer(disease)
-        return Response(serializer.data)
+            else:
+                response = []
+                for disease in diseases:
+                    serializer = DiseaseSerializer(disease)
+                    response.append(serializer.data)
+        return Response(response)
