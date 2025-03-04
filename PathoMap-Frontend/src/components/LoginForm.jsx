@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
+import UserContext from '../contexts/UserContext';
 
-function Form({formType, handleInputChange, formData, handleSubmit, errorMessage}) {
 
+function Form({formType, handleSubmit}) {
+  const{ handleInputChange, formData, errorMessage} = useContext(UserContext)
     return (
       <>
       {errorMessage && <h2>{errorMessage}</h2>}

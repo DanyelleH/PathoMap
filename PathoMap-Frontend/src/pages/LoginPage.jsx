@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Form from '../components/LoginForm';
 import { Navigate } from 'react-router-dom';
 import { login } from '../api/authApi';
 import { useNavigate } from "react-router-dom";
 import CircularColor from '../components/LoadingComponent';
-export default function Login({formData, handleInputChange,handleToken }){
+import UserContext from '../contexts/UserContext';
+export default function Login(){
     const [responseMsg, setResponseMsg] = useState("")
     const [shouldRedirect, setShouldRedirect] = useState(false)
     const [loading, setLoading]=useState(false)
+    const {formData, handleToken } = useContext(UserContext)
 
     const navigate = useNavigate()
 
@@ -22,9 +24,7 @@ export default function Login({formData, handleInputChange,handleToken }){
         } else {
           handleToken(token)
           setShouldRedirect(true)
-          localStorage.setItem("username", formData.username);
-          localStorage.setItem("token",token);
-          // #store username in storage
+        
         }
       } catch (error) {
         setResponseMsg("An error occured during login.")
@@ -34,7 +34,7 @@ export default function Login({formData, handleInputChange,handleToken }){
       }
   };
   if (shouldRedirect) {
-    return <Navigate to="/home" />;  
+    return <Navigate to="/profile" />;
   }
     return (
       <>
@@ -42,7 +42,7 @@ export default function Login({formData, handleInputChange,handleToken }){
           <CircularColor />
         ) : (
           <>
-            <Form formType={"Login"} handleInputChange={handleInputChange} formData={formData}handleToken={handleToken} handleSubmit={handleSubmit} responseMsg={responseMsg}/>
+            <Form formType={"Login"} handleSubmit={handleSubmit}/>
              <p> New User? </p>
             <button onClick={()=> navigate("/signup")} >Create an Account</button>
         </>

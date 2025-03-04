@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useContext } from 'react'
 import { useNavigate } from "react-router-dom";
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -9,17 +9,13 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Paper from '@mui/material/Paper';
+import UserContext from '../contexts/UserContext';
 
-
-export default function FixedBottomNavigation(userToken, setUserToken) {
+export default function FixedBottomNavigation() {
   const [value, setValue] = React.useState(0);
-  
+  const {userToken, handleLogout} = useContext(UserContext)
   const navigate = useNavigate()
 
-  const handleLogout = () => {
-    setUserToken(null)
-    navigate("/home")
-  }
 
   return (
 

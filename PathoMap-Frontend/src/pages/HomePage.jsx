@@ -1,17 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-export default function  HomePage(handleToken) {
-    const username= localStorage.getItem("username")
-    
+import UserContext from '../contexts/UserContext'
+export default function  HomePage() {
     const navigate = useNavigate()
+    
 
-    const handleNavigate = () => {
-        navigate(`/new-user/${username}`)
-    }
+    
     return (
         <>
         <p> This is the Homepage</p>
-        <button onClick={handleNavigate}> Click to update profile</button>
+        
         
         </>
     )
