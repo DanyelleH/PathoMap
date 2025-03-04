@@ -9,6 +9,7 @@ import UserContext from "./contexts/UserContext"
 import NewUser from './pages/UserInformation'
 import Profile from './pages/ProfilePage'
 import SymptomSearch from './pages/SymptomSearchPage'
+import DiseaseLookup from './pages/DiseaseLookupPage'
 
 function App() {
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -41,7 +42,8 @@ function App() {
             <Route path="/signup" element={<SignUp handleToken ={handleToken} handleInputChange={handleInputChange} formData={formData}/>} />
             <Route path="/new-user/:username" element={<NewUser handleInputChange={handleInputChange} formData={formData} handleToken={handleToken}/>} />
             <Route path="/profile" element={<Profile />} />  
-            <Route path="/symptomSearch" element={<SymptomSearch />} />
+            <Route path="/symptomSearch" element={<SymptomSearch />} handleToken={handleToken}/>
+            <Route path="/diseaseLookup" element={<DiseaseLookup />} handleToken={handleToken} />
             {/* direct to new user form with the users id as a parameter. */}
           </Routes>
       </BrowserRouter>

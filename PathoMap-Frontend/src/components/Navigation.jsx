@@ -11,7 +11,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Paper from '@mui/material/Paper';
 
 
-export default function FixedBottomNavigation({userToken, setUserToken}) {
+export default function FixedBottomNavigation(userToken, setUserToken) {
   const [value, setValue] = React.useState(0);
   
   const navigate = useNavigate()
@@ -32,7 +32,7 @@ export default function FixedBottomNavigation({userToken, setUserToken}) {
           }}
         >
           <BottomNavigationAction label="Home" icon={<HomeIcon />} onClick={() => navigate("/")} />
-          <BottomNavigationAction label="Saved Readings" icon={<LibraryBooksIcon />} />
+          <BottomNavigationAction label="Disease Lookup" icon={<LibraryBooksIcon />} onClick={() => navigate("/diseaseLookup")}/>
           <BottomNavigationAction label="Symptom Search" icon={<MedicalServicesIcon />} onClick={() => navigate("/symptomSearch")} />
           <BottomNavigationAction label="My Profile" icon={<ManageAccountsIcon />} onClick={() => navigate("/profile")}/>
           
