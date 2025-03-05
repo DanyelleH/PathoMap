@@ -4,7 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import { getDiseases } from "../api/DiseaseAPI";
 
-export default function SearchBar( { onSearch }) {
+export default function SearchBar( { onSearch, searchPrompt }) {
     const [query,setQuery]=useState("")
    
     const handleInputChange = (e) => {
@@ -24,7 +24,7 @@ export default function SearchBar( { onSearch }) {
           <TextField
             value={query}
             onChange={handleInputChange}
-            placeholder="Enter Disease Name"
+            placeholder= {searchPrompt}
             variant="outlined"
             size="small"
             style={{ marginRight: '10px', width: '300px' }}
