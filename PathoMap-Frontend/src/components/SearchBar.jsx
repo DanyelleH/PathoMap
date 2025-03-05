@@ -6,29 +6,32 @@ import { getDiseases } from "../api/DiseaseAPI";
 
 export default function SearchBar( { onSearch }) {
     const [query,setQuery]=useState("")
+   
+    const handleInputChange = (e) => {
+        setQuery(e.target.value);
+      };
+    
+      const handleSubmit = (e) => {
+        e.preventDefault(); 
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
         if (query.trim()) {
-            onSearch(query);
-          }
-
-    }
+          onSearch(query); 
+          setQuery(""); // need to add user notice of loading results.
+        }
+      };
     return (
-        <>
-            <form onSubmit={handleSubmit}> 
-                <TextField
-                id="searchBar"
-                className="text"
-                placeholder="Search Disease Name"
-                size="small"
-                onChange={(e) => setQuery(e.target.value)}
-                />
-                <IconButton type="submit" >
-                    <SearchIcon />
-                </IconButton>
-            
-            </form>
-        </>
-    )
-}
+        <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center' }}>
+          <TextField
+            value={query}
+            onChange={handleInputChange}
+            placeholder="Enter Disease Name"
+            variant="outlined"
+            size="small"
+            style={{ marginRight: '10px', width: '300px' }}
+          />
+          <IconButton type="submit">
+            <SearchIcon />
+          </IconButton>
+        </form>
+      );
+    }

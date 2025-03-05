@@ -3,14 +3,15 @@ import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 
 export default function Profile() {
-  const { formData } = useContext(UserContext);
-  
+  const {userToken } = useContext(UserContext)
   const navigate = useNavigate();
 
-  const handleNavigate = () => {
-    navigate(`/new-user/${formData.username}`);
-  };
+    const username = localStorage.getItem("userToken")
 
+  const handleNavigate = () => {
+    navigate(`/new-user/${username}`);
+  };
+  console.log(userToken,)
   return (
     <>
       <div>

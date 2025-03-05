@@ -14,7 +14,7 @@ const UserInfo = ({ handleInputChange, handleToken}) => {
     const [errorMessage, setErrorMessage] = React.useState("");
     const [loading, setLoading] = useState(false);
     const username = localStorage.getItem("username");
-    const userToken = localStorage.getItem("token");
+    const userToken = localStorage.getItem("userToken");
     const navigate= useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -38,7 +38,7 @@ const UserInfo = ({ handleInputChange, handleToken}) => {
                 throw new Error("Failed to update user information")
                 } else {
                     console.log("User Updated:", response)
-                    navigate("/home")
+                    navigate("/profile")
                 }
             } catch (error) {
                 console.error("Error updating user:", error)
