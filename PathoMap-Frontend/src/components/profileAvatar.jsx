@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
+import UserContext from '../contexts/UserContext';
 
 function stringToColor(string) {
   let hash = 0;
@@ -31,10 +32,17 @@ function stringAvatar(name) {
   };
 }
 
+const toTitleCase = (str) => {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
 export default function ProfileAvatar() {
+  const userInfo = JSON.parse(localStorage.getItem("userProfile"));
   return (
     <Stack direction="row" spacing={2}>
-      <Avatar {...stringAvatar('Kent Dodds')} />
+      <Avatar {...stringAvatar(`${toTitleCase(userInfo.first_name)}, ${toTitleCase(userInfo.last_name)}}`)} />
     </Stack>
   );
 }

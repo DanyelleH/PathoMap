@@ -1,11 +1,12 @@
 import { createContext, useEffect, useMemo, useState } from "react";
-
+import { getUserInfo } from "../api/usersAPI";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [userData, setUserData] = useState(null); 
   const [formData, setFormData] = useState({ username: "", password: "" });
+  const [userInfo, setUserInfo] = useState(null);
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
@@ -35,9 +36,28 @@ export const UserProvider = ({ children }) => {
 
     if (storedToken && !userToken) {
       setUserToken(storedToken);
-      setUserData({ username: storedUsername });  // ✅ Now it won’t crash
+      setUserData({ username: storedUsername }); 
     }
   }, []);
+
+
+  const username = localStorage.getItem("username")
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (username && userToken) {
+        try {
+          const info = await getUserInfo(username, userToken);
+          localStorage.setItem("userProfile", JSON.stringify(info))
+          setUserInfo(info);
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+        }
+      }
+    };
+    fetchUserInfo();
+  }, [username, userToken]);
+
+
 
   const value = useMemo(
     () => ({
@@ -47,6 +67,8 @@ export const UserProvider = ({ children }) => {
       handleToken,
       formData,
       handleFormDataChange,
+      userInfo,
+      setUserInfo
     }),
     [userToken, userData, formData]
   );
