@@ -16,7 +16,10 @@ In future versions, connection to LIMS could allow patients to access readings o
 ### Installation : 
 Create a venv running Python@3.12 or older to avoid errors running scispacy
 ```python
-python3.12 -m venv PathomapVenv
+# if Python 3.11 not available, install it
+	brew install python@3.11
+# Create venv w that version to suport quick umls	
+	python3.11 -m venv PathomapVenv
 
 cd protein_proj
 

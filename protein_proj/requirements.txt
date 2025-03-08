@@ -18,9 +18,6 @@ django-cors-headers==4.6.0
 django-extensions==3.2.3
 django-rest-framework==0.1.0
 djangorestframework==3.15.2
-en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl#sha256=86cc141f63942d4b2c5fcee06630fd6f904788d2f0ab005cce45aadb8fb73889
-en_ner_bc5cdr_md @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_ner_bc5cdr_md-0.5.4.tar.gz#sha256=ffc73130a710edf851206199720cb2c744a043e032f5da6ba4bb36863deca778
-gunicorn==23.0.0
 h11==0.14.0
 httpcore==1.0.7
 httpx==0.28.1
@@ -52,8 +49,6 @@ python-dotenv==1.0.1
 requests==2.32.3
 rich==13.9.4
 scikit-learn==1.6.1
-scipy==1.15.2
-scispacy==0.5.5
 setuptools==75.8.1
 shellingham==1.5.4
 smart-open==7.1.0
