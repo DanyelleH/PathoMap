@@ -37,7 +37,7 @@ class AllUsers(APIView):
             return Response(serializer.data)
         return Response(serializer.errors)
 
-class UserById(APIView):
+class UserById(APIView): # by username
     def get(self,request,username):
         user=User.objects.get(username=username)
         serialize_user = UserSerializer(user)
@@ -52,7 +52,7 @@ class UserById(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class CurrentDisease(APIView):
+class SavedReadings(APIView):
     def get(self, request, username):
         try:
             user = User.objects.get(username=username)
@@ -62,11 +62,12 @@ class CurrentDisease(APIView):
         serializer = DiseaseSerializer(user.current_readings.all(), many=True)
         return Response(serializer.data)
     
+
     def patch(self, request, username):
         # should diseases associated with this user.
         user = User.objects.get(username=username)
 
-        disease_name = request.data.get("current_readings")
+        disease_name = request.data.get("disease_name") # obtain disease name from request,
         if not disease_name:
             return Response({"error":"Disease name is required"}, status=404)
 

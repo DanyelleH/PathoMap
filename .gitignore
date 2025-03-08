@@ -8,3 +8,5 @@ node_modules
 DiagnosisImplemetationDraft.py
 MLData
 venv3.11
+umls_processed
+umls_raw
