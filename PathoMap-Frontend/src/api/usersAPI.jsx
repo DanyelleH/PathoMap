@@ -32,7 +32,7 @@
 
 
   export async function saveDiseaseInfo(username, userToken, context) {
-    console.log(context)
+    // console.log(context)
     const payload = {
         method: "PATCH",
         headers: {
@@ -41,9 +41,11 @@
         },
         body: JSON.stringify(context)
     } 
-    // console.log( JSON.stringify(context))
-    const body = await basicFetch(`http://127.0.0.1:8000/api/v1/accounts/${username}/saved_readings/`, payload)
-    return body
+    const response = await basicFetch(`http://127.0.0.1:8000/api/v1/accounts/${username}/saved_readings`, payload);
+
+    // Convert response to text if it's not already a string
+    // const confirmation = typeof response === "string" ? response : JSON.stringify(response);
+    return response
   }
 
 

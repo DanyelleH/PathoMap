@@ -1,17 +1,17 @@
-from quickumls import QuickUMLS
-import requests
+# from quickumls import QuickUMLS
+# import requests
 
-# Initialize QuickUMLS matcher
-matcher = QuickUMLS('/Users/danyelleridley/GolfPlatoonImmersive/PersonalProject/PathoMap/protein_proj/diagnosis/umls_processed')
+# # Initialize QuickUMLS matcher
+# matcher = QuickUMLS('/Users/danyelleridley/GolfPlatoonImmersive/PersonalProject/PathoMap/protein_proj/diagnosis/umls_processed')
 
-# Example input: Chief complaint
-text = "The patient is experiencing frequent urination."
+# # Example input: Chief complaint
+# text = "The patient is experiencing frequent urination."
 
-# Run QuickUMLS matcher to extract symptoms and possible diseases
-matches = matcher.match(text, best_match=True, ignore_syntax=False)
+# # Run QuickUMLS matcher to extract symptoms and possible diseases
+# matches = matcher.match(text, best_match=True, ignore_syntax=False)
 
-# Extract disease candidates
-diseases = [match['umls_ents'][0][0] for match in matches]  # This will return a list of CUIs (disease IDs)
+# # Extract disease candidates
+# diseases = [match['umls_ents'][0][0] for match in matches]  # This will return a list of CUIs (disease IDs)
 
 
 
