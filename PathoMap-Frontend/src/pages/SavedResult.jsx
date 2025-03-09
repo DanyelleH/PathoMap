@@ -3,15 +3,13 @@ import { useParams } from "react-router-dom"
 import {Box} from "@mui/material"
 import { saveDiseaseInfo } from "../api/usersAPI"
 import { useState } from "react"
-export default function DiseaseInformation() {
+export default function savedDiseaseInformation() {
     const {diseasePk} = useParams()
     const [ notification , setNotification]= useState("")
     const diseases = JSON.parse(localStorage.getItem("DiseaseSearch")) || [];
     
-    let disease = diseases.find((d) => d.pk.toString() === diseasePk);
-    if (!disease) {
-        disease = JSON.parse(localStorage.getItem("SelectedDisease"));
-    }
+    const disease = diseases.find((d) => d.pk.toString() === diseasePk);
+    
     const handleClick = async (e) => {
         e.preventDefault()
         const userToken = localStorage.getItem("userToken")
@@ -26,10 +24,8 @@ export default function DiseaseInformation() {
             setNotification(response)
         }
     }
-    if (!disease) {
-        return <p>Disease not found.</p>;}
 
-  
+    // ## this is all disease search info, i want each to direct to this page with their corresponding info
     return (
         <> 
         {notification}

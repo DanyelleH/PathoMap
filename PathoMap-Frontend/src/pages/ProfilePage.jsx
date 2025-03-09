@@ -1,16 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Card, CardContent, Divider, Stack, Typography } from "@mui/material";
 import ProfileAvatar from "../components/profileAvatar";
-import SavedDiseases from "../components/savedDiseases";
+import SavedDiseases from "../components/savedLists";
 import RecentSymptoms from "../components/recentSymptoms";
-
+import Results from "../components/ResultsComponent";
+import SavedList from "../components/savedLists";
+import { getSavedDiseases } from "../api/usersAPI";
+import { removeSavedDiseases } from "../api/usersAPI";
 export default function Profile() {
   const navigate = useNavigate();
   const [showInfo, setShowInfo] = useState(false);
-
-  const username = localStorage.getItem("username");
   const userInfo = JSON.parse(localStorage.getItem("userProfile"));
+  const username = localStorage.getItem("username");
+  const token = localStorage.getItem("userToken")
+
+  const [saved_list, setSavedList] = useState(userInfo.current_readings)
+
+
+  useEffect(() => {
+    async function fetchSavedDiseases() {
+      if (username && token) {
+        try {
+          const data = await getSavedDiseases(username, token);
+          setSavedList(data || []);
+        } catch (error) {
+          console.error("Error fetching saved diseases:", error);
+        }
+      }
+    }
+
+    fetchSavedDiseases();
+  }, [username, token]);
 
   const handleNavigate = () => {
     navigate(`/new-user/${username}`);
@@ -18,18 +39,18 @@ export default function Profile() {
 
   return (
     <>
-      {/* Profile Avatar */}
+  
       <Box display="flex" flexDirection="column" alignItems="center">
         <ProfileAvatar />
       </Box>
 
-      {/* Toggle Button */}
+   
       <Box sx={{ maxWidth: 400, mx: "auto", mt: 3 }}>
         <Button variant="contained" onClick={() => setShowInfo((prev) => !prev)}>
           {showInfo ? "Hide Profile Info" : "Show Profile Info"}
         </Button>
 
-        {/* User Info Card */}
+      
         {showInfo && userInfo && (
           <>
             <Card sx={{ mt: 2, p: 2, boxShadow: 3 }}>
@@ -58,7 +79,6 @@ export default function Profile() {
               </CardContent>
             </Card>
 
-            {/* Update profile button is now conditional */}
             <Box display="flex" justifyContent="center" mb={3}>
               <Button onClick={handleNavigate} variant="contained">
                 Click to update profile
@@ -74,7 +94,7 @@ export default function Profile() {
       <Box display="flex" flexWrap="wrap" justifyContent="space-between" gap={3} mb={3} sx={{ width: "100%" }}>
         <Box border={1} borderColor="grey.300" padding={2} flex={1} minWidth={250}>
           <Typography variant="h6">Saved Diseases</Typography>
-          <SavedDiseases />
+          <SavedList results={saved_list} setSavedList={setSavedList} />
         </Box>
 
         <Box border={1} borderColor="grey.300" padding={2} flex={1} minWidth={250}>

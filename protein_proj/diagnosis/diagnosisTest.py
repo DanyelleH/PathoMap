@@ -1,16 +1,16 @@
-# from quickumls import QuickUMLS
-# import requests
+from quickumls import QuickUMLS
+import requests
 
-# # Initialize QuickUMLS matcher
-# matcher = QuickUMLS('/Users/danyelleridley/GolfPlatoonImmersive/PersonalProject/PathoMap/protein_proj/diagnosis/umls_processed')
+# Initialize QuickUMLS matcher
+matcher = QuickUMLS('/Users/danyelleridley/GolfPlatoonImmersive/PersonalProject/PathoMap/protein_proj/diagnosis/umls_processed')
 
-# # Example input: Chief complaint
-# text = "The patient is experiencing frequent urination."
+# Example input: Chief complaint
+text = "The patient is experiencing frequent urination."
 
-# # Run QuickUMLS matcher to extract symptoms and possible diseases
-# matches = matcher.match(text, best_match=True, ignore_syntax=False)
-
-# # Extract disease candidates
+# Run QuickUMLS matcher to extract symptoms and possible diseases
+matches = matcher.match(text, best_match=True, ignore_syntax=False)
+print(matches)
+# Extract disease candidates
 # diseases = [match['umls_ents'][0][0] for match in matches]  # This will return a list of CUIs (disease IDs)
 
 
@@ -32,4 +32,4 @@
 
 # print(get_disease_name_from_cui("C0034243"))
 
-#get info on disease from medline 
+# get info on disease from medline 

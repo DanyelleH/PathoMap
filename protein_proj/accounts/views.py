@@ -2,6 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework.generics import CreateAPIView # when you ONLY need to post
 from rest_framework.views import APIView, Response
+from django.http import JsonResponse
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -82,7 +83,7 @@ class SavedReadings(APIView):
     def delete(self, request, username):
         user = User.objects.get(username=username)
         
-        disease_name = request.data.get("current_readings")
-        disease = Disease.objects.get(disease_name=disease_name)
-        user.current_readings.remove(disease)
+        disease_name = request.data.get("current_readings") # *** change to get("disease_name")
+        disease = Disease.objects.get(disease_name=disease_name) # get disease object from list
+        user.current_readings.remove(disease) # remove reading from users list
         return Response(f"{disease.disease_name} has been removed from {user.first_name}'s readings.")
