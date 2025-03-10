@@ -11,6 +11,9 @@ export const UserProvider = ({ children }) => {
   const handleLogout = () => {
     localStorage.removeItem("userToken");
     localStorage.removeItem("username");
+    localStorage.removeItem("SelectedDisease");
+    localStorage.removeItem("DiseaseSearch");
+    localStorage.removeItem("userProfile")
     setUserToken(null);
     setUserData(null);
   };

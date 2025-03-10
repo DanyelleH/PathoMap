@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { signup } from '../api/authApi';
-import SignupForm from '../components/SignupForm';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../contexts/UserContext';
 
