@@ -15,7 +15,7 @@ export default function Profile() {
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("userToken")
 
-  const [saved_list, setSavedList] = useState(userInfo.current_readings)
+  const [saved_list, setSavedList] = useState(userInfo?.current_readings || [])
 
 
   useEffect(() => {

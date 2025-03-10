@@ -19,7 +19,8 @@ export default function DiseaseLookup() {
     setIsLoading(true);
     try {
       const disease = await getDiseases(token, disease_name);
-      setDiseaseResults(disease);
+      if (disease.detail != "Disease not found"){
+        setDiseaseResults(disease);}
       localStorage.setItem("DiseaseSearch", JSON.stringify(disease));
     } catch (error) {
       console.error("Error fetching diseases:", error);

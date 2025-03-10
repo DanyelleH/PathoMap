@@ -42,7 +42,7 @@ export default function ProfileAvatar() {
   const userInfo = JSON.parse(localStorage.getItem("userProfile"));
   return (
     <Stack direction="row" spacing={2}>
-      <Avatar {...stringAvatar(`${toTitleCase(userInfo.first_name)}, ${toTitleCase(userInfo.last_name)}}`)} />
+      <Avatar {...stringAvatar(`${toTitleCase(userInfo?.first_name || "First")}, ${toTitleCase(userInfo?.last_name || "Last")}`)} />
     </Stack>
   );
 }
