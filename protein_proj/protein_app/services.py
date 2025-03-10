@@ -40,6 +40,7 @@ def fetch_protein_data(accession_id):
                     }
                 )
 
+                protein.save()
 
             # Create disease objects for each associated disease
                 for disease in disease_comments:
@@ -58,8 +59,7 @@ def fetch_protein_data(accession_id):
                             )
 
                 # Add the disease to the protein's associated diseases
-                            protein.associated_disease.add(disease_obj)
-                            protein.save()
+                            disease_obj.associated_proteins.add(protein)
                             return protein
                 # improve to provide verification of successful creation
                 # else:

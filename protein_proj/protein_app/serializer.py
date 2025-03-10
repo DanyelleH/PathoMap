@@ -4,4 +4,5 @@ from .models import *
 class ProteinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Protein
-        fields =["accession_id", "name", "function","associated_disease"]
+        fields =["accession_id", "name", "function"]
+    

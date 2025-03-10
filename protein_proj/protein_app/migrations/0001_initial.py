@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('accession_id', models.CharField(max_length=100, unique=True)),
                 ('name', models.CharField(max_length=255)),
                 ('function', models.JSONField(default=list)),
-                ('associated_disease', models.ManyToManyField(related_name='proteins', to='disease_app.disease')),
+                # ('associated_disease', models.ManyToManyField(related_name='proteins', to='disease_app.disease')),
             ],
         ),
     ]
