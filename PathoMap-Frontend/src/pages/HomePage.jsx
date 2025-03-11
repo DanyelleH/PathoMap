@@ -10,56 +10,59 @@ export default function HomePage() {
   };
 
   return (
-    <div>
+    <Box 
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        backgroundColor: '#f5f5f5',
+        padding: 3,
+      }}
+    >
+      {/* App Title */}
+      <Typography variant="h3" sx={{ fontWeight: 'bold', marginBottom: 3, textAlign: 'center' }}>
+        PathoMap: <br></br> Realtime Medical Insight
+      </Typography>
+
+      {/* Grid Container */}
       <Box 
-        display="grid" 
-        gridTemplateColumns="repeat(2, 1fr)" // Two items per row
-        gap={2} 
-        padding={2}
         sx={{
-          backgroundColor: '#f5f5f5',  // Optional background color
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, // 1 column on mobile, 2 on larger screens
+          gap: 3,
+          width: '100%',
+          maxWidth: '800px',
         }}
       >
-       
-        <Box sx={{ backgroundColor: '#ffffff' }}>
-          <Card onClick={() => handleNavigation('/diseaseLookup')} sx={{ cursor: 'pointer' }}>
-            <CardContent>
-              <Typography variant="h6">Search for a Disease</Typography>
-              <Typography variant="body2">Find diseases by name</Typography>
+        {/* Card Components */}
+        {[
+          { title: 'Search for a Disease', description: 'Find diseases by name', path: '/diseaseLookup' },
+          { title: 'Saved Diseases', description: "View diseases you've saved", path: '/profile' },
+          { title: 'Recent Symptoms', description: 'Review your recent symptom analyses', path: '/profile' },
+        ].map((item, index) => (
+          <Card
+            key={index}
+            onClick={() => handleNavigation(item.path)}
+            sx={{
+              cursor: 'pointer',
+              transition: '0.3s',
+              '&:hover': { transform: 'scale(1.05)', boxShadow: '0 6px 15px rgba(0,0,0,0.2)' },
+              borderRadius: 2,
+            }}
+          >
+            <CardContent sx={{ textAlign: 'center' }}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                {item.title}
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {item.description}
+              </Typography>
             </CardContent>
           </Card>
-        </Box>
-
-     
-        <Box sx={{ backgroundColor: '#e0e0e0' }}>
-          <Card onClick={() => handleNavigation('/profile')} sx={{ cursor: 'pointer' }}>
-            <CardContent>
-              <Typography variant="h6">Saved Diseases</Typography>
-              <Typography variant="body2">View diseases you've saved</Typography>
-            </CardContent>
-          </Card>
-        </Box>
-
-        <Box sx={{ backgroundColor: '#ffffff' }}>
-          <Card onClick={() => handleNavigation('/profile')} sx={{ cursor: 'pointer' }}>
-            <CardContent>
-              <Typography variant="h6">Recent Symptoms</Typography>
-              <Typography variant="body2">Review your recent symptom analyses</Typography>
-            </CardContent>
-          </Card>
-        </Box>
-
-        {/* Explore Proteins & Diseases */}
-        <Box sx={{ backgroundColor: '#e0e0e0' }}>
-          <Card onClick={() => handleNavigation('/exploreProteins')} sx={{ cursor: 'pointer' }}>
-            <CardContent>
-              <Typography variant="h6">Explore Proteins & Diseases</Typography>
-              <Typography variant="body2">Understand connections between proteins and diseases</Typography>
-            </CardContent>
-          </Card>
-        </Box>
-        
+        ))}
       </Box>
-    </div>
+    </Box>
   );
 }

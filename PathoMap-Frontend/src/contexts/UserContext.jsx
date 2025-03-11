@@ -1,12 +1,14 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 import { getUserInfo } from "../api/usersAPI";
+
+
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [userData, setUserData] = useState(null); 
   const [formData, setFormData] = useState({ username: "", password: "" });
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState("");
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
@@ -36,12 +38,13 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem("userToken");
     const storedUsername = localStorage.getItem("username");
-
+    const storedUserProfile = localStorage.getItem("userProfile")
     if (storedToken && !userToken) {
       setUserToken(storedToken);
       setUserData({ username: storedUsername }); 
+      setUserInfo(storedUserProfile)
     }
-  }, []);
+  }, [userInfo]);
 
 
   const username = localStorage.getItem("username")

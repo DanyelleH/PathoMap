@@ -10,7 +10,7 @@ export default function DiseaseLookup() {
     JSON.parse(localStorage.getItem("DiseaseSearch")) || []
   );
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate(); // Fixed incorrect use of `useNavigate`
+  const navigate = useNavigate();
   
   const searchPrompt = "Enter Disease Name";
   const token = localStorage.getItem("userToken");
@@ -19,8 +19,9 @@ export default function DiseaseLookup() {
     setIsLoading(true);
     try {
       const disease = await getDiseases(token, disease_name);
-      if (disease.detail != "Disease not found"){
-        setDiseaseResults(disease);}
+      if (disease.detail !== "Disease not found") {
+        setDiseaseResults(disease);
+      }
       localStorage.setItem("DiseaseSearch", JSON.stringify(disease));
     } catch (error) {
       console.error("Error fetching diseases:", error);
@@ -35,25 +36,25 @@ export default function DiseaseLookup() {
   };
 
   return (
-    <Container maxWidth="md">
-
-      <Typography variant="h4" align="center" gutterBottom>
-        Disease Lookup
+    <Container maxWidth="md" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 3 }}>
+      {/* Page Title */}
+      <Typography variant="h3" sx={{ fontWeight: 'bold', marginBottom: 3, textAlign: 'center' }}>
+        Disease Search
       </Typography>
 
-   
-      <Box display="flex" justifyContent="center" mb={3}>
+      {/* Search Bar */}
+      <Box display="flex" justifyContent="center" mb={3} sx={{ width: '100%' }}>
         <SearchBar onSearch={handleSearch} searchPrompt={searchPrompt} />
       </Box>
-      
+
       <Divider sx={{ marginBottom: 3 }} />
 
-      <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
-        <Typography variant="h6" gutterBottom>
+      {/* Results Section */}
+      <Paper elevation={3} sx={{ padding: 3, borderRadius: 2, width: '100%' }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
           Search Results:
         </Typography>
 
-        
         {isLoading ? (
           <Typography variant="body1">Loading...</Typography>
         ) : (
@@ -65,6 +66,10 @@ export default function DiseaseLookup() {
                   variant="contained" 
                   color="secondary" 
                   onClick={() => setDiseaseResults([])}
+                  sx={{
+                    '&:hover': { transform: 'scale(1.05)' },
+                    borderRadius: 2,
+                  }}
                 >
                   Clear Results
                 </Button>

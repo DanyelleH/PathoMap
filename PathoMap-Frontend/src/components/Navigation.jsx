@@ -12,10 +12,10 @@ import Paper from '@mui/material/Paper';
 import UserContext from '../contexts/UserContext';
 
 export default function FixedBottomNavigation() {
-  const {userToken, handleLogout} = useContext(UserContext)
+  const { handleLogout} = useContext(UserContext)
   const navigate = useNavigate()
   const location = useLocation()
-
+const userToken = localStorage.getItem("userToken")
   const pathToValue = {
     '/': 0,
     '/diseaseLookup': 1,

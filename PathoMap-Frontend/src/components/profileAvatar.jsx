@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import UserContext from '../contexts/UserContext';
@@ -38,11 +38,11 @@ const toTitleCase = (str) => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 };
-export default function ProfileAvatar() {
-  const userInfo = JSON.parse(localStorage.getItem("userProfile"));
+export default function ProfileAvatar({first_name, last_name}) {
+  const fullName = `${toTitleCase(first_name)} ${toTitleCase(last_name)}`;
   return (
     <Stack direction="row" spacing={2}>
-      <Avatar {...stringAvatar(`${toTitleCase(userInfo?.first_name || "First")}, ${toTitleCase(userInfo?.last_name || "Last")}`)} />
+      <Avatar {...stringAvatar(fullName)} />
     </Stack>
   );
 }

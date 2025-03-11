@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { Box, TextField, Button } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -8,9 +8,9 @@ import { updateUserInfo } from '../api/usersAPI';
 import dayjs from "dayjs"
 import CircularColor from '../components/LoadingComponent';
 import { Navigate } from 'react-router-dom';
-
+import UserContext from '../contexts/UserContext';
 const UserInfo = ({ handleInputChange, handleToken}) => {
-
+    const {setUserInfo} = useContext(UserContext)
     const [errorMessage, setErrorMessage] = React.useState("");
     const [loading, setLoading] = useState(false);
     const username = localStorage.getItem("username");
@@ -38,6 +38,9 @@ const UserInfo = ({ handleInputChange, handleToken}) => {
                 throw new Error("Failed to update user information")
                 } else {
                     console.log("User Updated:", response)
+
+                    setUserInfo(response)
+                    localStorage.setItem("userProfile", JSON.stringify(response))
                     navigate("/profile")
                 }
             } catch (error) {
