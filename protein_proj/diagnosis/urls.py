@@ -1,6 +1,6 @@
-from django.contrib import admin
-from django.urls import path, include
-from .views import PossibleConditions
+from django.urls import path
+from .views import AnalyzeSymptomsView
+
 urlpatterns = [
-    path("", PossibleConditions, name="symptom_input" )
- ]
+    path('analyze-symptoms/', AnalyzeSymptomsView.as_view(), name='analyze_symptoms'),
+]
