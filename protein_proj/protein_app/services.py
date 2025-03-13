@@ -9,61 +9,53 @@ def fetch_protein_data(accession_id):
         url = f"https://rest.uniprot.org/uniprotkb/{accession_id}.json"
         response = requests.get(url)
         
-        if response.status_code == 200:
-            data = response.json()
-            # Extract relevant data
-            protein_description = data.get("proteinDescription", {})
-            if "recommendedName" in protein_description:
-                name = protein_description.get("recommendedName", {}).get("fullName").get("value", "")
-            else:
-                submission_names = protein_description.get("submissionNames", [])
-                if submission_names:
-                    name = submission_names[0].get("fullName", {}).get("value", "")
-            if not name:
-                return None
-            
-            comments = data.get("comments", [])
+        if response.status_code != 200:
+            return " Failed to fetch protein information"
+        data = response.json()
+        protein_description = data.get("proteinDescription", {})
 
-            disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
+        if "recommendedName" in protein_description:
+            name = protein_description.get("recommendedName", {}).get("fullName").get("value", "")
+        else:
+            submission_names = protein_description.get("submissionNames", [])
+            if submission_names:
+                name = submission_names[0].get("fullName", {}).get("value", "")
+        if not name:
+            return None
+            
+        comments = data.get("comments", [])
+        disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
             # if there isnt any disease associations, do not save result. 
-            if disease_comments:
-
-                function_comments = [comment['texts'][0]["value"] for comment in comments if comment.get("commentType")== "FUNCTION" and 'texts' in comment]
+        if disease_comments:
+            function_comments = [comment['texts'][0]["value"] for comment in comments if comment.get("commentType")== "FUNCTION" and 'texts' in comment]
             
-
-                # Create the protein entry
-                protein, created = Protein.objects.get_or_create(
-                    accession_id=accession_id,
-                    defaults={
-                        'name': name,
-                        'function': ";".join(function_comments),
-                    }
-                )
-
-                protein.save()
+            # Create the protein entry
+            protein, created = Protein.objects.get_or_create(
+                accession_id=accession_id,
+                defaults={
+                    'name': name,
+                    'function': ";".join(function_comments),
+                }
+            )
 
             # Create disease objects for each associated disease
-                for disease in disease_comments:
-                    disease_data = disease.get('disease', {}) 
-                    disease_name = disease_data.get("diseaseId")
-                    if disease_name:
-                        patient_summary = fetch_disease_data(disease_name)
-                        # dont save diseases with no patient summary available
-                        if patient_summary:
-                            description = disease_data.get("description","")
-                                #get_or_create automatically saves disease
-                            disease_obj,_ = Disease.objects.get_or_create(
-                                disease_name=disease_name,
-                                defaults={"description": description},
-                                patient_summary = patient_summary
-                            )
+            for disease in disease_comments:
+                disease_data = disease.get('disease', {}) 
+                disease_name = disease_data.get("diseaseId")
+                if disease_name:
+                    patient_summary = fetch_disease_data(disease_name)
+                    # dont save diseases with no patient summary available
+                if patient_summary:
+                    description = disease_data.get("description","")
+                            #get_or_create automatically saves disease
+                    disease_obj,_ = Disease.objects.get_or_create(
+                        disease_name=disease_name,
+                        defaults={"description": description},
+                        patient_summary = patient_summary
+                    )
 
-                # Add the disease to the protein's associated diseases
-                            disease_obj.associated_proteins.add(protein)
-                            return protein
-                # improve to provide verification of successful creation
-                # else:
-                #     raise Exception(f"Failed to fetch data for accession ID {accession_id}")
+                disease_obj.associated_proteins.add(protein)
+                return protein
 
 
 def fetch_protein_data_by_name(name):
@@ -71,15 +63,13 @@ def fetch_protein_data_by_name(name):
     search_url = f"https://rest.uniprot.org/uniprotkb/search?query={name}&fields=accession"
     search_response = requests.get(search_url)
 
-    if search_response.status_code == 200:
-        search_data = search_response.json()
-        # Extract the first accession ID
-        accession_id = search_data.get("results", [])[0].get("primaryAccession", None)
-        if not accession_id:
-            raise Exception(f"No accession ID found for protein name: {name}")
-    else:
+    if search_response.status_code != 200:
         raise Exception(f"Failed to fetch accession ID for protein name: {name}")
-
+    search_data = search_response.json()
+        # Extract the first accession ID
+    accession_id = search_data.get("results", [])[0].get("primaryAccession", None)
+    if not accession_id:
+        raise Exception(f"No accession ID found for protein name: {name}")
     # Step 2: Fetch detailed protein information using the accession ID
     return fetch_protein_data(accession_id)
 

@@ -15,30 +15,27 @@ def fetch_disease_data(disease_name):
 
     response = requests.get(medline_url, params=paramaters)
 
-    if response.status_code == 200:
-        root = ET.fromstring(response.content)
+    if response.status_code != 200:
+        return "Issue fetching disease summary"
+    root = ET.fromstring(response.content)
 
-        first_document = root.find(".//document")
+    first_document = root.find(".//document")
 
-        if first_document is not None:
+    if first_document is None:
+            return "No documents to obtain summary"
             # Extract <content> elements inside <document>
-            full_summary = "Full Summary not available"
-            for content in first_document.findall("content"):
-                if content.attrib.get("name") == "FullSummary":
-                    full_summary = BeautifulSoup(content.text, "html.parser").get_text()
-                    break  # Stop after finding FullSummary
+    full_summary = "Full Summary not available"
+    for content in first_document.findall("content"):
+        if content.attrib.get("name") == "FullSummary":
+            full_summary = BeautifulSoup(content.text, "html.parser").get_text()
+            break  # Stop after finding FullSummary
 
-            # Clean and format extracted text
-            cleaned_text = re.sub(r'(?<=[a-z])(?=[A-Z])', ', ', full_summary)
-            cleaned_text = cleaned_text.replace(".", ". ") \
-                                       .replace(":", ": \n\n") \
-                                       .replace("•", "\n-") \
-                                       .replace("?", "? ") \
-                                       .replace("!", "! ")
-        
-            return cleaned_text
-        
-        
-        return "No documents found for this disease"
-    
-    return "Couldn't fetch data"
+    # Clean and format extracted text
+    cleaned_text = re.sub(r'(?<=[a-z])(?=[A-Z])', ', ', full_summary)
+    cleaned_text = cleaned_text.replace(".", ". ") \
+                                .replace(":", ": \n\n") \
+                                .replace("•", "\n-") \
+                                .replace("?", "? ") \
+                                .replace("!", "! ")
+
+    return cleaned_text
