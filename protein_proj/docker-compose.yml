@@ -3,19 +3,19 @@ services:
     build: .
     ports: 
     - "8000:8000"
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: "0.5"
-    #       memory: "512MB"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512MB"
     depends_on:
       - db
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:8000"]
-    #   interval: 30s
-    #   retries: 3
-    #   start_period: 10s
-    #   timeout: 10s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
   db:
     image: postgres:15
     environment:
@@ -27,11 +27,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # frontend:
-  #   image: danyelleh/pathomap-react-server:latest
-  #   platform: linux/amd64
-  #   ports: 
-  #     - "8090:80"
+  frontend:
+    image: danyelleh/pathomap-react-server:latest
+    platform: linux/amd64
+    ports: 
+      - "8090:80"
    
 volumes:
   postgres_data:
