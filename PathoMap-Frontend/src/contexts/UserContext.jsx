@@ -16,6 +16,7 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem("SelectedDisease");
     localStorage.removeItem("DiseaseSearch");
     localStorage.removeItem("userProfile")
+    localStorage.removeItem("Diagnosis")
     setUserToken(null);
     setUserData(null);
   };

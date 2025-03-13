@@ -4,6 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
+body {
+  padding-bottom: 70px; /* Same as navbar height */
+}
 
 .logo {
   height: 6em;

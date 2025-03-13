@@ -1,6 +1,9 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box } from '@mui/material';
+import { Card, CardContent, Typography, Box, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import HistoryIcon from '@mui/icons-material/History';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -10,54 +13,94 @@ export default function HomePage() {
   };
 
   return (
-    <Box 
+    <Box
       sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(to right, #6a11cb, #2575fc)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f5f5f5',
-        padding: 3,
+        padding: 4,
+        color: 'white',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundImage: 'PathoMap-Frontend/src/assets/image.png',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundSize: 'contain',
+          opacity: 0.1,
+          zIndex: 0,
+        }
+        
       }}
     >
       {/* App Title */}
-      <Typography variant="h3" sx={{ fontWeight: 'bold', marginBottom: 3, textAlign: 'center' }}>
-        PathoMap: <br></br> Realtime Medical Insight
-      </Typography>
+      <Container maxWidth="sm" sx={{ textAlign: 'center', mb: 4 }}>
+        <Typography
+          variant="h3"
+          sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 2 }}
+        >
+          PathoMap
+        </Typography>
+        <Typography variant="h5" sx={{ fontWeight: 'light', mt: 1 }}>
+          Real-time Medical Insight
+        </Typography>
+      </Container>
 
-      {/* Grid Container */}
-      <Box 
+      {/* Quick Navigation Cards */}
+      <Box
         sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, // 1 column on mobile, 2 on larger screens
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
           gap: 3,
-          width: '100%',
-          maxWidth: '800px',
+          justifyContent: 'center',
+          maxWidth: '900px',
         }}
       >
-        {/* Card Components */}
-        {[
-          { title: 'Search for a Disease', description: 'Find diseases by name', path: '/diseaseLookup' },
-          { title: 'Saved Diseases', description: "View diseases you've saved", path: '/profile' },
-          { title: 'Recent Symptoms', description: 'Review your recent symptom analyses', path: '/profile' },
-        ].map((item, index) => (
+        {[{
+          icon: <SearchIcon sx={{ fontSize: '3rem' }} />, title: 'Search for a Disease',
+          description: 'Find diseases by name', path: '/diseaseLookup'
+        }, {
+          icon: <BookmarkIcon sx={{ fontSize: '3rem' }} />, title: 'Saved Diseases',
+          description: 'View diseases you have saved', path: '/profile'
+        }, {
+          icon: <HistoryIcon sx={{ fontSize: '3rem' }} />, title: 'Recent Symptoms',
+          description: 'Review your recent symptom analyses', path: '/profile'
+        }].map((card, index) => (
           <Card
             key={index}
-            onClick={() => handleNavigation(item.path)}
+            onClick={() => handleNavigation(card.path)}
             sx={{
               cursor: 'pointer',
               transition: '0.3s',
-              '&:hover': { transform: 'scale(1.05)', boxShadow: '0 6px 15px rgba(0,0,0,0.2)' },
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0 6px 15px rgba(0,0,0,0.2)',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              },
               borderRadius: 2,
+              padding: 2,
+              width: { xs: '100%', sm: 'calc(33.33% - 1rem)' },
+              textAlign: 'center',
+              color: 'white',
             }}
           >
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                {item.title}
+            <CardContent>
+              {card.icon}
+              <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 1 }}>
+                {card.title}
               </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {item.description}
+              <Typography variant="body2" sx={{ opacity: 0.8, mt: 1 }}>
+                {card.description}
               </Typography>
             </CardContent>
           </Card>
