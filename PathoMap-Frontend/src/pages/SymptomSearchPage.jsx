@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar";
 import { 
-  Box, Divider, Typography, Card, CardContent, Button, Container} from "@mui/material";
+  Box, Divider, Typography, Card, CardContent, Button, Container, Alert} from "@mui/material";
 import { analyzeSymptoms } from "../api/SymptomsAPI";
 import { CheckCircle, Warning, ErrorOutline } from "@mui/icons-material"; 
 import CircularColor from "../components/LoadingComponent";
+import { saveDiagnosisInfo } from "../api/usersAPI";
 
 export default function SymptomSearch() {
   const searchPrompt = "What's bothering you?";
   const [results, setResults] = useState(JSON.parse(localStorage.getItem("Diagnosis")) || {});
   const [isLoading, setIsLoading] = useState(false);
+  const [notification, setNotification] = useState("");
   const token = localStorage.getItem("userToken");
 
   const handleSearch = async (complaint) => {
@@ -29,10 +31,31 @@ export default function SymptomSearch() {
     }
   };
 
-  const handleSaveSearch = () => {
-    localStorage.setItem("SavedDiagnosis", JSON.stringify(results));
-    alert("Search saved successfully!");
-  };
+  const handleSaveSearch = async (e) => {
+    e.preventDefault();
+    const userToken = localStorage.getItem("userToken");
+    const username = localStorage.getItem("username");
+
+    const context = { symptom_analysis:JSON.parse(localStorage.getItem("Diagnosis")) };
+    const response = await saveDiagnosisInfo(username, userToken, context);
+    console.log(response);
+    if (response.error) {
+        setNotification(response.error);
+    } else {
+        setNotification(response);
+        const userProfile = JSON.parse(localStorage.getItem("userProfile")) || {};
+        userProfile.saved_symptoms = userProfile.saved_symptoms || [];
+        userProfile.saved_symptoms.push(context.symptom_analysis);
+        localStorage.setItem("userProfile", JSON.stringify(userProfile));
+
+        // Force a state update to reflect changes
+        setResults((prevResults) => ({
+            ...prevResults,
+            saved_symptoms: [...(prevResults.saved_symptoms || []), context]
+        }));
+
+    }
+};
 
   const getLikelihoodIcon = (likelihood) => {
     switch (likelihood.toLowerCase()) {
@@ -84,6 +107,12 @@ export default function SymptomSearch() {
           <Typography variant="h5" fontWeight="bold" gutterBottom>
             Potential Diagnoses Based on Your Symptoms
           </Typography>
+           {notification && (
+                  <Alert severity={notification.error ? "error" : "info"} sx={{ marginBottom: "20px", backgroundColor: notification.error ? "#f8d7da" : "#d1ecf1", color: notification.error ? "#721c24" : "#0c5460" }}>
+                      {notification.error ? "Error: " : "Success: "}
+                      {notification.message || notification}
+                  </Alert>
+              )}
 
           {/* Summary */}
           {results.summary && (

@@ -17,6 +17,7 @@ export default function Profile() {
   const token = localStorage.getItem("userToken");
 
   const [saved_list, setSavedList] = useState(userInfo?.current_readings || []);
+  const [savedSymptomList, setSavedSymptomList] = useState(userInfo?.saved_symptoms || [])
 
   useEffect(() => {
     async function fetchSavedDiseases() {
@@ -126,7 +127,7 @@ export default function Profile() {
               <HealthAndSafety color="secondary" sx={{ fontSize: 40 }} />
               <Typography variant="h6" gutterBottom>Recent Symptoms</Typography>
             </Box>
-            <RecentSymptoms />
+            <RecentSymptoms results={savedSymptomList} setSavedSymptomList={setSavedSymptomList} />
           </CardContent>
         </Card>
       </Box>

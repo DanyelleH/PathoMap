@@ -42,10 +42,10 @@ def fetch_protein_data(accession_id):
             for disease in disease_comments:
                 disease_data = disease.get('disease', {}) 
                 disease_name = disease_data.get("diseaseId")
-                if disease_name:
-                    patient_summary = fetch_disease_data(disease_name)
+                patient_summary = fetch_disease_data(disease_name) if disease_name else None
                     # dont save diseases with no patient summary available
                 if patient_summary:
+    
                     description = disease_data.get("description","")
                             #get_or_create automatically saves disease
                     disease_obj,_ = Disease.objects.get_or_create(
@@ -54,8 +54,8 @@ def fetch_protein_data(accession_id):
                         patient_summary = patient_summary
                     )
 
-                disease_obj.associated_proteins.add(protein)
-                return protein
+                    disease_obj.associated_proteins.add(protein)
+                    return protein
 
 
 def fetch_protein_data_by_name(name):

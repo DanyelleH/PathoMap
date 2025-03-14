@@ -73,8 +73,20 @@
     return body;
   }
 
+
+  export async function getSavedSymptoms(username, userToken) {
+    const payload = {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Token ${userToken}`,}
+        }
+        const body= await basicFetch(`http://127.0.0.1:8000/api/v1/accounts/${username}/saved_readings`, payload);
+    return body;
+  }
+
   export async function saveDiagnosisInfo(username, userToken, context) {
-    // console.log(context)
+    
     const payload = {
         method: "PATCH",
         headers: {
@@ -83,6 +95,20 @@
         },
         body: JSON.stringify(context)
     } 
-    const response = await basicFetch(`http://127.0.0.1:8000/api/v1/accounts/${username}/saved_symptoms`, payload);
+    const response = await basicFetch(`http://127.0.0.1:8000/api/v1/accounts/${username}/symptom_analysis`, payload);
+    return response
+  }
+
+  export async function deleteDiagnosisInfo(username, userToken,context) {
+      console.log(context)
+    const payload = {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${userToken}`,
+        },
+        body: JSON.stringify(context),
+    } 
+    const response = await basicFetch(`http://127.0.0.1:8000/api/v1/accounts/${username}/symptom_analysis`, payload);
     return response
   }

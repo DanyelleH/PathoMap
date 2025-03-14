@@ -85,12 +85,13 @@ export default function FixedBottomNavigation() {
           value={2}
           sx={{ color: "white", "&:hover": { color: "#ffeb3b" } }}
         />
+        {userToken && (
         <BottomNavigationAction
           label="My Profile"
           icon={<ManageAccountsIcon sx={{ fontSize: "30px" }} />}
           value={3}
           sx={{ color: "white", "&:hover": { color: "#ffeb3b" } }}
-        />
+        />)}
 
         {!userToken ? (
           <BottomNavigationAction
