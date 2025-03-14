@@ -6,7 +6,8 @@ from disease_app.models import Disease
 class User(AbstractUser):
 
     dob = models.DateField(null=True, blank=True)
-    current_readings = models.ManyToManyField(Disease,related_name= 'current_readings', blank=True) # assigned readings.
+    current_readings = models.ManyToManyField(Disease,related_name= 'current_readings', blank=True)
+    saved_symptoms = models.JSONField(blank=True,null=True, default=list)
 
     def __str__(self):
         return f"{self.username} ({self.first_name}, {self.last_name})"

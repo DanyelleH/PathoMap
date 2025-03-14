@@ -12,4 +12,4 @@ class SignupSerializer(ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['pk','username','email','first_name','last_name','dob', "current_readings"]
+        fields = ['pk','username','email','first_name','last_name','dob', "current_readings", "saved_symptoms"]
