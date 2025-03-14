@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import { getDiseases } from "../api/DiseaseAPI";
 import Results from "../components/ResultsComponent";
-import { Box, Divider, Typography, Button, Container, Paper} from "@mui/material";
+import { Box, Divider, Typography, Button, Container, Paper } from "@mui/material";
 import CircularColor from "../components/LoadingComponent";
 
 export default function DiseaseLookup() {
@@ -37,8 +37,9 @@ export default function DiseaseLookup() {
   };
 
   return (
-    <Container maxWidth="md">
-      <Box
+    <Container maxWidth="md" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <Paper
+        elevation={3}
         sx={{
           background: "linear-gradient(to right, #6a11cb, #2575fc)",
           color: "white",
@@ -46,6 +47,7 @@ export default function DiseaseLookup() {
           padding: 4,
           borderRadius: 2,
           boxShadow: 3,
+          width: "100%",
           marginBottom: 3,
         }}
       >
@@ -55,16 +57,14 @@ export default function DiseaseLookup() {
         <Typography variant="subtitle1" mt={1} fontStyle="italic">
           Enter a disease name to find detailed information.
         </Typography>
-      </Box>
+      </Paper>
 
-      {/* Search Bar */}
-      <Box display="flex" justifyContent="center" mb={3} sx={{ width: '100%' }}>
+      <Paper elevation={3} sx={{ width: "100%", padding: 3, borderRadius: 2, boxShadow: 3, mb: 3 }}>
         <SearchBar onSearch={handleSearch} searchPrompt={searchPrompt} />
-      </Box>
+      </Paper>
 
-      <Divider sx={{ marginBottom: 3, backgroundColor: '#2575fc' }} />
+      <Divider sx={{ width: "100%", marginBottom: 3, backgroundColor: "#2575fc" }} />
 
-      {/* Results Section */}
       <Paper
         elevation={3}
         sx={{
@@ -73,18 +73,19 @@ export default function DiseaseLookup() {
           width: "100%",
           boxShadow: "0px 6px 20px rgba(10, 10, 10, 0.3)",
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
           alignItems: "center",
         }}
       >
         {isLoading ? (
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <CircularColor />
-            <Typography variant="body1" sx={{ color: "#1976d2", marginLeft: 2 }}>Loading...</Typography>
+            <Typography variant="body1" sx={{ color: "#1976d2", marginLeft: 2 }}>
+              Loading...
+            </Typography>
           </Box>
         ) : (
           <>
-            {/* Center the Results component */}
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
               <Results results={results} onClick={handleResultClick} />
             </Box>

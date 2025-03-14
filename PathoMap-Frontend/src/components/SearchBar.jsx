@@ -35,13 +35,9 @@ export default function SearchBar({ onSearch, searchPrompt }) {
           color: '#000000', // Dark text color for readability
           borderRadius: '8px', // Rounded corners for a cleaner look
         }}
-        InputProps={{
-          style: {
-            color: '#000000', // Ensures the input text is dark on a light background
-          },
-        }}
+      
       />
-      <IconButton type="submit" sx={{ color: 'white' }}> {/* Ensure the icon stands out on dark background */}
+      <IconButton type="submit" sx={{ color: 'indigo', background:"lavender", transition: '0.3s','&:hover': { color: '#D8BFD8' } }}> 
         <SearchIcon />
       </IconButton>
     </form>

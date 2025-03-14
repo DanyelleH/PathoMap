@@ -21,32 +21,18 @@ export default function HomePage() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 4,
+        px: 3,
+        py: 5,
         color: 'white',
         position: 'relative',
-        overflow: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundImage: 'PathoMap-Frontend/src/assets/image.png',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundSize: 'contain',
-          opacity: 0.1,
-          zIndex: 0,
-        }
-        
+        textAlign: 'center',
       }}
     >
       {/* App Title */}
-      <Container maxWidth="sm" sx={{ textAlign: 'center', mb: 4 }}>
+      <Container maxWidth="sm" sx={{ mb: 4 }}>
         <Typography
           variant="h3"
-          sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 2 }}
+          sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1 }}
         >
           PathoMap
         </Typography>
@@ -59,39 +45,54 @@ export default function HomePage() {
       <Box
         sx={{
           display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          gap: 3,
+          flexWrap: 'wrap', // This ensures the cards stack when needed
           justifyContent: 'center',
-          maxWidth: '900px',
+          gap: 3, // Spacing between the cards
+          maxWidth: 900,
+          width: '100%',
         }}
       >
-        {[{
-          icon: <SearchIcon sx={{ fontSize: '3rem' }} />, title: 'Search for a Disease',
-          description: 'Find diseases by name', path: '/diseaseLookup'
-        }, {
-          icon: <BookmarkIcon sx={{ fontSize: '3rem' }} />, title: 'Saved Diseases',
-          description: 'View diseases you have saved', path: '/profile'
-        }, {
-          icon: <HistoryIcon sx={{ fontSize: '3rem' }} />, title: 'Recent Symptoms',
-          description: 'Review your recent symptom analyses', path: '/profile'
-        }].map((card, index) => (
+        {[
+          {
+            icon: <SearchIcon sx={{ fontSize: '3rem' }} />,
+            title: 'Search for a Disease',
+            description: 'Find diseases by name',
+            path: '/diseaseLookup',
+          },
+          {
+            icon: <BookmarkIcon sx={{ fontSize: '3rem' }} />,
+            title: 'Saved Diseases',
+            description: 'View diseases you have saved',
+            path: '/profile',
+          },
+          {
+            icon: <HistoryIcon sx={{ fontSize: '3rem' }} />,
+            title: 'Recent Symptoms',
+            description: 'Review your recent symptom analyses',
+            path: '/profile',
+          },
+        ].map((card, index) => (
           <Card
             key={index}
             onClick={() => handleNavigation(card.path)}
             sx={{
               cursor: 'pointer',
-              transition: '0.3s',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              '&:hover': {
-                transform: 'scale(1.05)',
-                boxShadow: '0 6px 15px rgba(0,0,0,0.2)',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              },
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: 250,
               borderRadius: 2,
-              padding: 2,
-              width: { xs: '100%', sm: 'calc(33.33% - 1rem)' },
+              p: 3,
               textAlign: 'center',
               color: 'white',
+              '&:hover': {
+                transform: 'translateY(-5px)',
+                boxShadow: '0 10px 20px rgba(0,0,0,0.25)',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              },
             }}
           >
             <CardContent>
