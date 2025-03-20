@@ -29,7 +29,7 @@ services:
 
   frontend:
     image: danyelleh/pathomap-react-server:latest
-    # platform: linux/amd64
+    platform: linux/amd64
     ports: 
       - "8090:80"
    
