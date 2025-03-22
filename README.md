@@ -9,7 +9,7 @@ In future versions, connection to LIMS could allow patients to access readings o
 
 	1. Access Disease information by searching Disease name 
 
-	2. Symtom analysis from users plain text query, returning a ranked list of Differentials ( In Progress) 
+	2. Symtom analysis from users plain text query, returning a ranked list of Differentials 
 
 	3. Ability to store readings for quick access later.
 
