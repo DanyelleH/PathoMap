@@ -74,6 +74,8 @@ localhost:8000/api/v1/accounts/${username}/saved_readings  -> Users saved diseas
 localhost:8000/api/v1/accounts/${username}/symptom_analysis  -> A users saved symptoms
 ```
 
+In Progress Implementations: 
+** Currently working on revisualization of saved symptom analysis after saving.**
 
 ## Acknowledgements
 https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_ner_bc5cdr_md-0.5.4.tar.gz ( description pending) 
