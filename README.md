@@ -16,15 +16,17 @@ In future versions, connection to LIMS could allow patients to access readings o
 ### Installation : 
 Create a venv running Python@3.12 or older to avoid errors running scispacy
 ```python
-# if Python 3.11 not available, install it
-	brew install python@3.11
-# Create venv w that version to suport quick umls	
-	python3.11 -m venv PathomapVenv
-
 cd protein_proj
 
 ./run_compose.sh
 ```
+
+** To Run seperately ( in case of compose error)
+```
+cd protein_proj
+docker compose up
+```
+
 Start Frontend Seperately:
 ```python
 cd Pathomap-Frontend
@@ -32,15 +34,16 @@ npm install
 npm run dev
 
 ```
-
-
 # API Documentation (Organizing section in progress)
+
 ### Protein Data API (Proteins App)
 Allows users to retrieve detailed protein functional information.
 
 #### Endpoints:
 
 ```
+localhost:8000/api/v1/protein/     -> View all saved proteins in database
+localhost:8000/api/v1/protein/${protein_accession} -> Obtain protein by Uniprot Accession Number
 
 ```
 `Note: If a protein is not found in the local database, it will automatically be fetched from the UniProt API and added dynamically. The same goes for Diseases`
@@ -51,18 +54,24 @@ Allows users to retrieve detailed protein functional information.
 Provide general and clinically relevant disease descriptions.
 #### Endpoints:
 ```
-
+localhost:8000/api/v1/diseases/ -> View all Diseases in database
+localhost:8000/api/v1/diseases/${pk} -> Obtain detailed info on disease by its pk
+localhost:8000/api/v1/diseases/${disease_name} ->  Obtain a disease by name, gathering associated proteins in the process
 ```
 
 ## User Tracking (accounts)
 Contains all fields included in Django Built in Users Model, with the following added: 
  
-• dob: needed to improve diagnosis models accuracy.
+• dob: needed to improve diagnosis models accuracy in future versions.
 
 • current_readings: Users saved queries
 #### Endpoints:
 ```
-
+localhost:8000/api/v1/accounts/signup
+localhost:8000/api/v1/accounts/get-token
+localhost:8000/api/v1/accounts/${username}  -> Users profile information
+localhost:8000/api/v1/accounts/${username}/saved_readings  -> Users saved disease searches
+localhost:8000/api/v1/accounts/${username}/symptom_analysis  -> A users saved symptoms
 ```
 
 
