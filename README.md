@@ -8,13 +8,17 @@ In future versions, connection to LIMS could allow patients to access readings o
 ## Features
 
 	1. Access Disease information by searching Disease name 
+		- need to improve backend to account for variable input ( ex. Alzheimer vs Alzheimers vs Alzheimer's)
 
-	2. Symtom analysis from users plain text query, returning a ranked list of Differentials ( In Progress) 
+	2. Symptom analysis from users plain text query, returning a ranked list of Differentials
 
 	3. Ability to store readings for quick access later.
+		- working on implementation of re-accessing symptom searched
+		
 
 ### Installation : 
 Create a venv running Python@3.12 or older to avoid errors running scispacy
+
 ```python
 # if Python 3.11 not available, install it
 	brew install python@3.11

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import { getDiseases } from "../api/DiseaseAPI";
 import Results from "../components/ResultsComponent";
-import { Box, Divider, Typography, Button, Container, Paper } from "@mui/material";
+import { Box, Divider, Typography, Button, Container, Paper, Alert } from "@mui/material";
 import CircularColor from "../components/LoadingComponent";
 
 export default function DiseaseLookup() {
@@ -11,6 +11,7 @@ export default function DiseaseLookup() {
     JSON.parse(localStorage.getItem("DiseaseSearch")) || []
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError]= useState("");
   const navigate = useNavigate();
 
   const searchPrompt = "Enter Disease Name";
@@ -20,10 +21,18 @@ export default function DiseaseLookup() {
     setIsLoading(true);
     try {
       const disease = await getDiseases(token, disease_name);
+      if (disease?.detail?.trim() === "Invalid token.") {
+        setDiseaseResults([]);
+        setError("You must be logged in to perform a search");
+        return;
+    }
       if (disease.detail !== "Disease not found") {
         setDiseaseResults(disease);
+        localStorage.setItem("DiseaseSearch", JSON.stringify(disease));
+      } else {
+        setError(`${disease_name} not found, try performing a different search`)
+        return;
       }
-      localStorage.setItem("DiseaseSearch", JSON.stringify(disease));
     } catch (error) {
       console.error("Error fetching diseases:", error);
       setDiseaseResults([]);
@@ -41,7 +50,7 @@ export default function DiseaseLookup() {
       <Paper
         elevation={3}
         sx={{
-          background: "linear-gradient(to right, #6a11cb, #2575fc)",
+          background: "linear-gradient( #6a11cb,rgb(123, 37, 252))",
           color: "white",
           textAlign: "center",
           padding: 4,
@@ -56,6 +65,7 @@ export default function DiseaseLookup() {
         </Typography>
         <Typography variant="subtitle1" mt={1} fontStyle="italic">
           Enter a disease name to find detailed information.
+          <Alert severity ="note"> 🧬 Note: This tool only supports diseases with known human protein associations. Some infectious diseases may not return results.</Alert>
         </Typography>
       </Paper>
 
@@ -86,6 +96,7 @@ export default function DiseaseLookup() {
           </Box>
         ) : (
           <>
+          {error && <Alert severity="info">{error}</Alert>}
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
               <Results results={results} onClick={handleResultClick} />
             </Box>

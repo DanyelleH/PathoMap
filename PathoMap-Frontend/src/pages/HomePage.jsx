@@ -16,7 +16,7 @@ export default function HomePage() {
     <Box
       sx={{
         minHeight: '100vh',
-        background: 'linear-gradient(to right, #6a11cb, #2575fc)',
+        background: 'linear-gradient( #6a11cb,rgb(152, 65, 223))',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -37,7 +37,7 @@ export default function HomePage() {
           PathoMap
         </Typography>
         <Typography variant="h5" sx={{ fontWeight: 'light', mt: 1 }}>
-          Real-time Medical Insight
+          Real-time Medical Insights
         </Typography>
       </Container>
 

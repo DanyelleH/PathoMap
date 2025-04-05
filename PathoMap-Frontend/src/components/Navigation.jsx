@@ -43,10 +43,11 @@ export default function FixedBottomNavigation() {
         bottom: 0,
         left: 0,
         right: 0,
-        background: "linear-gradient(135deg, #1976d2, #42a5f5)", // Blue gradient
+        background: "rgb(74, 48, 112)", // Blue gradient
         color: "white",
         boxShadow: "0px -2px 10px rgba(0, 0, 0, 0.2)",
         borderRadius: "10px 10px 0 0",
+        opacity: .9
       }}
       elevation={3}
     >

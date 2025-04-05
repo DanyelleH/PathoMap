@@ -28,7 +28,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   frontend:
-    image: danyelleh/pathomap-react-server:latest
+    # image: danyelleh/pathomap-react-server:latest
+    build:
+      context: ../PathoMap-Frontend
     platform: linux/amd64
     ports: 
       - "8090:80"

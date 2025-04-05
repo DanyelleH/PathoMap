@@ -6,6 +6,7 @@ from disease_app.services import fetch_disease_data
 def fetch_protein_data(accession_id):
         # with each call, the protein and disease information structured at the same time
         # since there is an association.
+    if accession_id is not None:
         url = f"https://rest.uniprot.org/uniprotkb/{accession_id}.json"
         response = requests.get(url)
         
@@ -14,20 +15,19 @@ def fetch_protein_data(accession_id):
         data = response.json()
         protein_description = data.get("proteinDescription", {})
 
-        if "recommendedName" in protein_description:
-            name = protein_description.get("recommendedName", {}).get("fullName").get("value", "")
-        else:
-            submission_names = protein_description.get("submissionNames", [])
-            if submission_names:
-                name = submission_names[0].get("fullName", {}).get("value", "")
-        if not name:
-            return None
+        name = (protein_description.get("recommendedName", {}).get("fullName", {}).get("value")
+            or next(
+                (sn.get("fullName", {}).get("value") for sn in protein_description.get("submissionNames", []) if "fullName" in sn),
+                None))
+        print(f"Protein Name: {name}")
             
         comments = data.get("comments", [])
         disease_comments = [comment for comment in comments if comment.get("commentType") == "DISEASE"]
-            # if there isnt any disease associations, do not save result. 
+        #     # if there isnt any disease associations, do not save result. 
         if disease_comments:
-            function_comments = [comment['texts'][0]["value"] for comment in comments if comment.get("commentType")== "FUNCTION" and 'texts' in comment]
+            function_comments = [comment.get('texts', [{}])[0].get("value", "")
+                                for comment in comments 
+                                if comment.get("commentType") == "FUNCTION" ]
             
             # Create the protein entry
             protein, created = Protein.objects.get_or_create(
@@ -44,18 +44,21 @@ def fetch_protein_data(accession_id):
                 disease_name = disease_data.get("diseaseId")
                 patient_summary = fetch_disease_data(disease_name) if disease_name else None
                     # dont save diseases with no patient summary available
-                if patient_summary:
+                if not patient_summary:
+                    print(f"Skipping disease {disease_name} as no patient summary is available.")
+                    continue
+                else:
     
                     description = disease_data.get("description","")
                             #get_or_create automatically saves disease
-                    disease_obj,_ = Disease.objects.get_or_create(
+                    disease_obj, created = Disease.objects.get_or_create(
                         disease_name=disease_name,
-                        defaults={"description": description},
-                        patient_summary = patient_summary
+                        defaults={"description": disease_data.get("description", "")},
                     )
-
-                    disease_obj.associated_proteins.add(protein)
-                    return protein
+                    if created or not disease_obj.patient_summary:
+                        disease_obj.patient_summary = fetch_disease_data(disease_name)
+                        disease_obj.save()
+            return protein
 
 
 def fetch_protein_data_by_name(name):

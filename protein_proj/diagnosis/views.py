@@ -43,17 +43,19 @@ def analyze_symptoms(user_symptoms):
             messages=[
                         {
                             "role": "system",
-                            "content": """Analyze a patient's symptoms and provide a structured list of possible diseases, ranked by likelihood. 
+                            "content": """Analyze the following plain language description of symptoms. The input may be casual, vague, or non-clinical. 
+                            Your job is to interpret it using common symptom-disease relationships and return likely conditions. Provide a structured list of possible diseases, ranked by likelihood. 
                             - Base your responses on common medical knowledge and symptom-disease relationships.
                             - Always recommend consultation with a doctor for any serious conditions.
-                            - If symptoms are too vague, ask follow-up questions instead of making guesses.
+                            - If symptoms are vague, respond with the following JSON format, using an empty conditions list and a recommendation like 'Please provide more detailed symptoms (e.g., duration, severity, or accompanying symptoms).' Do not guess in these cases.
                             - Format your response strictly as JSON, following this structure:
                                 {
                                 "summary": "Brief summary of the users request.",
                                 "conditions": [
-                                    {"name": "Condition 1", "likelihood": "High", description: " description of condition"},
-                                    {"name": "Condition 2", "likelihood": "Medium" , description: " description of condition},
-                                    {"name": "Condition 3", "likelihood": "Low" , description: " description of condition}
+                                    {"name": "Condition 1", "likelihood": "High", description: " description of condition", "severity": "Monitor at Home", "Advice": "recomended medical advice for treatment, and when to act"},
+                                    {"name": "Condition 2", "likelihood": "Medium" , description: " description of condition, "severity":"Needs Medical Attention", "Advice": "recomended medical advice for treatment, and when to act"},
+                                    {"name": "Condition 3", "likelihood": "Low" , description: " description of condition, "severity":"Emergency", "Advice": "recomended medical advice for treatment, and when to act"}
+                                    
                                 ],
                                 "recommendations": "Advice on what the patient should do next."
                                 Ensure the response is **valid JSON** with no extra text outside the JSON block.
@@ -65,7 +67,7 @@ def analyze_symptoms(user_symptoms):
                             "content": user_symptoms
                         }
                     ],
-                    max_tokens=350,  # Token limit of 350
+                    max_tokens=600,  # Token limit of 600 
                     temperature=0.3,
         )
         # Extract response content

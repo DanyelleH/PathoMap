@@ -19,6 +19,7 @@ export default function SymptomSearch() {
     try {
       const context = { symptoms: complaint };
       const diagnosis = await analyzeSymptoms(token, context);
+      console.log(diagnosis)
       if (diagnosis) {
         setResults(diagnosis);
         localStorage.setItem("Diagnosis", JSON.stringify(diagnosis));
