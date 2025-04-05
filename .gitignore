@@ -1,6 +1,7 @@
 \__pycache__/
 pathomapvenv
 personal.txt
+personal.pem
 resources
 node_modules
 .env

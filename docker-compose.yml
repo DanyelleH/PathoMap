@@ -30,7 +30,7 @@ services:
   frontend:
     # image: danyelleh/pathomap-react-server:latest
     build:
-      context: ../PathoMap-Frontend
+      context: ../frontend
     platform: linux/amd64
     ports: 
       - "8090:80"

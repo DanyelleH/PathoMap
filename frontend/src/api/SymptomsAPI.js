@@ -1,5 +1,4 @@
-const baseUrl = "3.83.179.239"
-
+const baseUrl = import.meta.env.VITE_BASE_URL
 async function basicFetch(url, payload) {
     const res = await fetch(url, payload)
     const body = await res.json()
