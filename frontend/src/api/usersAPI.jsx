@@ -14,7 +14,7 @@ async function basicFetch(url, payload) {
       },
       body: JSON.stringify(context),
     };
-    const body = await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/${username}/`, payload)
+    const body = await basicFetch(`http://${baseUrl}/api/v1/accounts/${username}/`, payload)
     return body;
   }
 
@@ -27,7 +27,7 @@ async function basicFetch(url, payload) {
         "Content-Type": "application/json",
         "Authorization": `Token ${userToken}`
       } };
-    const body = await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/${username}/`, payload)
+    const body = await basicFetch(`http://${baseUrl}/api/v1/accounts/${username}/`, payload)
     return body;
   }
 
@@ -42,7 +42,7 @@ async function basicFetch(url, payload) {
         },
         body: JSON.stringify(context)
     } 
-    const response = await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/${username}/saved_readings`, payload);
+    const response = await basicFetch(`http://${baseUrl}/api/v1/accounts/${username}/saved_readings`, payload);
     return response
   }
 
@@ -54,7 +54,7 @@ async function basicFetch(url, payload) {
           "Content-Type": "application/json",
           "Authorization": `Token ${userToken}`,}
         }
-        const body= await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/${username}/saved_readings`, payload);
+        const body= await basicFetch(`http://${baseUrl}/api/v1/accounts/${username}/saved_readings`, payload);
     return body;
   }
 
@@ -70,7 +70,7 @@ async function basicFetch(url, payload) {
           current_readings: disease_name,
         }),
         }
-        const body= await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/${username}/saved_readings`, payload);
+        const body= await basicFetch(`http://${baseUrl}/api/v1/accounts/${username}/saved_readings`, payload);
     return body;
   }
 
@@ -82,7 +82,7 @@ async function basicFetch(url, payload) {
           "Content-Type": "application/json",
           "Authorization": `Token ${userToken}`,}
         }
-        const body= await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/${username}/saved_readings`, payload);
+        const body= await basicFetch(`http://${baseUrl}/api/v1/accounts/${username}/saved_readings`, payload);
     return body;
   }
 
@@ -96,7 +96,7 @@ async function basicFetch(url, payload) {
         },
         body: JSON.stringify(context)
     } 
-    const response = await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/${username}/symptom_analysis`, payload);
+    const response = await basicFetch(`http://${baseUrl}/api/v1/accounts/${username}/symptom_analysis`, payload);
     return response
   }
 
@@ -110,6 +110,6 @@ async function basicFetch(url, payload) {
         },
         body: JSON.stringify(context),
     } 
-    const response = await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/${username}/symptom_analysis`, payload);
+    const response = await basicFetch(`http://${baseUrl}/api/v1/accounts/${username}/symptom_analysis`, payload);
     return response
   }
