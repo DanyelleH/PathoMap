@@ -14,7 +14,7 @@ async function basicFetch(url, payload) {
       },
       body: JSON.stringify(context)
     }
-    const body = await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/signup/`,payload)
+    const body = await basicFetch(`http://${baseUrl}/api/v1/accounts/signup/`,payload)
     return body
   }
   
@@ -27,7 +27,7 @@ async function basicFetch(url, payload) {
       },
       body: JSON.stringify(context)
     }
-    const body = await basicFetch(`http://${baseUrl}:8000/api/v1/accounts/get-token/`, payload)
+    const body = await basicFetch(`http://${baseUrl}/api/v1/accounts/get-token/`, payload)
     return body.token
   }
 

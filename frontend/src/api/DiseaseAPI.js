@@ -13,7 +13,7 @@ export async function getDiseases(token, disease_name) {
         "Content-Type": "application/json",
         "Authorization": `Token ${token}`
       }  }
-    const body = await basicFetch(`http://${baseUrl}:8000/api/v1/diseases/${disease_name}`, payload)
+    const body = await basicFetch(`http://${baseUrl}/api/v1/diseases/${disease_name}`, payload)
     return body
   }
 
@@ -25,6 +25,6 @@ export async function AllDiseases(token) {
       "Content-Type": "application/json",
       "Authorization": `Token ${token}`
     }  }
-    const body= await basicFetch(`http://${baseUrl}:8000/api/v1/diseases/`, payload)
+    const body= await basicFetch(`http://${baseUrl}/api/v1/diseases/`, payload)
     return body.result
 }
