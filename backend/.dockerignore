@@ -3,5 +3,5 @@ __pycache__/
 .git/
 *.log
 *.whl
-diagnosis/umls_processed
-diagnosis/umls_raw
+node_modules
+.venv

@@ -15,6 +15,10 @@ services:
       - DB_PASS=$POSTGRES_PASSWORD
     depends_on:
       - db
+    expose:
+      - "8000"
+    restart:
+      - always
   nginx:
     image: $DOCKERHUB_UNAME/pathomap-webserver-prod:$NEW_VERSION
     restart: always
