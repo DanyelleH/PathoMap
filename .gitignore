@@ -1,0 +1,15 @@
+\__pycache__/
+pathomapvenv
+personal.txt
+personal.pem
+resources
+node_modules
+.env
+.DS_Store
+DiagnosisImplemetationDraft.py
+MLData
+venv3.11
+umls_processed
+umls_raw
+ProjectVenv
+.venv
