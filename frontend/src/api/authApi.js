@@ -1,4 +1,4 @@
-const baseUrl = import.meta.env.VITE_BASE_URL
+const baseUrl = import.meta.env.VITE_API_URL
 async function basicFetch(url, payload) {
     const res = await fetch(url, payload)
     const body = await res.json()
