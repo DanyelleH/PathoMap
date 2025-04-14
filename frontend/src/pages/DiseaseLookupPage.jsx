@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import { getDiseases } from "../api/DiseaseAPI";
 import Results from "../components/ResultsComponent";
-import { Box, Divider, Typography, Button, Container, Paper, Alert } from "@mui/material";
+import { Box, Divider, Typography, Button, Container, Paper, Alert, textFieldClasses } from "@mui/material";
 import CircularColor from "../components/LoadingComponent";
 
 export default function DiseaseLookup() {
@@ -46,34 +46,37 @@ export default function DiseaseLookup() {
   };
 
   return (
+    <>
+      <Typography variant="h4" fontWeight="bold">
+          Explore Diseases by Name
+        </Typography>
     <Container maxWidth="md" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <Paper
         elevation={3}
         sx={{
-          background: "linear-gradient( #6a11cb,rgb(123, 37, 252))",
+          background: "#56159d",
           color: "white",
-          textAlign: "center",
-          padding: 4,
+          textAlign: "left",
+          padding: 2,
           borderRadius: 2,
           boxShadow: 3,
           width: "100%",
           marginBottom: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
         }}
       >
-        <Typography variant="h4" fontWeight="bold">
-          Explore Diseases by Name
-        </Typography>
-        <Typography variant="subtitle1" mt={1} fontStyle="italic">
+        <Typography variant="inherit"  fontStyle="italic">
           Enter a disease name to find detailed information.
-          <Alert severity ="note"> 🧬 Note: This tool only supports diseases with known human protein associations. Some infectious diseases may not return results.</Alert>
         </Typography>
+        <Typography variant="subtitle2"> 🧬 Note: This tool only supports diseases with known human protein associations. Some infectious diseases may not return results.</Typography>
+        <Container sx={{display:'flex', flexDirection:'column', alignItems:'center', mt:1}}>
+          <SearchBar onSearch={handleSearch} searchPrompt={searchPrompt} />
+        </Container>
       </Paper>
 
-      <Paper elevation={3} sx={{ width: "100%", padding: 3, borderRadius: 2, boxShadow: 3, mb: 3 }}>
-        <SearchBar onSearch={handleSearch} searchPrompt={searchPrompt} />
-      </Paper>
-
-      <Divider sx={{ width: "100%", marginBottom: 3, backgroundColor: "#2575fc" }} />
+      <Divider sx={{ width: "100%", marginBottom: 3, backgroundColor: "#616161" }} />
 
       <Paper
         elevation={3}
@@ -85,8 +88,20 @@ export default function DiseaseLookup() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          background: "#000000"
         }}
       >
+        <Box
+            sx={{ width: '100%', textAlign: 'left' }}
+          >
+            <Typography
+              variant='h6'
+              fontWeight='bold'
+              sx={{ mb: 2, color: 'white' }}
+            >
+              Search Results
+            </Typography>
+          </Box>
         {isLoading ? (
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <CircularColor />
@@ -110,7 +125,7 @@ export default function DiseaseLookup() {
                   sx={{
                     "&:hover": { transform: "scale(1.05)", backgroundColor: "#E57373" },
                     borderRadius: 2,
-                    backgroundColor: "#1976d2",
+                    backgroundColor: "#B6465F",
                   }}
                 >
                   Clear Results
@@ -121,5 +136,6 @@ export default function DiseaseLookup() {
         )}
       </Paper>
     </Container>
+    </>
   );
 }

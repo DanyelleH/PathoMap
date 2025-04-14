@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, CardContent, Typography, Box, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import SearchIcon from '@mui/icons-material/Search';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import HistoryIcon from '@mui/icons-material/History';
-
+import BiotechIcon from '@mui/icons-material/Biotech';
+import SavedSearchIcon from '@mui/icons-material/SavedSearch';
+import MasksIcon from '@mui/icons-material/Masks';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 export default function HomePage() {
   const navigate = useNavigate();
 
@@ -13,33 +13,29 @@ export default function HomePage() {
   };
 
   return (
+    <>
+    {/* App Title */}
+    <Container maxWidth="sm" sx={{ mb: 4 }}>
+      <Typography
+        variant="h3"
+        sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1 }}
+      >
+        PathoMap
+      </Typography>
+      <Typography variant="h6" sx={{ fontWeight: 'light', mt: 1 }}>
+        Real-time Medical Insights
+      </Typography>
+    </Container>
     <Box
       sx={{
-        minHeight: '100vh',
         background: 'linear-gradient( #6a11cb,rgb(152, 65, 223))',
+        py: 5,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
         justifyContent: 'center',
-        px: 3,
-        py: 5,
-        color: 'white',
-        position: 'relative',
-        textAlign: 'center',
+        borderRadius: 10
       }}
     >
-      {/* App Title */}
-      <Container maxWidth="sm" sx={{ mb: 4 }}>
-        <Typography
-          variant="h3"
-          sx={{ fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1 }}
-        >
-          PathoMap
-        </Typography>
-        <Typography variant="h5" sx={{ fontWeight: 'light', mt: 1 }}>
-          Real-time Medical Insights
-        </Typography>
-      </Container>
 
       {/* Quick Navigation Cards */}
       <Box
@@ -48,29 +44,35 @@ export default function HomePage() {
           flexWrap: 'wrap', // This ensures the cards stack when needed
           justifyContent: 'center',
           gap: 3, // Spacing between the cards
-          maxWidth: 900,
+          maxWidth: 800,
           width: '100%',
         }}
       >
         {[
           {
-            icon: <SearchIcon sx={{ fontSize: '3rem' }} />,
+            icon: <BiotechIcon sx={{ fontSize: '3rem' }} />,
             title: 'Search for a Disease',
             description: 'Find diseases by name',
             path: '/diseaseLookup',
           },
           {
-            icon: <BookmarkIcon sx={{ fontSize: '3rem' }} />,
+            icon: <SavedSearchIcon sx={{ fontSize: '3rem' }} />,
             title: 'Saved Diseases',
             description: 'View diseases you have saved',
             path: '/profile',
           },
           {
-            icon: <HistoryIcon sx={{ fontSize: '3rem' }} />,
+            icon: <MasksIcon sx={{ fontSize: '3rem' }} />,
             title: 'Recent Symptoms',
             description: 'Review your recent symptom analyses',
             path: '/profile',
           },
+          {
+            icon: <AutoStoriesIcon sx={{ fontSize: '3rem' }} />,
+            title: 'About Us',
+            description: 'Learn about the Developer',
+            path: '/aboutUs',
+          }
         ].map((card, index) => (
           <Card
             key={index}
@@ -83,9 +85,9 @@ export default function HomePage() {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              minWidth: 250,
-              borderRadius: 2,
-              p: 3,
+              width: 250,
+              borderRadius: 5,
+              p: 4,
               textAlign: 'center',
               color: 'white',
               '&:hover': {
@@ -108,5 +110,6 @@ export default function HomePage() {
         ))}
       </Box>
     </Box>
+    </>
   );
 }

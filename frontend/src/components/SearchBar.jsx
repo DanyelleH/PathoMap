@@ -29,13 +29,12 @@ export default function SearchBar({ onSearch, searchPrompt }) {
         variant="outlined"
         size="small"
         style={{
-          marginRight: '10px',
+          marginRight: '15px',
           width: '300px',
-          backgroundColor: '#ffffff', // Light background for the input
-          color: '#000000', // Dark text color for readability
-          borderRadius: '8px', // Rounded corners for a cleaner look
+          backgroundColor: '#e7e7e7', 
+          color: '#000000', 
+          borderRadius: '8px', 
         }}
-      
       />
       <IconButton type="submit" sx={{ color: 'indigo', background:"lavender", transition: '0.3s','&:hover': { color: '#D8BFD8' } }}> 
         <SearchIcon />
