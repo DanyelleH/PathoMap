@@ -1,148 +1,251 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { Card, CardContent, Collapse } from "@mui/material";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import BiotechIcon from '@mui/icons-material/Biotech';;
 import { saveDiseaseInfo } from "../api/usersAPI";
-import { useState } from "react";
-import { Box, Button, Accordion, AccordionSummary, AccordionDetails, Typography, Alert } from "@mui/material";
+import {
+    Box, Button, Accordion, AccordionSummary, AccordionDetails,
+    Typography, Alert, Divider
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function DiseaseInformation() {
     const { diseasePk } = useParams();
     const [notification, setNotification] = useState("");
+    const [expandedIndexes, setExpandedIndexes] = useState([]);
+    const [expandedProteins, setExpandedProteins] = useState([]);
+
+    const toggleCard = (index) => {
+        setExpandedIndexes((prev) =>
+            prev.includes(index)
+                ? prev.filter((i) => i !== index)
+                : [...prev, index]
+        );
+    };
+    const toggleProteinCard = (index) => {
+        setExpandedProteins((prev) =>
+            prev.includes(index)
+                ? prev.filter((i) => i !== index)
+                : [...prev, index]
+        );
+    };
+
     const diseases = JSON.parse(localStorage.getItem("DiseaseSearch")) || [];
-    
-    let disease = diseases.find((d) => d.pk.toString() === diseasePk);
-    if (!disease) {
-        disease = JSON.parse(localStorage.getItem("SelectedDisease"));
-    }
+    let disease = diseases.find((d) => d.pk.toString() === diseasePk) || 
+                  JSON.parse(localStorage.getItem("SelectedDisease"));
 
     const handleClick = async (e) => {
         e.preventDefault();
         const userToken = localStorage.getItem("userToken");
         const username = localStorage.getItem("username");
 
-        const context = { disease_name: disease.disease_name };
-        const response = await saveDiseaseInfo(username, userToken, context);
-        console.log(response);
-        if (response.error) {
-            setNotification(response.error);
-        } else {
-            setNotification(response);
-        }
+        const response = await saveDiseaseInfo(username, userToken, {
+            disease_name: disease.disease_name
+        });
+
+        setNotification(response.error ? response.error : response);
     };
 
     const formatSummary = (summary) => {
         if (!summary) return [];
+        const regex = /(What[^?]*\?)/g;
+        const parts = summary.split(regex).filter(p => p.trim() !== "");
 
-        const regex = /(What[^?]*\?)/g; // Match "What...?" questions
-        const parts = summary.split(regex).filter(part => part.trim() !== "");
-
-        let formattedSections = [];
+        let formatted = [];
         let currentHeader = null;
-        
-        parts.forEach((part) => {
+
+        parts.forEach(part => {
             if (part.startsWith("What")) {
                 currentHeader = part.trim();
-                formattedSections.push({ header: currentHeader, content: "" });
+                formatted.push({ header: currentHeader, content: "" });
             } else if (currentHeader) {
-                formattedSections[formattedSections.length - 1].content += part.trim() + " ";
+                formatted[formatted.length - 1].content += part.trim() + " ";
             }
         });
 
-        return formattedSections;
+        return formatted;
     };
 
-    const formattedSummary = formatSummary(disease.patient_summary);
+    const cleanFunctionText = (text) => text.replace(/\s*\([^)]*\)/g, "");
 
-    const cleanFunctionText = (text) => {
-        return text.replace(/\s*\([^)]*\)/g, ""); // Removes "(...)" including spaces before
-    };
+    const formattedSummary = formatSummary(disease?.patient_summary);
 
     if (!disease) {
         return <Typography variant="h6" color="error">Disease not found.</Typography>;
     }
 
     return (
-        <Box sx={{ maxWidth: "800px", margin: "auto", padding: "20px", fontFamily: '"Roboto", sans-serif' }}>
-    {/* Notification Section */}
-    {notification && (
-        <Alert severity={notification.error ? "error" : "info"} sx={{ marginBottom: "20px", backgroundColor: notification.error ? "#f8d7da" : "#d1ecf1", color: notification.error ? "#721c24" : "#0c5460" }}>
-            {notification.error ? "Error: " : "Success: "}
-            {notification.message || notification}
-        </Alert>
-    )}
+        <Box sx={{ maxWidth: "900px", margin: "auto", p: 3, fontFamily: "Roboto, sans-serif" }}>
+            {/* Disease Title */}
+            <Box sx={{ mb: 2 }}>
+                <Typography variant="h3" fontWeight="bold" gutterBottom>
+                    {disease.disease_name}
+                </Typography>
+                <Typography variant="body1" >
+                    {disease.description}
+                </Typography>
+            </Box>
 
-    {/* Disease Header and Save Button */}
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", marginBottom: "20px" }}>
-        <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "10px", color: "#2c3e50" }}>
-            {disease.disease_name}
-        </Typography>
-        <Button 
-            variant="contained" 
-            color="primary" 
-            sx={{ padding: "10px 20px", fontSize: "16px", backgroundColor: "#2980b9", "&:hover": { backgroundColor: "#1c638d" } }} 
-            onClick={handleClick}>
-            Save for later
-        </Button>
+            {/* Save Button */}
+            <Box sx={{ textAlign: "right", mb: 2 }}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleClick}
+                    sx={{
+                        backgroundColor: "#6A11CB",
+                        "&:hover": { backgroundColor: "#8f1ed9" },
+                        fontSize: "14px",
+                        padding: "10px 20px"
+                    }}
+                >
+                    💾 Save for Later
+                </Button>
+            </Box>
+
+            {/* Notification */}
+            {notification && (
+                <Alert
+                    severity={notification.error ? "error" : "info"}
+                    sx={{ mb: 3 }}
+                >
+                    {notification.error ? "Error: " : "Success: "}
+                    {notification.message || notification}
+                </Alert>
+            )}
+
+            <Divider sx={{ mb: 3 }} />
+
+            {/* Summary Section */}
+            <AccordionDetails sx={{ backgroundColor: "#C6CAED" }}>
+                <Typography sx={{color:"black",mb:1, fontWeight:"bold"}}>Disease Information</Typography>
+                {formattedSummary.length > 0 ? (
+                    formattedSummary.map((section, i) => (
+                <Box key={i} sx={{ mb: 2 }}>
+                    <Card
+                    variant="outlined"
+                    sx={{ backgroundColor: "#ffffff", borderRadius: 2, boxShadow: 1 }}
+                    >
+                        <CardContent
+                            onClick={() => toggleCard(i)}
+                            sx={{
+                                cursor: "pointer",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center"
+                            }}
+                            >
+                            <Typography variant="subtitle1" fontWeight="bold">
+                                {section.header}
+                            </Typography>
+                            <ExpandMoreIcon
+                                sx={{
+                                    transform: expandedIndexes.includes(i) ? "rotate(180deg)" : "rotate(0deg)",
+                                    transition: "transform 0.3s ease"
+                                }}
+                            />
+                        </CardContent>
+
+                        <Collapse in={expandedIndexes.includes(i)} timeout="auto" unmountOnExit>
+                            <CardContent sx={{ pt: 0 }}>
+                                <Typography variant="body2">
+                                    {section.content.trim()}
+                                </Typography>
+                            </CardContent>
+                        </Collapse>
+                    </Card>
+                </Box>))
+                ) : (
+                <Typography sx={{color:"black"}} >No additional information available for this condition.</Typography>
+                )}
+            </AccordionDetails>
+
+            {/* Protein Section */}
+            <Accordion sx={{ mt: 2, backgroundColor:"#C6CAED" }}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="h6" fontWeight="bold">🧬 Associated Proteins</Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ backgroundColor: "#f5f7fa" }}>
+                {Array.isArray(disease.associated_proteins) && disease.associated_proteins.length > 0 ? (
+                    disease.associated_proteins.map((protein, i) => (
+                    <Box key={i} sx={{ mb: 2 }}>
+                        <Card
+                            variant="outlined"
+                            sx={{ backgroundColor: "#ffffff", borderRadius: 2, boxShadow: 1 }}
+                            >
+                            <CardContent
+                                    onClick={() => toggleProteinCard(i)}
+                                    sx={{
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center"
+                                    }}
+                            >
+                                <Box>
+                                    <Typography variant="subtitle1" fontWeight="bold">
+                                        {protein.name}
+                                    </Typography>
+                                    <Typography variant="caption" color="text.secondary">
+                                        Accession ID: {protein.accession_id}
+                                    </Typography>
+                                </Box>
+                                <ExpandMoreIcon
+                                    sx={{
+                                        transform: expandedProteins.includes(i) ? "rotate(180deg)" : "rotate(0deg)",
+                                        transition: "transform 0.3s ease"
+                                    }}
+                                />
+                            </CardContent>
+
+                            <Collapse in={expandedProteins.includes(i)} timeout="auto" unmountOnExit>
+                                <CardContent sx={{ pt: 1 }}>
+                                    <Box
+                                    sx={{
+                                        maxHeight: 200,
+                                        overflowY: "auto",
+                                        pr: 1,
+                                        "&::-webkit-scrollbar": {
+                                        width: "0.4em"
+                                        },
+                                        "&::-webkit-scrollbar-thumb": {
+                                        backgroundColor: "#c1c1c1",
+                                        borderRadius: "8px"
+                                        }
+                                    }}
+                                    >
+                                    <List dense>
+                                        {protein.function?.split(". ")
+                                        .filter(text => text.trim())
+                                        .map((sentence, j) => (
+                                            <ListItem
+                                            key={j}
+                                            alignItems="flex-start"
+                                            disableGutters
+                                            sx={{ pl: 1.5 }}
+                                            >
+                                            <ListItemIcon sx={{ minWidth: 28 }}>
+                                                <BiotechIcon fontSize="small" color="action" />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={cleanFunctionText(sentence) + '.'}
+                                                typographyProps={{ variant: "body2", color: "text.primary" }}
+                                            />
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                    </Box>
+                                </CardContent>
+                            </Collapse>
+                        </Card>
+                    </Box>
+                ))
+                ) : (
+                    <Typography>No associated proteins found.</Typography>
+                )}
+            </AccordionDetails>
+        </Accordion>
     </Box>
-
-    {/* Disease Summary Accordion */}
-    <Accordion sx={{ marginBottom: "20px" }}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6" sx={{ fontWeight: "bold", color: "#34495e" }}>Summary</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ maxHeight: "300px", overflowY: "auto", backgroundColor: "#f9fafb" }}>
-            {formattedSummary.length > 0 ? (
-                formattedSummary.map((section, index) => (
-                    <Box key={index} sx={{ marginBottom: "15px" }}>
-                        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                            {section.header}
-                        </Typography>
-                        <Typography variant="body2">{section.content.trim()}</Typography>
-                    </Box>
-                ))
-            ) : (
-                <Typography>No summary available.</Typography>
-            )}
-        </AccordionDetails>
-    </Accordion>
-
-    {/* Disease Description Accordion */}
-    <Accordion sx={{ marginBottom: "20px" }}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6" sx={{ fontWeight: "bold", color: "#34495e" }}>High Level Description</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ maxHeight: "300px", overflowY: "auto", backgroundColor: "#f9fafb" }}>
-            <Typography variant="body1">{disease.description}</Typography>
-        </AccordionDetails>
-    </Accordion>
-
-    {/* Associated Proteins Accordion */}
-    <Accordion sx={{ marginBottom: "20px" }}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6" sx={{ fontWeight: "bold", color: "#34495e" }}>Protein Association</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ maxHeight: "300px", overflowY: "auto", backgroundColor: "#f9fafb" }}>
-            {Array.isArray(disease.associated_proteins) && disease.associated_proteins.length > 0 ? (
-                disease.associated_proteins.map((protein, index) => (
-                    <Box key={index} sx={{ border: "1px solid #ddd", borderRadius: "8px", padding: "10px", marginBottom: "10px", backgroundColor: "#f1f1f1" }}>
-                        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                            <strong>{protein.name}</strong> (Accession ID: {protein.accession_id})
-                        </Typography>
-                        <ul>
-                            {protein.function
-                                ?.split(". ")
-                                .filter(sentence => sentence.trim() !== "")
-                                .map((sentence, idx) => (
-                                    <li key={idx}>{cleanFunctionText(sentence)}.</li>
-                                ))}
-                        </ul>
-                    </Box>
-                ))
-            ) : (
-                <Typography>No associated proteins found.</Typography>
-            )}
-        </AccordionDetails>
-    </Accordion>
-</Box>
     );
 }

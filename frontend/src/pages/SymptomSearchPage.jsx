@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar";
 import { 
-  Box, Divider, Typography, Card, CardContent, Button, Container, Alert} from "@mui/material";
+  Box, Divider, Typography, Card, CardContent, Button, Container, Alert, Paper} from "@mui/material";
 import { analyzeSymptoms } from "../api/SymptomsAPI";
 import { CheckCircle, Warning, ErrorOutline } from "@mui/icons-material"; 
 import CircularColor from "../components/LoadingComponent";
@@ -72,24 +72,30 @@ export default function SymptomSearch() {
   };
 
   return (
-    <Container maxWidth="md">
-      <Box 
-        sx={{ 
-          background: "linear-gradient(to right, #6a11cb, #2575fc)", 
-          color: "white", 
-          textAlign: "center", 
-          padding: 4, 
-          borderRadius: 2,
-          boxShadow: 3
-        }}
-      >
-        <Typography variant="h4" fontWeight="bold">
-          AI Symptom Analyzer
-        </Typography>
+    <>
+      <Typography variant="h4" fontWeight="bold">
+            AI Symptom Analyzer </Typography>
+    <Container maxWidth="md" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <Paper
+              elevation={3}
+              sx={{
+                background: "#56159d",
+                color: "white",
+                textAlign: "left",
+                padding: 2,
+                borderRadius: 2,
+                boxShadow: 3,
+                width: "100%",
+                marginBottom: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+              }}
+            >
         <Typography variant="subtitle1" mt={1} fontStyle="italic">
           Enter your symptoms below to get a possible diagnosis.
         </Typography>
-      </Box>
+        </Paper>
 
       {/* Search Bar */}
       <Box mt={3}>
@@ -166,5 +172,6 @@ export default function SymptomSearch() {
         </Box>
       )}
     </Container>
+    </>
   );
 }

@@ -11,6 +11,7 @@ import SymptomSearch from './pages/SymptomSearchPage'
 import DiseaseLookup from './pages/DiseaseLookupPage'
 import ProteinSearch from './pages/ProteinSearchPage'
 import DiseaseInformation from './pages/DiseaseInformation'
+import About from './pages/AboutPage'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/diseaseLookup" element={<DiseaseLookup />}  />
             <Route path="/exploreProteins" element={<ProteinSearch />} />
             <Route path="diseaseInformation/:diseasePk" element={ <DiseaseInformation />} />
+            <Route path="aboutUs" element={<About />} />
             {/* direct to new user form with the users id as a parameter. */}
           </Routes>
           <FixedBottomNavigation />
