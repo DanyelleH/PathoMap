@@ -53,8 +53,9 @@ def fetch_protein_data(accession_id):
                             #get_or_create automatically saves disease
                     disease_obj, created = Disease.objects.get_or_create(
                         disease_name=disease_name,
-                        defaults={"description": disease_data.get("description", "")},
+                        defaults={"description": description},
                     )
+                    disease_obj.associated_proteins.add(protein)
                     if created or not disease_obj.patient_summary:
                         disease_obj.patient_summary = fetch_disease_data(disease_name)
                         disease_obj.save()
