@@ -1,0 +1,38 @@
+services:
+  api:
+    build: .
+    ports: 
+    - "8000:8000"
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.5"
+    #       memory: "512MB"
+    depends_on:
+      - db
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8000"]
+    #   interval: 30s
+    #   retries: 3
+    #   start_period: 10s
+    #   timeout: 10s
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=protein_db
+    ports:
+      - '5444:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # frontend:
+  #   image: danyelleh/pathomap-react-server:latest
+  #   platform: linux/amd64
+  #   ports: 
+  #     - "8090:80"
+   
+volumes:
+  postgres_data:
+  
