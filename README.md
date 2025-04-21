@@ -16,14 +16,14 @@ Pathomap provides a user with quick access to Disease information, symptom searc
 
 ### Installation : 
 
-```python
+```
 cd backend
 
 docker compose up -d
 ```
 
 Start Frontend Seperately:
-```python
+```
 cd frontend
 npm install
 npm run dev
