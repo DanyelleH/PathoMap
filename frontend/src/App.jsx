@@ -12,11 +12,12 @@ import DiseaseLookup from './pages/DiseaseLookupPage'
 import ProteinSearch from './pages/ProteinSearchPage'
 import DiseaseInformation from './pages/DiseaseInformation'
 import About from './pages/AboutPage'
-
+import { ThemeProvider } from './contexts/themeContext'
 function App() {
   return (
       <BrowserRouter>
-        <UserProvider > 
+        <UserProvider >
+          <ThemeProvider>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
@@ -32,6 +33,7 @@ function App() {
             {/* direct to new user form with the users id as a parameter. */}
           </Routes>
           <FixedBottomNavigation />
+          </ThemeProvider>
         </UserProvider>
       </BrowserRouter>
   )

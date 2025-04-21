@@ -5,11 +5,13 @@ import { getDiseases } from "../api/DiseaseAPI";
 import Results from "../components/ResultsComponent";
 import { Box, Divider, Typography, Button, Container, Paper, Alert, textFieldClasses } from "@mui/material";
 import CircularColor from "../components/LoadingComponent";
-
+import { useTheme } from "../contexts/themeContext";
 export default function DiseaseLookup() {
   const [results, setDiseaseResults] = useState(
     JSON.parse(localStorage.getItem("DiseaseSearch")) || []
   );
+  const {theme} = useTheme()
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError]= useState("");
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ export default function DiseaseLookup() {
   const handleResultClick = (disease_pk) => {
     navigate(`/diseaseInformation/${disease_pk}`);
   };
-
+console.log(theme)
   return (
     <>
       <Typography variant="h4" fontWeight="bold">
@@ -88,7 +90,7 @@ export default function DiseaseLookup() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          background: "#000000"
+          backgroundColor: theme === 'dark' ? "#94a3b8" : "#f9f9f9"
         }}
       >
         <Box
@@ -97,8 +99,8 @@ export default function DiseaseLookup() {
             <Typography
               variant='h6'
               fontWeight='bold'
-              sx={{ mb: 2, color: 'white' }}
-            >
+              sx={{ mb: 2,color: theme ==='dark'? "#ffffff": "#000000" }}
+              >
               Search Results
             </Typography>
           </Box>

@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar";
 import { 
-  Box, Divider, Typography, Card, CardContent, Button, Container, Alert, Paper} from "@mui/material";
+  Box, Divider, Typography, Card, CardContent, Button, Container, Alert, Paper, Chip} from "@mui/material";
 import { analyzeSymptoms } from "../api/SymptomsAPI";
-import { CheckCircle, Warning, ErrorOutline } from "@mui/icons-material"; 
 import CircularColor from "../components/LoadingComponent";
 import { saveDiagnosisInfo } from "../api/usersAPI";
+import { useTheme } from "../contexts/themeContext";
 
 export default function SymptomSearch() {
-  const searchPrompt = "What's bothering you?";
+  const searchPrompt = "What's bothering you? 🤕";
   const [results, setResults] = useState(JSON.parse(localStorage.getItem("Diagnosis")) || {});
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState("");
   const token = localStorage.getItem("userToken");
+  const {theme} = useTheme()
 
   const handleSearch = async (complaint) => {
     setIsLoading(true);
@@ -58,18 +59,18 @@ export default function SymptomSearch() {
     }
 };
 
-  const getLikelihoodIcon = (likelihood) => {
-    switch (likelihood.toLowerCase()) {
-      case "high":
-        return <ErrorOutline sx={{ color: "red", marginRight: 1 }} />;
-      case "medium":
-        return <Warning sx={{ color: "orange", marginRight: 1 }} />;
-      case "low":
-        return <CheckCircle sx={{ color: "green", marginRight: 1 }} />;
-      default:
-        return null;
-    }
-  };
+const getLikelihoodIcon = (likelihood) => {
+  switch (likelihood.toLowerCase()) {
+    case "high":
+      return "✅ ";
+    case "medium":
+      return "⚠️ ";
+    case "low":
+      return "❓ ";
+    default:
+      return "❓"
+  }
+};
 
   return (
     <>
@@ -92,17 +93,16 @@ export default function SymptomSearch() {
                 justifyContent: 'center',
               }}
             >
-        <Typography variant="subtitle1" mt={1} fontStyle="italic">
-          Enter your symptoms below to get a possible diagnosis.
+        <Typography variant="inherit"  fontStyle="italic">
+          Enter your symptoms below to get a possible diagnosis.<br></br>
+          <Typography variant="subtitle2">
+          ‼️ Tip: Include how long you’ve had them, their severity, and anything else that might help (e.g. travel, meds, or conditions).
+          </Typography>
         </Typography>
+        <Container sx={{display:'flex', flexDirection:'column', alignItems:'center', mt:1}}>
+          <SearchBar searchPrompt={searchPrompt} onSearch={handleSearch} />
+        </Container>
         </Paper>
-
-      {/* Search Bar */}
-      <Box mt={3}>
-        <SearchBar searchPrompt={searchPrompt} onSearch={handleSearch} />
-      </Box>
-
-      <Divider sx={{ marginY: 4, borderColor: "#2575fc" }} />
 
       {/* Loading Spinner */}
       {isLoading ? (
@@ -124,7 +124,7 @@ export default function SymptomSearch() {
           {/* Summary */}
           {results.summary && (
             <Typography variant="body1" mb={2} sx={{ fontStyle: "italic" }}>
-              {results.summary}
+              Reported Symptoms 📝 : {results.summary}
             </Typography>
           )}
 
@@ -138,15 +138,27 @@ export default function SymptomSearch() {
                   padding: 2, 
                   boxShadow: 3, 
                   transition: "0.3s", 
-                  "&:hover": { boxShadow: 6, transform: "scale(1.02)" } 
+                  backgroundColor: theme === 'dark' ? "#FFDDD2" : "#FFFFFF",
+                  "&:hover": { boxShadow: 9, transform: "scale(1.08)" } 
                 }}
               >
                 <CardContent>
-                  <Typography variant="h6" display="flex" alignItems="center">
-                    {getLikelihoodIcon(condition.likelihood)}
-                    {condition.name} ({condition.likelihood})
+                  <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
+                    <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center">
+                      {getLikelihoodIcon(condition.likelihood)}
+                      {condition.name}
+                    </Typography>
+                    <Chip 
+                      label={`Likelihood: ${condition.likelihood}`} 
+                      color="primary" 
+                      variant="outlined" 
+                      size="small"
+                    />
+                  </Box>
+                  
+                  <Typography variant="body2" color="text.secondary">
+                    {condition.description}
                   </Typography>
-                  <Typography variant="body2">{condition.description}</Typography>
                 </CardContent>
               </Card>
             ))
@@ -165,9 +177,33 @@ export default function SymptomSearch() {
 
           {/* Save Search Button */}
           <Box textAlign="center" mt={3}>
-            <Button variant="contained" color="primary" onClick={handleSaveSearch}>
+            <Button variant="contained" color="primary" onClick={handleSaveSearch} sx={{
+                        backgroundColor: "#57A773",
+                        "&:hover": { backgroundColor: "#90C290" },
+                        fontSize: "14px",
+                        padding: "10px 20px"
+                    }}>
               Save Search
             </Button>
+          </Box>
+          <Box mt={4} mb={2}>
+            <Paper elevation={1} sx={{ padding: 2, backgroundColor: "#f9f9f9", borderLeft: "6px solid #B6465F" }}>
+              <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                ⚠️ Symbol Key
+              </Typography>
+              <Typography variant="body2">
+                ✅ <strong>Commonly Associated</strong>: This condition is often linked with your reported symptoms.
+              </Typography>
+              <Typography variant="body2">
+                ⚠️ <strong>Possible Explanation</strong>: This condition may explain your symptoms.
+              </Typography>
+              <Typography variant="body2">
+                ❓ <strong>Less Likely</strong>: This condition is less likely but still possible.
+              </Typography>
+              <Typography variant="caption" color="text.secondary" display="block" mt={1}>
+                Disclaimer: This tool does not replace professional medical advice. Please consult a healthcare provider for a proper diagnosis.
+              </Typography>
+            </Paper>
           </Box>
         </Box>
       )}

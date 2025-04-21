@@ -1,10 +1,10 @@
 import { List, ListItemButton, ListItemText, IconButton, Typography, Box } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Delete as DeleteIcon } from '@mui/icons-material';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { removeSavedDiseases, getSavedDiseases, deleteDiagnosisInfo } from '../api/usersAPI';
 
-const RecentSymptoms = ({ results, setSavedSymptomList }) => {
+const RecentSymptoms = ({ results, setSavedSymptomList, handleOpenSymptomDialog }) => {
   const navigate = useNavigate();
 
   if (!results || results.length === 0) {
@@ -40,16 +40,13 @@ const RecentSymptoms = ({ results, setSavedSymptomList }) => {
 
   return (
     <Box sx={{ padding: 3 }}>
-      <Typography variant="h6" color="primary" fontWeight="bold" mb={2}>
-        Saved Disease Searches
-      </Typography>
 
       <Box sx={{ maxHeight: 300, overflowY: 'auto', borderRadius: 2, padding: 1 }}>
         <List disablePadding>
           {results.map((item, index) => (
             <ListItemButton
               key={index}
-              // onClick={() => handleResultClick(item)}
+              onClick={() => handleOpenSymptomDialog(item)}
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -57,8 +54,9 @@ const RecentSymptoms = ({ results, setSavedSymptomList }) => {
                 borderRadius: 2,
                 marginBottom: 1,
                 padding: 2,
+                backgroundColor: "#C6CAED",
                 '&:hover': {
-                  backgroundColor: "#e1e1e1",
+                  backgroundColor: "#FFDDD2",
                   transform: 'scale(1.02)',
                 },
               }}
@@ -77,7 +75,7 @@ const RecentSymptoms = ({ results, setSavedSymptomList }) => {
                   },
                 }}
               >
-                <DeleteIcon />
+                <HighlightOffIcon />
               </IconButton>
             </ListItemButton>
           ))}

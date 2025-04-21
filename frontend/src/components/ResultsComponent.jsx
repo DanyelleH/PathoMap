@@ -13,7 +13,7 @@ export default function Results({ results, onClick }) {
         width: '100%',
         maxHeight: 400,
         maxWidth: 800,
-        bgcolor: '#000000',
+        // bgcolor: '#000000',
         borderRadius: 2,
         boxShadow: 2,
         overflowY: 'auto',

@@ -2,6 +2,7 @@ import { List, ListItemButton, ListItemText, IconButton, Typography, Box } from 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Delete as DeleteIcon } from '@mui/icons-material';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { removeSavedDiseases, getSavedDiseases } from '../api/usersAPI';
 
 const SavedList = ({ results, setSavedList }) => {
@@ -37,10 +38,8 @@ const SavedList = ({ results, setSavedList }) => {
   };
 
   return (
+    // saved disease searches list 
     <Box sx={{ padding: 3 }}>
-      <Typography variant="h6" color="primary" fontWeight="bold" mb={2}>
-        Saved Disease Searches
-      </Typography>
 
       <Box sx={{ maxHeight: 300, overflowY: 'auto', borderRadius: 2, padding: 1 }}>
         <List disablePadding>
@@ -55,8 +54,9 @@ const SavedList = ({ results, setSavedList }) => {
                 borderRadius: 2,
                 marginBottom: 1,
                 padding: 2,
+                backgroundColor: "#C6CAED",
                 '&:hover': {
-                  backgroundColor: "#e1e1e1",
+                  backgroundColor: "#FFDDD2",
                   transform: 'scale(1.02)',
                 },
               }}
@@ -69,13 +69,13 @@ const SavedList = ({ results, setSavedList }) => {
                 onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
                 edge="end"
                 sx={{
-                  color: "#d32f2f",
+                  color: "#B6465F",
                   '&:hover': {
                     backgroundColor: "#ffebee",
                   },
                 }}
               >
-                <DeleteIcon />
+                <HighlightOffIcon />
               </IconButton>
             </ListItemButton>
           ))}
