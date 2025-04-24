@@ -19,15 +19,20 @@ export default function AboutUs() {
           </Typography>
 
           <Typography variant="body1" sx={{ mt: 2, lineHeight: 1.6 }}>
-            Hi! I'm a former medical student turned software engineer. I created PathoMap to help people 
-            quickly access reliable medical insights and better understand disease pathways.
-            My goal is to blend my passion for medicine and technology to build tools that empower patients 
-            and support informed decision-making.
-          </Typography>
+  Hi! I'm a former medical student turned software engineer on a mission to build tech that cares.
+  I created <strong>PathoMap</strong> to help people access reliable medical insights and understand disease pathways more clearly —
+  combining my background in biomedical science and public health with the power of technology.
+</Typography>
 
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            When I’m not coding, I love spending time with my child, playing video games, and listening to music.
-          </Typography>
+<Typography variant="body1" sx={{ mt: 2, lineHeight: 1.6 }}>
+  My goal is to develop tools that bridge healthcare and software — empowering patients, supporting informed decision-making, 
+  and bringing more empathy into digital solutions. I specialize in full-stack development using Python, React, Django, and PostgreSQL, 
+  and I'm currently expanding my skills with Java and Spring Boot.
+</Typography>
+
+<Typography variant="body1" sx={{ mt: 2 }}>
+  When I’m not coding, I love spending time with my child, playing video games, and listening to music.
+</Typography>
 
           <Box sx={{ mt: 4, display: 'flex', gap: 2 }}>
             <Button

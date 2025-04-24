@@ -41,8 +41,22 @@ const SavedList = ({ results, setSavedList }) => {
     // saved disease searches list 
     <Box sx={{ padding: 3 }}>
 
-      <Box sx={{ maxHeight: 300, overflowY: 'auto', borderRadius: 2, padding: 1 }}>
-        <List disablePadding>
+      <Box sx={{ maxHeight: 400, overflowY: 'auto', borderRadius: 8, padding: 1 }}>
+        <List
+        sx={{
+          maxHeight: 300,
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgba(106, 17, 203, 0.3)', // Change this to any color
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: '#94a3b8',
+          },
+        }} disablePadding>
           {results.map((item, index) => (
             <ListItemButton
               key={index}
@@ -57,7 +71,7 @@ const SavedList = ({ results, setSavedList }) => {
                 backgroundColor: "#C6CAED",
                 '&:hover': {
                   backgroundColor: "#FFDDD2",
-                  transform: 'scale(1.02)',
+                  transform: 'scale(1.0)',
                 },
               }}
             >
