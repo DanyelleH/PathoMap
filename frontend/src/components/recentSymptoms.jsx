@@ -2,74 +2,84 @@ import { List, ListItemButton, ListItemText, IconButton, Typography, Box } from 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { removeSavedDiseases, getSavedDiseases, deleteDiagnosisInfo } from '../api/usersAPI';
 
-const RecentSymptoms = ({ results, setSavedSymptomList, handleOpenSymptomDialog }) => {
+const RecentSymptoms = ({ symptoms, setSymptomsList }) => {
   const navigate = useNavigate();
 
-  if (!results || results.length === 0) {
-    return <Typography variant="body1" color="textSecondary">No saved symptoms found.</Typography>;
+  if (!symptoms || symptoms.length === 0) {
+    return <Typography variant="body1" color="textSecondary">No recent symptoms recorded.</Typography>;
   }
 
-  // const handleResultClick = (disease) => {
-  //   localStorage.setItem("SelectedDisease", JSON.stringify(disease));
-  //   navigate(`/diseaseInformation/${disease}`);
-  // };
+  const handleResultClick = (symptom) => {
+    // You can link to a detailed page if needed
+    localStorage.setItem("SelectedSymptom", JSON.stringify(symptom));
+    navigate(`/symptomInformation/${symptom}`);
+  };
 
   const handleDelete = async (symptom) => {
     try {
-      const savedSymptoms = JSON.parse(localStorage.getItem("userProfile")).saved_symptoms || [];
-      const updatedSymptoms = savedSymptoms.filter((item) => item.summary !== symptom.summary);
-      console.log(symptom.summary)
+      const currentSymptoms = JSON.parse(localStorage.getItem("userProfile")).recent_symptoms || [];
+      const updatedSymptoms = currentSymptoms.filter((item) => item.id !== symptom.id);
 
       const userProfile = JSON.parse(localStorage.getItem("userProfile"));
-      userProfile.saved_symptoms = updatedSymptoms;
+      userProfile.recent_symptoms = updatedSymptoms;
       localStorage.setItem("userProfile", JSON.stringify(userProfile));
 
-      const username = localStorage.getItem("username");
-      const userToken = localStorage.getItem("userToken");
-      const context = {"summary": symptom.summary}
-
-      await deleteDiagnosisInfo(username, userToken, context);
-      const data = await getSavedDiseases(username, userToken);
-      setSavedSymptomList(data || []);
+      setSymptomsList(updatedSymptoms);
     } catch (error) {
-      console.error("Error deleting disease:", error.message);
+      console.error("Error deleting symptom:", error.message);
     }
   };
 
   return (
     <Box sx={{ padding: 3 }}>
-
-      <Box sx={{ maxHeight: 300, overflowY: 'auto', borderRadius: 2, padding: 1 }}>
-        <List disablePadding>
-          {results.map((item, index) => (
+      <Box sx={{ maxHeight: 300, overflowY: 'auto', borderRadius: 8, padding: 1 }}>
+        <List
+          sx={{
+            maxHeight: 300,
+            overflowY: 'auto',
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: 'rgba(106, 17, 203, 0.5)',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: '#f0f0f0',
+            },
+          }} 
+          disablePadding
+        >
+          {symptoms.map((item, index) => (
             <ListItemButton
               key={index}
-              onClick={() => handleOpenSymptomDialog(item)}
+              onClick={() => handleResultClick(item)}
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                backgroundColor: "#f5f5f5",
+                backgroundColor: "#E3F2FD",
                 borderRadius: 2,
                 marginBottom: 1,
                 padding: 2,
-                backgroundColor: "#C6CAED",
                 '&:hover': {
-                  backgroundColor: "#FFDDD2",
+                  backgroundColor: "#FFEB3B",
                   transform: 'scale(1.02)',
                 },
               }}
             >
-              <ListItemText 
-                primary={item.summary || `Item ${index + 1}`}
-                sx={{ fontWeight: 'medium', color: "#333" }}
+              <ListItemText
+                primary={item.symptom_description || `Symptom ${index + 1}`}
+                sx={{
+                  fontWeight: 'medium',
+                  color: "#333",
+                }}
               />
               <IconButton
                 onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
                 edge="end"
                 sx={{
-                  color: "#d32f2f",
+                  color: "#B6465F",
                   '&:hover': {
                     backgroundColor: "#ffebee",
                   },

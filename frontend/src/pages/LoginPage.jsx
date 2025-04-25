@@ -10,8 +10,9 @@ export default function Login() {
   const [responseMsg, setResponseMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const { handleToken, formData, handleFormDataChange, setUserInfo } = useContext(UserContext);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const theme = useTheme();  // Access the theme object
+  const theme = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,10 +28,10 @@ export default function Login() {
         await fetchUserInfo(token);
         navigate('/profile');
       } else {
-        setResponseMsg('Error logging in');
+        setResponseMsg('User with those credentials was not found. Check username / password and try again, or create an account');
       }
     } catch (error) {
-      setResponseMsg('An error occurred during login.');
+      setResponseMsg('There was an error on our side. Try again later');
       console.error('Login failed:', error);
     } finally {
       setLoading(false);
@@ -52,9 +53,24 @@ export default function Login() {
   };
 
   return (
-    <Container maxWidth="xs" sx={{ padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-      <Typography variant="h4" gutterBottom>
-        Login
+    <Container
+      maxWidth="xs"
+      sx={{
+        padding: 4,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center',
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: 2,
+        boxShadow: 3,
+      }}
+    >
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}>
+        Welcome Back
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 3, color: theme.palette.text.secondary }}>
+        Please login to your account.
       </Typography>
       <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', mt: 2 }}>
         <TextField
@@ -66,17 +82,17 @@ export default function Login() {
           onChange={handleFormDataChange}
           sx={{
             mb: 2,
-            backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#fff', // Dark mode background
+            backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#fff',
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
-                borderColor: theme.palette.mode === 'dark' ? '#bbb' : '#ccc', // Border color for dark/light
+                borderColor: theme.palette.mode === 'dark' ? '#bbb' : '#ccc',
               },
             },
             '& .MuiInputLabel-root': {
-              color: theme.palette.mode === 'dark' ? '#fff' : '#000', // Label color
+              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
             },
             '& .MuiInputBase-root': {
-              color: theme.palette.mode === 'dark' ? '#fff' : '#000', // Text color
+              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
             },
           }}
         />
@@ -90,17 +106,17 @@ export default function Login() {
           onChange={handleFormDataChange}
           sx={{
             mb: 2,
-            backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#fff', // Dark mode background
+            backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#fff',
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
-                borderColor: theme.palette.mode === 'dark' ? '#bbb' : '#ccc', // Border color for dark/light
+                borderColor: theme.palette.mode === 'dark' ? '#bbb' : '#ccc',
               },
             },
             '& .MuiInputLabel-root': {
-              color: theme.palette.mode === 'dark' ? '#fff' : '#000', // Label color
+              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
             },
             '& .MuiInputBase-root': {
-              color: theme.palette.mode === 'dark' ? '#fff' : '#000', // Text color
+              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
             },
           }}
         />
@@ -109,21 +125,43 @@ export default function Login() {
           variant="contained"
           fullWidth
           disabled={loading}
-          sx={{ py: 1.5, backgroundColor: '#007bff', '&:hover': { backgroundColor: '#0056b3' } }}
+          sx={{
+            py: 1.5,
+            backgroundColor: loading ? theme.palette.grey[400] : theme.palette.primary.main,
+            '&:hover': { backgroundColor: loading ? theme.palette.grey[400] : theme.palette.primary.dark },
+            mt: 2,
+          }}
         >
           {loading ? <CircularColor /> : 'Login'}
         </Button>
         {responseMsg && (
-          <Typography variant="body2" color="error.main" sx={{ mt: 2 }}>
+          <Typography
+            variant="body2"
+            color="error.main"
+            sx={{ mt: 2, fontWeight: 'bold', lineHeight: 1.4 }}
+          >
             {responseMsg}
           </Typography>
         )}
       </Box>
       <Box sx={{ mt: 3 }}>
-        <Typography variant="body2">
+        <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
           New User?
         </Typography>
-        <Button onClick={() => navigate('/signup')} variant="outlined" sx={{ mt: 1, width: '100%' }}>
+        <Button
+          onClick={() => navigate('/signup')}
+          variant="outlined"
+          sx={{
+            mt: 1,
+            width: '100%',
+            color: theme.palette.primary.main,
+            borderColor: theme.palette.primary.main,
+            '&:hover': {
+              backgroundColor: theme.palette.primary.main,
+              color: '#fff',
+            },
+          }}
+        >
           Create an Account
         </Button>
       </Box>
