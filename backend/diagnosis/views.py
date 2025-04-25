@@ -52,9 +52,9 @@ def analyze_symptoms(user_symptoms):
                                 {
                                 "summary": "Brief summary of the users request.",
                                 "conditions": [
-                                    {"name": "Condition 1", "likelihood": "High", description: " description of condition", "severity": "Monitor at Home", "Advice": "recomended medical advice for treatment, and when to act"},
-                                    {"name": "Condition 2", "likelihood": "Medium" , description: " description of condition, "severity":"Needs Medical Attention", "Advice": "recomended medical advice for treatment, and when to act"},
-                                    {"name": "Condition 3", "likelihood": "Low" , description: " description of condition, "severity":"Emergency", "Advice": "recomended medical advice for treatment, and when to act"}
+                                    {"name": "Condition 1", "likelihood": "High", "description": " description of condition", "severity": "Monitor at Home", "Advice": "recomended medical advice for treatment, and when to act"},
+                                    {"name": "Condition 2", "likelihood": "Medium" , "description": " description of condition, "severity":"Needs Medical Attention", "Advice": "recomended medical advice for treatment, and when to act"},
+                                    {"name": "Condition 3", "likelihood": "Low" , "description": " description of condition, "severity":"Emergency", "Advice": "recomended medical advice for treatment, and when to act"}
                                     
                                 ],
                                 "recommendations": "Advice on what the patient should do next."
@@ -72,6 +72,8 @@ def analyze_symptoms(user_symptoms):
         )
         # Extract response content
         response_text = completion.choices[0].message.content
+        if not response_text.strip().startswith("{"):
+            raise ValueError("GPT returned invalid or non-JSON response: " + response_text)
 
         # Convert stringified JSON back to a dictionary
         structured_response = json.loads(response_text)
@@ -79,3 +81,4 @@ def analyze_symptoms(user_symptoms):
         return structured_response
     except Exception as e:
         return str(e)
+    

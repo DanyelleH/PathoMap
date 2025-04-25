@@ -95,8 +95,9 @@ class SavedSymptoms(APIView):
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=404)
         
-        serializer = DiseaseSerializer(user.saved_symptoms, many=True)
-        return Response(serializer.data)
+        # If it's a queryset or model objects, convert them to dicts
+        data = [symptom for symptom in user.saved_symptoms]
+        return Response(data)
     
     def patch(self, request, username):
         try:
