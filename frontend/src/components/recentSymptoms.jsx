@@ -2,8 +2,8 @@ import { List, ListItemButton, ListItemText, IconButton, Typography, Box } from 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-
-const RecentSymptoms = ({ symptoms, setSymptomsList }) => {
+import { deleteDiagnosisInfo } from '../api/usersAPI';
+const RecentSymptoms = ({ symptoms, setSavedSymptomList, handleOpenSymptomDialog, fetchSavedSymptoms }) => {
   const navigate = useNavigate();
 
   if (!symptoms || symptoms.length === 0) {
@@ -11,21 +11,24 @@ const RecentSymptoms = ({ symptoms, setSymptomsList }) => {
   }
 
   const handleResultClick = (symptom) => {
-    // You can link to a detailed page if needed
-    localStorage.setItem("SelectedSymptom", JSON.stringify(symptom));
-    navigate(`/symptomInformation/${symptom}`);
+    handleOpenSymptomDialog(symptom);
   };
 
   const handleDelete = async (symptom) => {
+    console.log(symptom.summary)
+    const username = localStorage.getItem("username")
+    const userToken = localStorage.getItem("userToken")
+    const context = {summary: symptom.summary}
     try {
-      const currentSymptoms = JSON.parse(localStorage.getItem("userProfile")).recent_symptoms || [];
-      const updatedSymptoms = currentSymptoms.filter((item) => item.id !== symptom.id);
-
-      const userProfile = JSON.parse(localStorage.getItem("userProfile"));
-      userProfile.recent_symptoms = updatedSymptoms;
-      localStorage.setItem("userProfile", JSON.stringify(userProfile));
-
-      setSymptomsList(updatedSymptoms);
+      // const currentSymptoms = JSON.parse(localStorage.getItem("userProfile")).recent_symptoms || [];
+      // const updatedSymptoms = currentSymptoms.filter((item) => item.id !== symptom.id);
+      const updatedSymptoms = await deleteDiagnosisInfo(username, userToken, context)
+      console.log(updatedSymptoms)
+      // const userProfile = JSON.parse(localStorage.getItem("userProfile"));
+      // userProfile.recent_symptoms = updatedSymptoms;
+      // localStorage.setItem("userProfile", JSON.stringify(userProfile));
+      
+      setSavedSymptomList([]);
     } catch (error) {
       console.error("Error deleting symptom:", error.message);
     }
@@ -33,7 +36,7 @@ const RecentSymptoms = ({ symptoms, setSymptomsList }) => {
 
   return (
     <Box sx={{ padding: 3 }}>
-      <Box sx={{ maxHeight: 300, overflowY: 'auto', borderRadius: 8, padding: 1 }}>
+      <Box sx={{ maxHeight: 400, overflowY: 'auto', borderRadius: 8, padding: 1 }}>
         <List
           sx={{
             maxHeight: 300,
@@ -58,18 +61,18 @@ const RecentSymptoms = ({ symptoms, setSymptomsList }) => {
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                backgroundColor: "#E3F2FD",
+                backgroundColor: "#C6CAED",
                 borderRadius: 2,
                 marginBottom: 1,
                 padding: 2,
                 '&:hover': {
-                  backgroundColor: "#FFEB3B",
+                  backgroundColor: "#FFDDD2",
                   transform: 'scale(1.02)',
                 },
               }}
             >
               <ListItemText
-                primary={item.symptom_description || `Symptom ${index + 1}`}
+                primary={item.summary || `Symptom ${index + 1}`}
                 sx={{
                   fontWeight: 'medium',
                   color: "#333",

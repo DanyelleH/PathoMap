@@ -6,7 +6,6 @@ import { analyzeSymptoms } from "../api/SymptomsAPI";
 import CircularColor from "../components/LoadingComponent";
 import { saveDiagnosisInfo } from "../api/usersAPI";
 import { useTheme } from "../contexts/themeContext";
-
 export default function SymptomSearch() {
   const searchPrompt = "What's bothering you? 🤕";
   const [results, setResults] = useState(JSON.parse(localStorage.getItem("Diagnosis")) || {});
@@ -19,6 +18,7 @@ export default function SymptomSearch() {
   const handleSearch = async (complaint) => {
     setIsLoading(true);
     setErrorMessage("")
+    console.log(complaint)
 
     try {
       const context = { symptoms: complaint };
@@ -37,6 +37,8 @@ export default function SymptomSearch() {
       if (diagnosis) {
         setResults(diagnosis);
         localStorage.setItem("Diagnosis", JSON.stringify(diagnosis));
+        // autosave results to users profile
+        handleSaveSearch(diagnosis)
       }
     } catch (error) {
       console.error("Error fetching diagnosis", error);
@@ -46,25 +48,24 @@ export default function SymptomSearch() {
     }
   };
 
-  const handleSaveSearch = async (e) => {
-    e.preventDefault();
+  const handleSaveSearch = async (diagnosis) => {
     const userToken = localStorage.getItem("userToken");
     const username = localStorage.getItem("username");
 
-    const context = { symptom_analysis: JSON.parse(localStorage.getItem("Diagnosis")) };
+    const context = { symptom_analysis: diagnosis };
     const response = await saveDiagnosisInfo(username, userToken, context);
     if (response.error) {
       setNotification(response.error);
     } else {
       setNotification(response);
-      const userProfile = JSON.parse(localStorage.getItem("userProfile")) || {};
-      userProfile.saved_symptoms = userProfile.saved_symptoms || [];
-      userProfile.saved_symptoms.push(context.symptom_analysis);
-      localStorage.setItem("userProfile", JSON.stringify(userProfile));
-      setResults((prevResults) => ({
-        ...prevResults,
-        saved_symptoms: [...(prevResults.saved_symptoms || []), context],
-      }));
+      // const userProfile = JSON.parse(localStorage.getItem("userProfile")) || {};
+      // userProfile.saved_symptoms = userProfile.saved_symptoms || [];
+      // userProfile.saved_symptoms.push(context.symptom_analysis);
+      // localStorage.setItem("userProfile", JSON.stringify(userProfile));
+      // setResults((prevResults) => ({
+      //   ...prevResults,
+      //   saved_symptoms: [...(prevResults.saved_symptoms || []), context],
+      // }));
     }
   };
 
@@ -174,7 +175,7 @@ export default function SymptomSearch() {
               </Typography>
             )}
 
-            {/* Save Search Button - Only visible if results.conditions are present */}
+            {/* Save Search Button - Only visible if results.conditions are present
             {results.conditions && results.conditions.length > 0 && (
               <Box textAlign="center" mt={3}>
                 <Button
@@ -191,7 +192,7 @@ export default function SymptomSearch() {
                   Save Search
                 </Button>
               </Box>
-            )}
+            )} */}
           </Box>
         )}
 

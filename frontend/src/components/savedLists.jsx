@@ -31,7 +31,8 @@ const SavedList = ({ results, setSavedList }) => {
 
       await removeSavedDiseases(username, userToken, disease.disease_name);
       const data = await getSavedDiseases(username, userToken);
-      setSavedList(data || []);
+      // console.log(data)
+      // setSavedList(data || []);
     } catch (error) {
       console.error("Error deleting disease:", error.message);
     }

@@ -10,18 +10,19 @@ import { useTheme } from "../contexts/themeContext";
 import { LocalHospital, HealthAndSafety, ExpandMore } from '@mui/icons-material';
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import UserInfo from "./UserInformation";
-
+import { getSavedSymptoms } from "../api/usersAPI";
 export default function Profile() {
   const navigate = useNavigate();
   const [showInfo, setShowInfo] = useState(false);
   const [selectedSymptom, setSelectedSymptom] = useState(null);
+
   const [showProfileInfoDialog, setShowProfileInfoDialog] = useState(false);
   const [showSavedAnalysisDialog, setShowSavedAnalysisDialog] = useState(false)
   const userInfo = JSON.parse(localStorage.getItem("userProfile"));
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("userToken");
   const {theme} = useTheme();
-  const [saved_list, setSavedList] = useState(userInfo?.current_readings || []);
+  const [savedDiseaseList, setSavedDiseaseList] = useState(userInfo?.current_readings || []);
   const [savedSymptomList, setSavedSymptomList] = useState(userInfo?.saved_symptoms || []);
 
   useEffect(() => {
@@ -29,17 +30,35 @@ export default function Profile() {
       if (username && token) {
         try {
           const data = await getSavedDiseases(username, token);
-          setSavedList(data || []);
+          setSavedDiseaseList(data || []);
         } catch (error) {
           console.error("Error fetching saved diseases:", error);
-          setSavedList([]);
+          setSavedDiseaseList([]);
         }
       } else {
-        setSavedList([]);
+        setSavedDiseaseList([]);
       }
     }
     fetchSavedDiseases();
-  }, [username, token]);
+  }, [username, token, savedDiseaseList]);
+
+  useEffect(() => {
+    async function fetchSavedSymptoms() {
+      if (username && token) {
+        try {
+          const data = await getSavedSymptoms(username, token);
+          setSavedSymptomList(data || []);
+
+        } catch (error) {
+          console.error("Error fetching saved symptoms:", error);
+          setSavedSymptomList([]);
+        }
+      } else {
+        setSavedSymptomList([]);
+      }
+    }
+    fetchSavedSymptoms();
+  }, [username, token, savedSymptomList]);
 
   const handleOpenDialog = () => {
     setShowProfileInfoDialog(true);
@@ -162,78 +181,128 @@ export default function Profile() {
 
       <Divider sx={{ marginY: 2 }} />
 
-      {/* Saved Disease Searches Section */}
-      <Box display="flex" flexDirection="column" gap={3} sx={{ width: "100%" }}>
-        <Card sx={{ boxShadow: 3, borderRadius: 2, backgroundColor: "#E9ECEF" }}>
-          <CardContent>
-            <Box display="flex" alignItems="center" gap={2}>
-              <LocalHospital sx={{ fontSize: 30, color: "purple" }} />
-              <Typography variant="h5" fontWeight="bold">Saved Disease Searches</Typography>
-            </Box>
-            <SavedList results={saved_list} setSavedList={setSavedList} />
-          </CardContent>
-        </Card>
+      <Box display="flex" flexDirection="column" gap={3} width="100%">
+  {/* Saved Disease Searches Section */}
+  <Card
+    sx={{
+      boxShadow: 4,
+      borderRadius: 3,
+      backgroundColor: "#f8f9fa",
+      p: 2,
+    }}
+  >
+    <CardContent>
+      <Stack direction="row" alignItems="center" spacing={2} mb={2}>
+        <LocalHospital sx={{ fontSize: 32, color: "#6f42c1" }} />
+        <Typography variant="h5" fontWeight="bold">
+          Saved Disease Searches
+        </Typography>
+      </Stack>
+      <SavedList results={savedDiseaseList} setSavedDiseaseList={setSavedDiseaseList} />
+    </CardContent>
+  </Card>
 
-        {/* Saved Symptom Searches Section */}
-        <Card sx={{ boxShadow: 3, borderRadius: 2, backgroundColor: "#E9ECEF" }}>
-          <CardContent>
-            <Box display="flex" alignItems="center" gap={2}>
-              <HealthAndSafety sx={{ fontSize: 30, color: "purple" }} />
-              <Typography variant="h5" fontWeight="bold">Saved Symptom Analysis</Typography>
-            </Box>
-            <RecentSymptoms results={savedSymptomList} setSavedSymptomList={setSavedSymptomList} handleOpenSymptomDialog={handleOpenSymptomDialog} />
-          </CardContent>
-        </Card>
-      </Box>
-
-      {/* Profile Update Dialog */}
-      <Dialog open={showProfileInfoDialog} onClose={handleCloseProfileInfoDialog} fullWidth maxWidth="sm">
-        <DialogContent sx={{ backgroundColor: "#6C757D" }}>
+  {/* Saved Symptom Searches Section */}
+  <Card
+    sx={{
+      boxShadow: 4,
+      borderRadius: 3,
+      backgroundColor: "#e2e8f0",
+      p: 2,
+    }}
+  >
+    <CardContent>
+      <Stack direction="row" alignItems="center" spacing={2} mb={2}>
+        <HealthAndSafety sx={{ fontSize: 32, color: "#6f42c1" }} />
+        <Typography variant="h5" fontWeight="bold">
+          Saved Symptom Analysis
+        </Typography>
+      </Stack>
+      <RecentSymptoms
+        symptoms={savedSymptomList}
+        setSavedSymptomList={setSavedSymptomList}
+        handleOpenSymptomDialog={handleOpenSymptomDialog}
+      />
+    </CardContent>
+  </Card>
+</Box>
+      {/* user profile update  */}
+      <Dialog open={showProfileInfoDialog} onClose={handleCloseProfileInfoDialog} fullWidth maxWidth="sm" sx ={{}}>
+        <DialogContent sx={{backgroundColor: "#94a3b8", opacity:5}}>
           <UserInfo closeDialog={handleCloseProfileInfoDialog} />
         </DialogContent>
       </Dialog>
+        
+      <Dialog
+  sx={{ backdropFilter: "blur(6px)" }}
+  fullWidth
+  maxWidth="md"
+  open={showSavedAnalysisDialog}
+  onClose={handleCloseSymptomDialog}
+>
+  <DialogContent
+    sx={{
+      backgroundColor: "#F4F4FC",
+      padding: 4,
+      borderRadius: 2,
+    }}
+    dividers
+  >
+    {selectedSymptom && selectedSymptom.conditions ? (
+      <Box>
+        <Typography variant="h6" gutterBottom fontWeight="bold">
+          Complaint
+        </Typography>
+        <Typography variant="body1" gutterBottom mb={4}>
+          {selectedSymptom.summary}
+        </Typography>
 
-      {/* Symptom Prediction Dialog */}
-      <Dialog sx={{ backdropFilter: "blur(6px)" }} fullWidth maxWidth="md" open={showSavedAnalysisDialog} onClose={handleCloseSymptomDialog}>
-        <DialogContent sx={{ backgroundColor: "#C6CAED" }} dividers>
-          {selectedSymptom ? (
-            <Box>
-              <Typography variant="body1" gutterBottom>
-                <strong>Complaint:</strong> {selectedSymptom.summary}
+        {selectedSymptom.conditions.map((condition, index) => (
+          <Card
+            key={index}
+            sx={{
+              marginBottom: 3,
+              padding: 3,
+              boxShadow: 3,
+              transition: "0.3s ease",
+              backgroundColor: "#FFF1E6",
+              borderLeft: "6px solid #C94C4C",
+              "&:hover": {
+                boxShadow: 6,
+                transform: "translateY(-2px)",
+              },
+            }}
+          >
+            <CardContent>
+              <Typography
+                variant="h6"
+                color="primary"
+                gutterBottom
+                fontWeight="bold"
+              >
+                {condition.name}
               </Typography>
-
-              {selectedSymptom.conditions.map((condition, index) => (
-                <Card
-                  key={index}
-                  sx={{
-                    marginBottom: 2,
-                    padding: 2,
-                    boxShadow: 3,
-                    transition: "0.3s",
-                    backgroundColor: "#FFDDD2",
-                    "&:hover": { boxShadow: 9, transform: "scale(1.02)" }
-                  }}
-                >
-                  <CardContent>
-                    <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
-                      <Typography variant="h5" fontWeight="bold">
-                        Condition: {condition.name} <br /> Likelihood: {condition.likelihood}
-                      </Typography>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      Description: {condition.description} <br />
-                      {selectedSymptom.recommendations}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
-            </Box>
-          ) : (
-            <Typography>No symptom data selected.</Typography>
-          )}
-        </DialogContent>
-      </Dialog>
-
+              <Typography
+                variant="subtitle2"
+                sx={{ fontStyle: "italic", marginBottom: 1 }}
+              >
+                Likelihood: {condition.likelihood}
+              </Typography>
+              <Typography variant="body2" sx={{ marginBottom: 1.5 }}>
+                {condition.description}
+              </Typography>
+              <Typography variant="body2" sx={{ color: "#4A4A4A" }}>
+                {selectedSymptom.recommendations}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </Box>
+    ) : (
+      <Typography variant="body1">No symptom data selected.</Typography>
+    )}
+  </DialogContent>
+</Dialog>
     </Container>
   );
 }
