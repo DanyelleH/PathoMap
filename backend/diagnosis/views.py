@@ -72,13 +72,14 @@ def analyze_symptoms(user_symptoms):
         )
         # Extract response content
         response_text = completion.choices[0].message.content
-        if not response_text.strip().startswith("{"):
-            raise ValueError("GPT returned invalid or non-JSON response: " + response_text)
-
+        # if not response_text.strip().startswith("{"):
+        #     raise ValueError("GPT returned invalid or non-JSON response: " + response_text)
+        # return response_text
         # Convert stringified JSON back to a dictionary
-        structured_response = json.loads(response_text)
+        # structured_response = json.loads(response_text)
 
-        return structured_response
+        return response_text
     except Exception as e:
         return str(e)
     
+# print(analyze_symptoms("this should be unable to get analysis"))

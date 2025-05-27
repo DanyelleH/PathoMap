@@ -15,38 +15,49 @@ export default function SymptomSearch() {
   const token = localStorage.getItem("userToken");
   const { theme } = useTheme();
 
-  const handleSearch = async (complaint) => {
-    setIsLoading(true);
-    setErrorMessage("")
-    console.log(complaint)
+  const handleSearch = async (complaint) => { 
+  setIsLoading(true);
+  setErrorMessage("");
 
-    try {
-      const context = { symptoms: complaint };
-      const diagnosis = await analyzeSymptoms(token, context);
-      console.log(diagnosis)
-      if (diagnosis?.detail?.trim() === "Invalid token.") {
-        setResults([]);
-        setErrorMessage("You must be logged in to perform symptom analysis");
+  try {
+    const context = { symptoms: complaint };
+    let diagnosis = await analyzeSymptoms(token, context);
+
+    // 🔽 If diagnosis is a string, clean and parse it
+    if (typeof diagnosis === "string") {
+      // Remove triple backticks and optional 'json' label
+      diagnosis = diagnosis.replace(/```json|```/g, "").trim();
+
+      try {
+        diagnosis = JSON.parse(diagnosis);
+      } catch (parseError) {
+        console.error("Failed to parse cleaned diagnosis:", parseError);
+        setErrorMessage("There was an error reading the diagnosis result.");
+        setIsLoading(false);
         return;
       }
-      if (typeof diagnosis !== 'object' || !diagnosis) {
-        setResults([]);
-        setErrorMessage("Diagnosis result is invalid or incomplete. Please provide more details or try again later.");
-        return;
-      }
-      if (diagnosis) {
-        setResults(diagnosis);
-        localStorage.setItem("Diagnosis", JSON.stringify(diagnosis));
-        // autosave results to users profile
-        handleSaveSearch(diagnosis)
-      }
-    } catch (error) {
-      console.error("Error fetching diagnosis", error);
-      setResults({});
-    } finally {
-      setIsLoading(false);
     }
-  };
+
+    if (diagnosis?.detail?.trim() === "Invalid token.") {
+      setResults([]);
+      setErrorMessage("You must be logged in to perform symptom analysis");
+      return;
+    }
+
+    if (diagnosis) {
+      setResults(diagnosis);
+      localStorage.setItem("Diagnosis", JSON.stringify(diagnosis));
+      handleSaveSearch(diagnosis);
+    }
+
+  } catch (error) {
+    console.error("Error fetching diagnosis", error);
+    setResults({});
+    setErrorMessage("Something went wrong while analyzing symptoms.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleSaveSearch = async (diagnosis) => {
     const userToken = localStorage.getItem("userToken");
@@ -58,14 +69,6 @@ export default function SymptomSearch() {
       setNotification(response.error);
     } else {
       setNotification(response);
-      // const userProfile = JSON.parse(localStorage.getItem("userProfile")) || {};
-      // userProfile.saved_symptoms = userProfile.saved_symptoms || [];
-      // userProfile.saved_symptoms.push(context.symptom_analysis);
-      // localStorage.setItem("userProfile", JSON.stringify(userProfile));
-      // setResults((prevResults) => ({
-      //   ...prevResults,
-      //   saved_symptoms: [...(prevResults.saved_symptoms || []), context],
-      // }));
     }
   };
 
@@ -157,7 +160,8 @@ export default function SymptomSearch() {
                       <Chip label={`Likelihood: ${condition.likelihood}`} color="primary" variant="outlined" size="small" />
                     </Box>
                     <Typography variant="body2" color="text.secondary">
-                      {condition.description}
+                      Description: {condition.description} <br></br>
+                      Advice: {condition.Advice}
                     </Typography>
                   </CardContent>
                 </Card>
