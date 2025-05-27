@@ -34,7 +34,7 @@ async function basicFetch(url, payload) {
 
 
   export async function saveDiseaseInfo(username, userToken, context) {
-    // console.log(context)
+   
     const payload = {
         method: "PATCH",
         headers: {
@@ -102,7 +102,7 @@ async function basicFetch(url, payload) {
   }
 
   export async function deleteDiagnosisInfo(username, userToken,context) {
-      console.log(context)
+     
     const payload = {
         method: "DELETE",
         headers: {
