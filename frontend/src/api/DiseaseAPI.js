@@ -1,5 +1,5 @@
-// const baseUrl = import.meta.env.VITE_BASE_URL
-const baseUrl = "127.0.0.1:8000"
+const baseUrl = import.meta.env.VITE_BASE_URL
+// const baseUrl = "127.0.0.1:8000"
 async function basicFetch(url, payload) {
   const res = await fetch(url, payload)
   const body = await res.json()
@@ -14,7 +14,7 @@ export async function getDiseases(token, disease_name) {
         "Content-Type": "application/json",
         "Authorization": `Token ${token}`
       }  }
-    const body = await basicFetch(`http://${baseUrl}/api/v1/diseases/${disease_name}`, payload)
+    const body = await basicFetch(`https://${baseUrl}/api/v1/diseases/${disease_name}`, payload)
     return body
   }
 
@@ -26,6 +26,6 @@ export async function AllDiseases(token) {
       "Content-Type": "application/json",
       "Authorization": `Token ${token}`
     }  }
-    const body= await basicFetch(`http://${baseUrl}/api/v1/diseases/`, payload)
+    const body= await basicFetch(`https://${baseUrl}/api/v1/diseases/`, payload)
     return body.result
 }

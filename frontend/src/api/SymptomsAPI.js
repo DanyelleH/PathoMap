@@ -1,5 +1,5 @@
-// const baseUrl = import.meta.env.VITE_BASE_URL
-const baseUrl = "127.0.0.1:8000"
+const baseUrl = import.meta.env.VITE_BASE_URL
+// const baseUrl = "127.0.0.1:8000"
 async function basicFetch(url, payload) {
     const res = await fetch(url, payload)
     const body = await res.json()
@@ -16,6 +16,6 @@ export async function analyzeSymptoms(token, context) {
       },
       body: JSON.stringify(context)
     }
-    const body = await basicFetch(`http://${baseUrl}/api/v1/diagnosis/analyze-symptoms/`,payload)
+    const body = await basicFetch(`https://${baseUrl}/api/v1/diagnosis/analyze-symptoms/`,payload)
     return body
   }

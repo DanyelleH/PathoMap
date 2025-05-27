@@ -17,7 +17,7 @@ export default function savedDiseaseInformation() {
 
         const context ={disease_name: disease.disease_name}
         const response = await saveDiseaseInfo(username, userToken,context)
-        console.log(response)
+
         if (response.error) {
             setNotification(response.error)
         } else {

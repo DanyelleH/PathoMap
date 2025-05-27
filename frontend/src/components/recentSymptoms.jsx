@@ -15,7 +15,7 @@ const RecentSymptoms = ({ symptoms, setSavedSymptomList, handleOpenSymptomDialog
   };
 
   const handleDelete = async (symptom) => {
-    console.log(symptom.summary)
+   
     const username = localStorage.getItem("username")
     const userToken = localStorage.getItem("userToken")
     const context = {summary: symptom.summary}
@@ -23,7 +23,6 @@ const RecentSymptoms = ({ symptoms, setSavedSymptomList, handleOpenSymptomDialog
       // const currentSymptoms = JSON.parse(localStorage.getItem("userProfile")).recent_symptoms || [];
       // const updatedSymptoms = currentSymptoms.filter((item) => item.id !== symptom.id);
       const updatedSymptoms = await deleteDiagnosisInfo(username, userToken, context)
-      console.log(updatedSymptoms)
       // const userProfile = JSON.parse(localStorage.getItem("userProfile"));
       // userProfile.recent_symptoms = updatedSymptoms;
       // localStorage.setItem("userProfile", JSON.stringify(userProfile));
