@@ -1,7 +1,9 @@
 # PathoMap - Patient Health Education V0.0.2
 ## Description
 
-Pathomap provides a user with quick access to Disease information, symptom search, and additional research information about the disease process with proteins involved. This tool is meant to improve patient education and research efficiency by leveraging data from the UniProt database and MedlinePlus API to deliver accurate insights into protein roles and related conditions. Symptom analysis is performed utilizing OpenAI 3o model. 
+PathoMap provides users with quick access to disease information, symptom search, and additional research insights into disease processes and associated proteins. This tool is designed to improve patient education and research efficiency by leveraging data from the UniProt database and MedlinePlus API to deliver accurate, reliable insights into protein functions and related conditions. Symptom analysis is powered by the OpenAI 3o model, enabling natural language understanding of patient inputs.
+
+PathoMap is intended to function as a Personal Health Information (PHI) application aimed at improving health outcomes by offering a centralized, medically informed alternative to generic symptom searches (like those on Google). It creates a safer, more structured space for users to explore possible conditions, understand underlying biology, and take the first step toward informed healthcare decisions. 
 
 ## Features
 
