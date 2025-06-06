@@ -1,50 +1,59 @@
-# PathoMap - Patient Health Education V0.0.2
-## Description
+# PathoMap - Patient Health Education Platform (v0.0.2)
 
-PathoMap provides users with quick access to disease information, symptom search, and additional research insights into disease processes and associated proteins. This tool is designed to improve patient education and research efficiency by leveraging data from the UniProt database and MedlinePlus API to deliver accurate, reliable insights into protein functions and related conditions. Symptom analysis is powered by the OpenAI 3o model, enabling natural language understanding of patient inputs.
+## 🩺 Overview
 
-PathoMap is intended to function as a Personal Health Information (PHI) application aimed at improving health outcomes by offering a centralized, medically informed alternative to generic symptom searches (like those on Google). It creates a safer, more structured space for users to explore possible conditions, understand underlying biology, and take the first step toward informed healthcare decisions. 
+**PathoMap** is a full-stack medical information tool that empowers users to explore potential conditions based on their symptoms, and retrieve trustworthy biomedical data on diseases and proteins. It aims to replace generic internet searches with structured, reliable information from vetted sources.
 
-## Features
+The platform combines **AI-powered symptom analysis** with **medical reference APIs** (MedlinePlus, UniProt) to help users better understand health concerns and underlying biology—all in one interface.
 
-	1. Access Disease information by searching its name 
-		- need to streamline user input for variable variations to improve inclusivity of returned results
+---
 
-	2. Symptom analysis from users plain text "Chief complaint", returning a ranked list of 3 potential differentials, ranked from most likely to least.
+## 💡 Key Features
 
-	3. Ability to store readings ( symptom analysis and Disease searches) for quick access later.
-		- working on implementation of re-accessing symptom searched
-		
+1. **Natural Language Symptom Analysis**  
+   - Accepts user input (e.g., *"I've had chest tightness and nausea"*)  
+   - Uses **OpenAI GPT-3.5 (3o)** to return the top 3 possible conditions, ranked by likelihood  
 
-### Installation : 
+2. **Condition Lookup Tool**  
+   - Search for any disease by name  
+   - Retrieves structured information from **MedlinePlus** and **UniProt**, including summaries and protein associations  
 
-```
+3. **Saved Readings**  
+   - Users can store symptom analyses and disease searches for future review  
+   - In-progress: UI to manage saved readings and improve revisit experience
+
+---
+
+## ⚙️ Tech Stack
+
+- **Frontend**: React (JavaScript), Vite  
+- **Backend**: Django, Django REST Framework  
+- **AI Integration**: OpenAI API  
+- **External Data**: MedlinePlus API, UniProt API  
+- **Cloud**: AWS EC2  
+- **DevOps**: Docker, Postman  
+- **Auth & Storage**: Django Custom User Model, PostgreSQL  
+
+---
+
+## 🚀 Getting Started
+
+### 🐳 Backend Setup (via Docker)
+```bash
 cd backend
-
 docker compose up -d
-```
-
-Start Frontend Seperately:
-```
+### Frontend Setup
 cd frontend
 npm install
 npm run dev
-
 ```
-# API Documentation (Organizing section in progress)
+# API Documentation
 
-### Protein Data API (Proteins App)
+### Protein Data (Proteins App)
 Allows users to retrieve detailed protein functional information.
 ```
-	• Models:
-		- accession_id, name, function
-```
-#### Endpoints:
-
-```
-localhost:8000/api/v1/protein/   -> View all saved proteins in database
-localhost:8000/api/v1/protein/${protein_accession} -> Obtain protein by Uniprot Accession Number
-
+	GET /api/v1/protein/ — View all proteins
+	GET /api/v1/protein/{accession_id} — Get protein by UniProt Accession ID
 ```
 
 
@@ -52,44 +61,41 @@ localhost:8000/api/v1/protein/${protein_accession} -> Obtain protein by Uniprot 
 
 Provide general and clinically relevant disease descriptions.
 ```
-	• Model:
- 		- disease_name, description, patient_summary, associated_proteins
-```
-#### Endpoints:
-```
-localhost:8000/api/v1/diseases/ -> View all Diseases in database
-localhost:8000/api/v1/diseases/${pk} -> Obtain detailed info on disease by its pk
-localhost:8000/api/v1/diseases/${disease_name} ->  Obtain a disease by name, gathering associated proteins in the process
+	GET api/v1/diseases/ -> View all Diseases in database
+	GET api/v1/diseases/${pk} -> Obtain detailed info by pk
+	GET api/v1/diseases/${disease_name} ->  Get a disease by namewith associated protein data
 ```
 
-### Diagnosis (accounts):
+### Symptom-to-Condition (Diagnosis):
 ```
-	No model, Responsible for performing analysis via OpenAI through views.
+	No model — uses OpenAI’s API to generate conditions from symptoms
 ```
 
 ### User Tracking (accounts)
-Contains all fields included in Django Built in Users Model, with the following added: 
+Extended Django user model includes: 
  
-• dob: needed to improve diagnosis models accuracy in future versions.
-
-• current_readings: Users saved queries
-
-• saved_symptoms: Users saved symptom analysis queries
+	dob — Intended for future diagnosis model refinement
+	saved_readings — User’s saved disease searches
+	saved_symptoms — User’s saved symptom analyses
 
 #### Endpoints:
 ```
-localhost:8000/api/v1/accounts/signup
-localhost:8000/api/v1/accounts/get-token
-localhost:8000/api/v1/accounts/${username}  -> Users profile information
-localhost:8000/api/v1/accounts/${username}/saved_readings  -> Users saved disease searches
-localhost:8000/api/v1/accounts/${username}/symptom_analysis  -> A users saved symptoms
+	POST /api/v1/accounts/signup
+	POST /api/v1/accounts/get-token
+	GET /api/v1/accounts/{username}
+	GET /api/v1/accounts/{username}/saved_readings
+	GET /api/v1/accounts/{username}/symptom_analysis
 ```
-
-In Progress Implementations: 
-** Improving UI and Design
-** Improvements of disease search to improve result inclusion.
-** Improve sign up with confirmation of password
-** Improvements in validation and user notification of causes of errors
+# Roadmap / In Progress
+	• Improve UI/UX and responsiveness for mobile
+	• Add password confirmation to sign-up form
+	• Expand disease name matching to support misspellings and variations
+	• Improve error handling and user notifications
 
 ## Acknowledgements
+MedlinePlus
+Uniprot
+OpenAI
 
+
+Built with care to support patient education and informed healthcare decisions.
